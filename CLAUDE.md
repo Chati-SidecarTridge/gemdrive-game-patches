@@ -23,13 +23,13 @@ The work is planned and tracked in `docs/epics/` (see Backlog). This repository 
 the sidecartos product (`../sidecartos`, `../sidecartos-config`, `../romemul-switcher-rom`): it
 borrows their procedure, not their sync contract (D-02).
 
-**Fresh start (D-01).** A first pass (2026-04-23/24) is being archived to
-`_archive/2026-04-first-pass/` by EPIC-00 STORY-01. Until that story is done, its work still sits
-in `src/`, a patched build sits in `LEMMINGS/START.TOS` (original: `START.TOS.orig`), and an
-800 MB `trace.log` sits in the root. Its conclusions are hypotheses `H-NN` in
-`docs/epics/ITERATIONS.md`, not facts: a finding counts only once a story here observes it
-again, and its code is reused only after a story has verified it. Its notes contradict its own
-code in places.
+**Fresh start (D-01).** A first pass (2026-04-23/24) is archived, read-only, in
+`_archive/2026-04-first-pass/`: its tools, listings and notes (`src/`), the patched builds it had
+left in `LEMMINGS/` (`lemmings-patched/`), the hashes of everything before the move
+(`MANIFEST.before.sha256`) and an 800 MB `trace.log` (git-ignored). Its conclusions are
+hypotheses `H-NN` in `docs/epics/ITERATIONS.md`, not facts: a finding counts only once a story
+here observes it again, and its code is reused only after a story has verified it. Its notes
+contradict its own code in places.
 
 ## The evidence: `LEMMINGS/`
 
@@ -64,23 +64,31 @@ drive at this repository's root.
   git-ignored.
 - `_archive/2026-04-first-pass/`: the first pass, read-only (D-01).
 
-## Tools on this Mac
+## Commands
 
-Until EPIC-00 delivers `tools/dev/`, these are the tools, checked on 2026-10-11:
+Everything is in `tools/dev/` (EPIC-00; details and examples in `tools/dev/README.md`). Once per
+machine: Docker running with `logronoide/atarist-toolkit-docker-x86_64:1.4.0`, and
+`cp tools/dev/dev.cfg.example tools/dev/dev.cfg` (paths to Hatari, the TOS images, `../atari-hd`).
 
-- Hatari 2.6.1 at `/usr/local/bin/hatari`; its sources in `../hatari`.
-- `stcmd` (Diego's `atarist-toolkit-docker`) runs `logronoide/atarist-toolkit-docker-x86_64:latest`
-  with the current folder mounted at `/tmp`, so a file is passed as `/tmp/<relative path>`. That
-  image has `vasmm68k_mot`, `vlink` and `m68k-atari-mint-objdump`/`-as`/`-gcc`. Disassembling a
-  raw binary loaded at an address:
-  ```
-  STCMD_NO_TTY=1 STCMD_QUIET=1 stcmd m68k-atari-mint-objdump -D -b binary -m m68k --adjust-vma=0x70000 /tmp/<bin>
-  ```
-- Python 3.14 (`python3`), standard library only; mtools (`mcopy`, `mformat`).
-- `../atari-hd` (sidecartridge/atari-hd): builds Atari hard-disk images. `--ppdriver-bootable`
-  makes the self-booting PPDRIVER image of the working reference (D-09) from its bundled boot
-  blob; it cannot copy files in, so the game goes in with `mcopy`.
-- TOS images: C-03 in `docs/epics/DECISIONS.md` (in `../sidecartos`, never copied here).
+```
+tools/dev/all_harness.sh                       # check everything: disks, round trip, 6 Hatari runs (~2 min)
+tools/dev/make_disks.sh [<game folder>]        # builds/disks/: gemdrive/ and ppdriver.img from LEMMINGS/ or a patched tree
+python3 tools/dev/hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver \
+    [--expect tools/dev/expect/launcher-start.exp] [--parse <debugger script>] [--no-auto]
+tools/dev/disasm.sh <bin> <vma> <out.lst>      # objdump listing, 68000
+python3 tools/dev/listing2vasm.py <out.lst> <bin> <out.s>   # a source that reassembles to <bin>
+tools/dev/roundtrip.sh <src.s> <ref.bin>       # PASS, or FAIL at the first differing offset
+tools/dev/asm.sh <src.s> <out.bin> [<listing>] # vasm, 68000, -no-opt
+./docs/epics/cockpit.sh                        # after editing any epic or story
+```
+
+The test machines are Hatari's ST with TOS 1.04 and STE with TOS 1.62 and 2.06, 1 MB, each with
+two disks: `gemdrive` (Hatari's GEMDOS drive, the target) and `ppdriver` (an ACSI image booted by
+PPDRIVER, built by `../atari-hd --ppdriver-bootable`, the working reference, D-09). A harness run
+leaves `tools/dev/logs/<date>-<setup>-<disk>/`: `hatari.out` (GEMDOS calls with file names,
+BIOS/XBIOS calls, ACSI commands, debugger output), `shots/`, the run's own disk copy and
+`result.txt` (PASS/FAIL, steps reached, PC at the end). Hatari's sources (v2.6.1) are in
+`../hatari`, for reading only (C-02).
 
 ## Backlog
 
@@ -105,12 +113,16 @@ Lemmings.
 - **68000, big-endian**: words and longs are big-endian; a word or long access at an odd address
   is an Address Error. ST hardware registers live at `$FFFF8000` and up (DMA/ACSI at
   `$FFFF8604`-`$FFFF860D`, MFP at `$FFFFFA01` and up).
-- **`stcmd` passes its arguments unquoted** (`$@`), so `stcmd bash -c '…'` breaks: call one tool
-  per `stcmd`. It follows `latest`; EPIC-00 STORY-02 pins `1.4.0` (D-05).
+- **Docker Desktop can serve a container a file the host has just rewritten in place, at its old
+  length** (vasm once assembled a source cut off mid-line). Run the toolchain only through
+  `tools/dev/toolchain.sh` (`tc_stage` hands the container a fresh copy), never `stcmd`, which
+  also follows `latest` instead of the pinned `1.4.0` (D-05).
 - **Hatari loads its saved configuration** (`~/Library/Application Support/Hatari/hatari.cfg`)
-  unless `HOME` points elsewhere: a run that must be reproducible sets its own `HOME`.
-- **Never read a trace whole.** A Hatari CPU trace reaches hundreds of MB in seconds; use `grep`,
-  `head`, `tail` or `sed -n`, and bound traces in time.
+  unless `HOME` points elsewhere; the harness gives each run its own. Control-socket keys go in
+  hex (`0x39`): a single character is typed as that character.
+- **Never read a trace whole.** `hatari.out` is tens of thousands of lines, and a CPU trace gets
+  huge (the first pass's reached 800 MB); use `grep`, `head`, `tail` or `sed -n`, and bound CPU
+  traces in time.
 - The first pass's tools find the repository through their own location
   (`Path(__file__).parents[2]`), so they break once archived; copy one into `tools/` only when a
   story has verified it.

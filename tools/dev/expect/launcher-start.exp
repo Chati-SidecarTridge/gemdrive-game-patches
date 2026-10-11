@@ -1,0 +1,11 @@
+# The pristine launcher starts and reads its own files: every EPIC-00 setup,
+# GEMDRIVE and PPDRIVER, gets this far (EPIC-00 STORY-05). What happens after
+# FILES/ is EPIC-01's question; the last screenshot shows it.
+expect start-tos Pexec\(0, "C:\\LEMMINGS\\START\.TOS"
+expect info-text Cconws\(
+expect pch Fopen\("LEMMINGS\.PCH"
+expect d15r Fopen\("D15R_[FH]5\.FIC"
+expect ls2dd Fopen\("LS2DD\.FIC"
+expect files-dir Dsetpath\("FILES"\)
+sleep 10
+shot after-files
