@@ -7,7 +7,7 @@ status: done
 
 ## Goal
 
-The disk layer the launcher installs, understood completely, since EPIC-04 replaces or feeds it.
+The disk layer the launcher installs, understood completely, since a solution (iteration 2) replaces or feeds it.
 That means D15R (PP's GOS, if H-08 holds), the relocated copy of PP's resident driver, and how
 the game reaches its files through them. EPIC-01 found that the launcher carries no driver of its
 own (`src/notes/gemdrive-failure.md` §3).

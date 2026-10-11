@@ -1,5 +1,5 @@
 ---
-id: STORY-03
+id: STORY-04
 epic: EPIC-03
 title: The strategies, from the files
 status: todo
@@ -12,8 +12,8 @@ evidence, not by PP's names alone.
 
 ## Tasks
 
-- [ ] The signatures of each launcher family, starting from Lemmings' (EPIC-01, and EPIC-02 STORY-04
-      and STORY-05): the `PPHD` gate, the `.FIC` header and its packer, GOS (D15R), and the Gamex
+- [ ] The signatures of each launcher family, starting from Lemmings' (`src/notes/launcher-signatures.md`,
+      EPIC-02): the `PPHD` gate, the `.FIC` header and its packer, GOS (D15R), and the Gamex
       header `PPGX`. Also the signatures of disk access in the start programs and in the stages our
       unpackers can open: GEMDOS file calls, BIOS `Rwabs`, XBIOS `Floprd` and `DMAread`, the ACSI,
       floppy-controller and IDE registers.

@@ -10,7 +10,7 @@ status: done
 Every PPera launcher program as sources in this repository that reassemble to the original bytes,
 and a build that turns them back into launcher files. Run in Hatari, our build starts the game
 exactly as the originals do. From then on the launcher is code we can change and test, which
-EPIC-04 needs, and its signatures are known, which EPIC-03's survey of PP's other adaptations
+iteration 2's solutions need (D-14), and its signatures are known, which EPIC-03's survey of PP's other adaptations
 needs. Asked by Diego, 2026-10-11.
 
 ## Scope
@@ -24,7 +24,7 @@ needs. Asked by Diego, 2026-10-11.
   from our build in Hatari.
 - Out of scope: PPDRIVER itself beyond the interface the launcher uses (it is `../atari-hd`'s blob,
   C-03); the game's own code (`FILES/CODE`, `FILES/MAIN`) beyond where the launcher hands over; any
-  change in behaviour (EPIC-04).
+  change in behaviour (iteration 2).
 
 ## Setups
 

@@ -1,5 +1,5 @@
 ---
-id: STORY-02
+id: STORY-03
 epic: EPIC-03
 title: The adapted games' files
 status: todo

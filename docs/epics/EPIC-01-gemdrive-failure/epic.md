@@ -10,7 +10,7 @@ status: done
 Find out, from runs, why PP's pristine launcher does not start Lemmings from a Hatari GEMDOS drive
 (GEMDRIVE mode, `--harddrive`), and confirm or refute Diego's guess (H-07): the PPera driver
 embedded in the launcher. The answer is the full list of what the launcher asks of the disk that a
-GEMDOS drive cannot give, which is what EPIC-04 has to provide. Asked by Diego, 2026-10-11.
+GEMDOS drive cannot give, which is what a solution has to provide (iteration 2, D-14). Asked by Diego, 2026-10-11.
 
 ## Scope
 
@@ -18,7 +18,7 @@ GEMDOS drive cannot give, which is what EPIC-04 has to provide. Asked by Diego, 
   booting from an ACSI image with PP's own driver, PPDRIVER (D-09); GEMDRIVE runs on the EPIC-00
   setups; the first point where the two part, and every later one, found with experiments on
   patched copies; the verdicts on H-03, H-04, H-06 and H-07; the write-up.
-- Out of scope: reconstructing the launcher (EPIC-02); the fix (EPIC-04); changing Hatari (C-02).
+- Out of scope: reconstructing the launcher (EPIC-02); the fix (iteration 2's solutions, D-14); changing Hatari (C-02).
 
 ## Setups
 
@@ -45,5 +45,5 @@ checked against `../hatari`'s sources and a run in STORY-02, not assumed.
 at the checkpoint (STORY-06). The cause and its evidence are in `src/notes/gemdrive-failure.md`.
 Found on the way and not this epic's: the game crashes after "1 PLAYER" on the reference too
 (STORY-01, a candidate in `ITERATIONS.md`). Committed on `epic-01-gemdrive-failure` (`bf2ed35`)
-and merged into `main` (`01b4c3c`). The fix, EPIC-03 when this epic was written, is EPIC-04
-since D-10.
+and merged into `main` (`01b4c3c`). The fix, EPIC-03 when this epic was written, then EPIC-04
+(D-10), is now iteration 2's solution for Lemmings' strategy (D-14).

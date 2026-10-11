@@ -11,24 +11,37 @@ Every game in PP's list of hard-disk adaptations (<https://atari.8bitchip.info/f
 records on 2026-10-11) classified by the strategy its adaptation uses to run from a hard disk,
 and the answers to Diego's questions: how many different ways there are, how many games use each,
 what each one needs from the disk and the system, and which of them run from a Hatari GEMDOS drive
-today. The result is a **migration table**: for every game, its strategy, whether it works as it
-is in GEMDRIVE mode or needs adapting, and the generic way that would adapt it. That table drives
-the later work of adapting every game that does not work as it is, in Hatari or on the
-SidecarTridge's GEMDRIVE, with a few generic solutions instead of one per game. Asked by Diego,
-2026-10-11 (D-10).
+today. The result is a **migration table** with, for every game, its strategy and one of three
+verdicts (D-14):
+
+1. **as it is**: it runs from a GEMDOS drive unchanged; shown by its files (no sector-access
+   signature) and by a run that gets past its first file load, not only to its title;
+2. **fix**: it needs adapting, and the table names the solution that would do it (one per
+   strategy, or several where a strategy has variants);
+3. **not feasible**: it cannot run from a GEMDOS drive without major modifications, with the
+   reason (for example a game that drives the floppy controller itself during play), so the
+   verdict can be revisited.
+
+A game the evidence does not settle is **unsure**, with what is missing. The epic also proposes
+the solutions, each with the games it covers and its cost; at its checkpoint Diego chooses which
+become iteration 2's epics and in what order. All of it, with the project's documentation, is
+published as a website with the repository (STORY-07); the repository goes public only after
+what cannot be published is removed (D-15). Asked by Diego, 2026-10-11 (D-10, D-14).
 
 ## Scope
 
 - In scope: the list and each game's page; PP's own documentation of his methods (below); every
-  adapted game's files, in the mirror made ahead of the epic (STORY-02, D-11, D-12); static signatures
-  of their launchers, starting from the ones EPIC-01 and EPIC-02 found in Lemmings'; every game
-  run once in GEMDRIVE mode, for the table's works-as-it-is column; each strategy's
-  representatives also run from the PPDRIVER reference; for each strategy that fails, a sketch of
-  a generic way to adapt it; the migration table.
-- Out of scope: adapting the games, that is, implementing the generic ways (later epics,
-  `ITERATIONS.md` candidates); the SidecarTridge's GEMDRIVE itself, beyond noting where it would
-  differ from Hatari's; Falcon, TT and TOS above 2.06 (as in EPIC-00); committing or publishing
-  PP's files (D-11).
+  adapted game's files, in the mirror made ahead of the epic (STORY-03, D-11, D-12); static
+  signatures of their launchers, starting from EPIC-02's (`src/notes/launcher-signatures.md`)
+  and read with EPIC-02's tools (`tools/unpack.py`, `tools/dev/mksource.py`, the profile probes);
+  every game run in GEMDRIVE mode, for its verdict; each strategy's representatives also run from
+  the PPDRIVER reference; for each strategy with games to fix, the solutions proposed, with the
+  games they cover and their cost; the migration table; the website (designed with the
+  frontend-design skill) and what publication needs.
+- Out of scope: building the solutions (iteration 2's epics, chosen at this epic's checkpoint);
+  the SidecarTridge's GEMDRIVE itself, beyond noting where it would differ from Hatari's; Falcon,
+  TT and TOS above 2.06 (as in EPIC-00); committing or publishing PP's files (D-11); publishing
+  anything: the work is local until the clean-up and Diego's word (D-15).
 
 ## Setups
 
@@ -39,12 +52,14 @@ representative of each strategy also runs on all three setups.
 
 ## Stories
 
-- STORY-01: The catalogue and PP's own classification
-- STORY-02: The adapted games' files
-- STORY-03: The strategies, from the files
-- STORY-04: Every game in Hatari's GEMDRIVE mode
-- STORY-05: The write-up: how many ways, and a generic way for each
-- STORY-06: Verification (Diego's checkpoint)
+- STORY-01: PP's modes and strategies, understood
+- STORY-02: The catalogue and PP's own classification
+- STORY-03: The adapted games' files
+- STORY-04: The strategies, from the files
+- STORY-05: Every game in Hatari's GEMDRIVE mode: the verdicts
+- STORY-06: The write-up: how many ways, and the solutions proposed
+- STORY-07: The website: the documentation and the catalogue, for the internet
+- STORY-08: Verification and the choice of solutions (Diego's checkpoint)
 
 ## Notes
 
@@ -79,7 +94,9 @@ counts once a story here has seen it happen in a run.
   disk sector access", and "direct hard disk access", which "some game hard disk adaptations use",
   cannot work on it. Such games need a real disk or a disk image. EPIC-01 showed one such case;
   this epic counts how many there are.
-- **Lemmings is GOS5 with PP's own driver** (H-08): GOS5's RAM map in `GAMEXdoc.html` (driver and
-  buffers 700-768 KB, the modded GEMDOS 768-830 KB) matches EPIC-01's addresses (buffers at
-  `$AF100`, the relocated driver at `$B7180`, D15R at `$C0100`).
+- **Lemmings is GOS5 with PP's own driver**, now shown by EPIC-02 (H-08 confirmed): D15R is TOS
+  1.04 in RAM, the game asks PP's loader for files by name and D15R's GEMDOS reads them by
+  sectors through a copy of PP's driver (`src/notes/disk-layer.md`). GOS5's RAM map in
+  `GAMEXdoc.html` matches its addresses. Lemmings is the first known game of that strategy, and
+  the one whose verdict ("fix") and solution are already best understood.
 - The downloaded files stay on this Mac, never committed or published (D-11, C-03).

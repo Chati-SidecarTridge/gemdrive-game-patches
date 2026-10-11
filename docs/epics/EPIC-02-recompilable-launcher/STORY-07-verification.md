@@ -8,7 +8,7 @@ status: done
 ## Goal
 
 Diego sees the launcher built from our sources boot the game, and agrees the sources are ready to
-change in EPIC-04 and the signatures ready for EPIC-03's survey.
+change in iteration 2 and the signatures ready for EPIC-03's survey.
 
 ## Tasks
 

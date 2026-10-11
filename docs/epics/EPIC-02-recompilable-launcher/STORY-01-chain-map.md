@@ -88,7 +88,7 @@ C:\LEMMINGS\GXUT260.PRG`, runs `…-165007-st-104-ppdriver-gxut` and `…-165016
 it shows a GEM dialog: "GAMEX-utility for gamestate store, playing stored gamestates, V 0.9, By
 P. Putnik 2011", with Enter notes, Save current state, Play saved gamestate, Play game in RAM, Show
 info, Free RAM and Exit. It works in both disk modes. No launch opens it, so it leaves this epic's
-scope; it matters again for saved gamestates (EPIC-03, EPIC-04).
+scope; it matters again for saved gamestates (EPIC-03, iteration 2).
 
 Found on the way: `LEVELDAT` is read at the title in every reference run, before any click. EPIC-01
 had it after the click, and `reference-first-level.exp` passed only by timing; this story moved it

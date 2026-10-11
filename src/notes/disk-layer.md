@@ -95,7 +95,7 @@ dumps of the resident and copied driver (`gemdrive-failure.md` §3):
 And from the game, through D15R (§4): `hdv_rw` for every read (logical 1,024-byte records on
 drive C, per the BPB it gave), `hdv_mediach` before each access (answering 0); `hdv_bpb` not
 after the hand-over (EPIC-01 saw D15R's `Getbpb(2)` before it, on the reference). A replacement driver would have to provide exactly that, laid out the
-same way; or D15R's GEMDOS could be bypassed altogether (EPIC-04 STORY-01).
+same way; or D15R's GEMDOS could be bypassed altogether (the solution for this strategy, iteration 2).
 
 ## 4. Every call the game makes, from the hand-over to the level load
 
@@ -114,14 +114,15 @@ In all: 3 calls to the loader at `$85000`, 5 to `file_io`, none to `file_io_2`, 
 copy's `hdv_rw`, 139 to its `hdv_mediach`, none to its `hdv_bpb`. Names arrive in mixed case
 (`leveldat`); D15R's GEMDOS matches them regardless, as TOS does.
 
-## 5. For EPIC-04
+## 5. For the solution
 
 The game asks for files **by name** and the request reaches GEMDOS as `Fopen`/`Fread` by name.
 The sectors only come in because that GEMDOS is D15R's own, behind `trap1` in TOS's image, and it
 reads the volume through the driver copy. Hatari's GEMDOS drive answers `Fopen`/`Fread` by name
 too, at the ROM's `TRAP #1` (`$FA002A`, which the game's own vectors still hold, STORY-01). Where
 the fix goes in (a driver that serves records, a `file_io` that calls the system's GEMDOS, or
-something else) is EPIC-04 STORY-01's choice; this is what it starts from.
+something else) is chosen with the solutions at EPIC-03's checkpoint (D-14); this is what it
+starts from.
 
 ## Tools
 

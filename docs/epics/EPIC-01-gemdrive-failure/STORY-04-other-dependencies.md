@@ -8,7 +8,7 @@ status: done
 ## Goal
 
 The full list of what the launcher and the game ask of the disk that GEMDRIVE mode does not give,
-not just the first: EPIC-04 must cover all of it.
+not just the first: the fix must cover all of it (iteration 2, D-14).
 
 ## Tasks
 
@@ -26,7 +26,7 @@ or, if none does, the stop that could not be passed and why.
 
 ## Notes
 
-The patched copies here are probes for finding dependencies, not the fix (EPIC-04).
+The patched copies here are probes for finding dependencies, not the fix (iteration 2).
 
 **Done 2026-10-11**, on the second branch of the acceptance: no by-hand run reaches play. The
 list is `src/notes/gemdrive-failure.md` §5; in short: (1) a resident, PPDRIVER-shaped driver with

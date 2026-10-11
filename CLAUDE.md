@@ -8,21 +8,23 @@ A reverse-engineering workspace for **PP's (PPera's) Gamex hard-disk launcher** 
 the Atari ST: the 2011 adaptation (`LEMMINGS/README.TXT`) that runs the game from a hard disk. The
 target is the launcher and the disk layer it installs (its loader D15R and a copy of PP's
 resident driver), not the game. The aim is **GEMDRIVE mode**: the game started from a Hatari GEMDOS
-drive (`--harddrive`) instead of a hard-disk image. Four goals, one epic each, in this order (D-08,
-D-10):
+drive (`--harddrive`) instead of a hard-disk image, for Lemmings and then for every game PP adapted.
+Two iterations (D-14): first understand and classify, then the solutions.
 
 1. **Why it fails** in Hatari's GEMDRIVE mode today. Diego's guess, to confirm first: the PPera
    driver embedded in the launcher (H-07). EPIC-01.
 2. **Recompilable launcher**: every PPera launcher program reverse engineered into 68000 sources
    that reassemble to the original bytes, and our own build of them booting the game. EPIC-02.
-3. **The ways PP's adaptations run from a hard disk**: every game in PP's list
-   (<https://atari.8bitchip.info/fromhd3.php>) classified by the strategy that runs it from a hard
-   disk, in a migration table that says for each game whether it works from a GEMDOS drive as it
-   is or needs adapting, and how. EPIC-03. The site was mirrored first (D-12): work from the
-   mirror (`MIRROR` in `tools/dev/dev.cfg`), not the site.
-4. **The fix**: GEMDRIVE mode as an alternative way to launch Lemmings. EPIC-04. Adapting the
-   other games, one generic way at a time, and the SidecarTridge's GEMDRIVE come later
-   (`ITERATIONS.md` candidates).
+3. **The ways PP's adaptations run from a hard disk**: PP's modes understood first, then every
+   game in PP's list (<https://atari.8bitchip.info/fromhd3.php>) classified by the strategy that
+   runs it from a hard disk, with one of three verdicts: as it is, fix (with the solution), not
+   feasible (with the reason); and the solutions proposed; all of it, with the project's
+   documentation, as a website published with the repository (designed with the frontend-design
+   skill; the repository goes public only after it is cleaned, D-15). EPIC-03. The site was mirrored first (D-12): work
+   from the mirror (`MIRROR` in `tools/dev/dev.cfg`), not the site.
+4. **The solutions** (iteration 2): one epic per solution, chosen and ordered by Diego at EPIC-03's
+   checkpoint; Lemmings' strategy (GOS) among them, with Lemmings as its first test game. The
+   SidecarTridge's GEMDRIVE comes later (`ITERATIONS.md`).
 
 **Hatari's code is never modified** (C-02): every fix lives on the Atari side.
 
@@ -124,11 +126,12 @@ checkpoint; a task is checked only when it was observed; `LEMMINGS/` is never mo
 backlog is committed, code and notes only when Diego says so (D-03). Each epic on its own branch
 `epic-NN-<slug>` (D-07, proposed).
 
-Iteration 1 is **GEMDRIVE**: EPIC-00, the development environment, the test tools and Hatari as
-the test machine (ST and STE, TOS up to 2.06; GEMDRIVE mode, and an ACSI image booted by PP's
-driver, PPDRIVER, as the working reference); EPIC-01, why the game fails in GEMDRIVE mode;
-EPIC-02, the launcher recompilable and tested with our own build; EPIC-03, PP's adaptations
-classified by how they run from a hard disk; EPIC-04, the GEMDRIVE fix for Lemmings.
+Iteration 1 is **understand and classify**: EPIC-00, the development environment, the test tools
+and Hatari as the test machine (ST and STE, TOS up to 2.06; GEMDRIVE mode, and an ACSI image
+booted by PP's driver, PPDRIVER, as the working reference); EPIC-01, why the game fails in
+GEMDRIVE mode; EPIC-02, the launcher recompilable and tested with our own build, the groundwork
+for the solutions; EPIC-03, PP's modes and every adaptation classified with a verdict. Iteration
+2 is **solutions**: its epics are written at EPIC-03's checkpoint (D-14).
 
 ## Conventions and gotchas
 
@@ -160,6 +163,8 @@ classified by how they run from a hard disk; EPIC-04, the GEMDRIVE fix for Lemmi
 - The first pass's tools find the repository through their own location
   (`Path(__file__).parents[2]`), so they break once archived; copy one into `tools/` only when a
   story has verified it.
+- **Nothing leaves this Mac yet** (D-15): no remote, no push. Before the repository goes public,
+  `LEMMINGS/` and `_archive/`'s binaries are removed from it and its history.
 - `.DS_Store` files are macOS noise; ignore them.
 
 ---
@@ -234,7 +239,7 @@ You MUST execute every task on your own, with what this computer has:
   one will meet.
 
 Do not hand Diego work you can do. A task is his only when it needs his decision or approval: the
-checkpoints and the choice of approach (EPIC-04 STORY-01). Do not turn "Diego does it" into a
+checkpoints and the choice of solutions (EPIC-03's checkpoint, D-14). Do not turn "Diego does it" into a
 shot list or a checklist for him.
 
 Evidence comes from this computer: Hatari runs, memory dumps, traces, round trips.
