@@ -8,11 +8,17 @@
 #   1. tools/dev/make_disks.sh: both disk setups from LEMMINGS/
 #   2. the round trip: the text of START.TOS disassembled, turned into a vasm
 #      source and reassembled to the same 230 bytes
+#   2b. the launcher's sources (EPIC-02 STORY-04): each reassembles to the
+#      stage tools/unpack.py takes out of LEMMINGS/ (tools/dev/roundtrip.sh),
+#      and still says the same with a nop inserted (tools/dev/shiftcheck.py)
 #   3. tools/dev/hatari_harness.py with expect/launcher-start.exp on every
 #      setup: ST TOS 1.04, STE TOS 1.62, STE TOS 2.06, each in GEMDRIVE mode
 #      and from the PPDRIVER image
 #   4. expect/must-fail.exp, which the harness must report as FAIL
-#   5. LEMMINGS/ against LEMMINGS.sha256, and no Hatari left running
+#   5. the launcher built from src/ (tools/build_launcher.sh, EPIC-02 STORY-06): every stage
+#      unpacks to PP's bytes, and it boots the PPDRIVER reference to the level load on ST TOS
+#      1.04 (expect/reference-first-level.exp); the disks are rebuilt from LEMMINGS/ after
+#   6. LEMMINGS/ against LEMMINGS.sha256, and no Hatari left running
 #
 # Prints one line per check and exits 0 only when every check gave what it
 # must. Each harness run keeps its folder under tools/dev/logs/.
@@ -56,6 +62,31 @@ else
   row "round trip START.TOS text" FAIL "see $work/" $((SECONDS - t))
 fi
 
+# 2b. The launcher's sources: round trip and nop check for every stage. D15R's are not
+# committed (D-13): made from their maps first.
+"$repo/tools/make_sources.sh" > "$work/make-sources.txt" 2>&1 || row "D15R's sources made" FAIL "see $work/make-sources.txt" 0
+refs="$work/refs"
+mkdir -p "$refs"
+python3 -I tools/unpack.py text LEMMINGS/START.TOS "$refs/START.text" > /dev/null
+python3 -I tools/unpack.py start LEMMINGS/START.TOS "$refs/LEMLD2.TOS" > /dev/null
+for f in LS2DD D15R_H5 D15R_F5; do
+  python3 -I tools/unpack.py fic "LEMMINGS/$f.FIC" "$refs/$f.bin" > /dev/null
+done
+for stage in "start src/start/start.s START.text 0" \
+             "lemld2 src/lemld2/lemld2.s LEMLD2.TOS 0 --tos" \
+             "ls2dd src/ls2dd/ls2dd.s LS2DD.bin 0x70000" \
+             "d15r_h5 src/d15r/d15r_h5.s D15R_H5.bin 0xc0100" \
+             "d15r_f5 src/d15r/d15r_f5.s D15R_F5.bin 0xc0100"; do
+  read -r name src ref origin tos <<< "$stage"
+  t=$SECONDS
+  if "$here/roundtrip.sh" $tos "$src" "$refs/$ref" > "$work/rt-$name.txt" 2>&1 \
+     && python3 -I "$here/shiftcheck.py" $tos "$src" "$origin" > "$work/shift-$name.txt" 2>&1; then
+    row "source $name" PASS "$(sed -E 's/^PASS [^:]*: ([0-9]+) bytes.*/\1 bytes/' "$work/rt-$name.txt"), nop check: every reference moves" $((SECONDS - t))
+  else
+    row "source $name" FAIL "see $work/rt-$name.txt, shift-$name.txt" $((SECONDS - t))
+  fi
+done
+
 # 3. The launcher on every setup.
 for setup in st-104 ste-162 ste-206; do
   for disk in gemdrive ppdriver; do
@@ -81,7 +112,23 @@ else
   row "harness detects a failure" FAIL "see $out" $((SECONDS - t))
 fi
 
-# 5. The evidence, and no Hatari left.
+# 5. The launcher built from the sources boots the reference.
+t=$SECONDS
+out="$work/build-launcher.txt"
+if "$repo/tools/build_launcher.sh" > "$out" 2>&1 && [[ $(grep -c "the same bytes as PP" "$out") -eq 4 ]] \
+   && "$here/make_disks.sh" "$here/builds/launcher/LEMMINGS" > /dev/null 2>&1; then
+  python3 -I "$here/hatari_harness.py" --setup st-104 --disk ppdriver --name built \
+    --expect "$here/expect/reference-first-level.exp" > "$work/built-run.txt" 2>&1
+  summary="$(grep -E '^(PASS|FAIL) ' "$work/built-run.txt" | tail -1)"
+  result="${summary%% *}"
+  detail="$(sed -E 's/^(PASS|FAIL) [^:]*: //; s/, [0-9.]+ s$//' <<< "$summary")"
+  row "launcher built from src/" "${result:-FAIL}" "4 stages as PP's; st-104: ${detail:-see $work/built-run.txt}" $((SECONDS - t))
+else
+  row "launcher built from src/" FAIL "see $out" $((SECONDS - t))
+fi
+"$here/make_disks.sh" > /dev/null 2>&1 || row "disks back from LEMMINGS/" FAIL "make_disks.sh" 0
+
+# 6. The evidence, and no Hatari left.
 if shasum -a 256 -c LEMMINGS.sha256 > "$work/evidence.txt" 2>&1; then
   row "LEMMINGS.sha256" PASS "$(grep -c ': OK$' "$work/evidence.txt") files unchanged" 0
 else

@@ -1,0 +1,337 @@
+; D15R_F5: the loader LEMLD2 unpacks to $C0100 (EPIC-02 STORY-01, STORY-02, STORY-04): TOS 1.04's
+; GEMDOS and floppy BIOS routines, relocated, behind PP's own TRAP #1 entry (H-08, STORY-05).
+binary	tools/dev/builds/epic02/unpacked/D15R_F5.bin
+format	bin
+origin	$c0100
+include	src/include/atari.i
+title	D15R_F5.FIC (the Falcon build), unpacked: 91,512 bytes run at $C0100.
+title	PP's GOS: TOS 1.04's GEMDOS (its function table and every function) and its floppy
+title	hdv_* routines, relocated to $C0100, behind PP's own TRAP #1 entry. LEMLD2 calls its init;
+title	the game reaches it through PP's loader (LEMLD2's block). Notes: src/notes/disk-layer.md.
+executed	src/d15r/d15r_f5.executed
+
+data	$c0100	$c010a	entry_table	; five word offsets from $C0100 to its entry points
+code	$c0110	entry_0
+code	$c0134	entry_1
+code	$c0170	entry_2
+code	$c02bc	init	; called by LEMLD2 (start_d15r) with a1 = $FFFAA
+code	$c02ca	entry_4
+code	$c84b8	trap1	; PP's GEMDOS entry: functions 1-11 answer 0, Super apart, the rest to gemdos; on the Falcon the function number is at 8(sp), after the 68030's format word
+name	$c89d2	gemdos	; TOS's GEMDOS dispatcher: function number to the table below, -32 above $57
+pointers	$cfb90	19	4	; the dispatcher's switch for functions 1-19
+pointers	$cf97a	88	6	; GEMDOS's function table: routine (long), flags (word), by function number
+name	$c3546	gemdos_Cconis	; GEMDOS $0b: Cconis
+name	$c3560	gemdos_Cconos	; GEMDOS $10: Cconos
+name	$c3584	gemdos_Cprnos	; GEMDOS $11: Cprnos
+name	$c35a8	gemdos_Cauxis	; GEMDOS $12: Cauxis
+name	$c35c4	gemdos_Cauxos	; GEMDOS $13: Cauxos
+name	$c3830	gemdos_Cconout	; GEMDOS $02: Cconout
+name	$c38f2	gemdos_Cauxout	; GEMDOS $04: Cauxout
+name	$c391a	gemdos_Cprnout	; GEMDOS $05: Cprnout
+name	$c39f0	gemdos_Crawcin	; GEMDOS $07: Crawcin
+name	$c3a44	gemdos_Cconin	; GEMDOS $01: Cconin
+name	$c3a5e	gemdos_Cnecin	; GEMDOS $08: Cnecin
+name	$c3a96	gemdos_Cauxin	; GEMDOS $03: Cauxin
+name	$c3aba	gemdos_Crawio	; GEMDOS $06: Crawio
+name	$c3b1a	gemdos_Cconws	; GEMDOS $09: Cconws
+name	$c3c4a	gemdos_Cconrs	; GEMDOS $0a: Cconrs
+name	$c4f42	gemdos_Dfree	; GEMDOS $36: Dfree
+name	$c53f4	gemdos_Dsetpath	; GEMDOS $3b: Dsetpath
+name	$c54f0	gemdos_Dgetpath	; GEMDOS $47: Dgetpath
+name	$c567a	gemdos_Dcreate	; GEMDOS $39: Dcreate
+name	$c5886	gemdos_Ddelete	; GEMDOS $3a: Ddelete
+name	$c5a92	gemdos_Fsnext	; GEMDOS $4f: Fsnext
+name	$c6290	gemdos_Fattrib	; GEMDOS $43: Fattrib
+name	$c636e	gemdos_Fdatime	; GEMDOS $57: Fdatime
+name	$c6420	gemdos_Fdelete	; GEMDOS $41: Fdelete
+name	$c65b0	gemdos_Frename	; GEMDOS $56: Frename
+name	$c68a0	gemdos_Fseek	; GEMDOS $42: Fseek
+name	$c6a84	gemdos_Fdup	; GEMDOS $45: Fdup
+name	$c6b08	gemdos_Fforce	; GEMDOS $46: Fforce
+name	$c6bce	gemdos_Fclose	; GEMDOS $3e: Fclose
+name	$c6c9a	gemdos_Fread	; GEMDOS $3f: Fread
+name	$c6cda	gemdos_Fwrite	; GEMDOS $40: Fwrite
+name	$c6db8	gemdos_Fgetdta	; GEMDOS $2f: Fgetdta
+name	$c6dca	gemdos_Fsetdta	; GEMDOS $1a: Fsetdta
+name	$c6dde	gemdos_Dsetdrv	; GEMDOS $0e: Dsetdrv
+name	$c6dfe	gemdos_Dgetdrv	; GEMDOS $19: Dgetdrv
+name	$c6e14	gemdos_Fsfirst	; GEMDOS $4e: Fsfirst
+name	$c6e36	gemdos_Fcreate	; GEMDOS $3c: Fcreate
+name	$c6e72	gemdos_Fopen	; GEMDOS $3d: Fopen
+name	$c7280	gemdos_Ptermres	; GEMDOS $31: Ptermres
+name	$c72ae	gemdos_Pterm	; GEMDOS $4c: Pterm
+name	$c730a	gemdos_Pterm0	; GEMDOS $00: Pterm0
+name	$c73d8	gemdos_Pexec	; GEMDOS $4b: Pexec
+name	$c7c00	gemdos_Mshrink	; GEMDOS $4a: Mshrink
+name	$c7d98	gemdos_Malloc	; GEMDOS $48: Malloc
+name	$c7dec	gemdos_Mfree	; GEMDOS $49: Mfree
+name	$c8802	gemdos_invalid	; GEMDOS $0c, $0d, $0f, $14, $15, $16, $17, $18, $1b, $1c, $1d, $1e, $1f, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $2e, $32, $33, $34, $35, $37, $38, $44, $4d, $50, $51, $52, $53, $54, $55: no such function here (Super is the trap handler's)
+name	$c880c	gemdos_Sversion	; GEMDOS $30: Sversion
+name	$c93b0	gemdos_Tgetdate	; GEMDOS $2a: Tgetdate
+name	$c93c0	gemdos_Tsetdate	; GEMDOS $2b: Tsetdate
+name	$c943e	gemdos_Tgettime	; GEMDOS $2c: Tgettime
+name	$c944e	gemdos_Tsettime	; GEMDOS $2d: Tsettime
+name	$c19d6	flop_getbpb	; TOS 1.04's floppy getbpb ($FC173C), byte for byte; the driver copy chains to it
+name	$c1cbc	flop_rw	; TOS 1.04's floppy rw ($FC1A24), byte for byte; the driver copy chains to it
+name	$c1b86	flop_mediach	; TOS 1.04's floppy mediach ($FC18EC), byte for byte; the driver copy chains to it
+; PP's entry points and state switching.
+name	$c0110	swap_low_ram	; entry 0: swap $8-$7FF (vectors, system variables) with the copy at ($C07E6)+$C0808: TOS's state in, the game's out, or back
+name	$c0134	tos_paths	; entry 1: a VBL tick for _hz_200, then Dsetdrv and Dsetpath to the drive and path LEMLD2 saved ($C0734, $C0760)
+name	$c0170	file_io	; entry 2: load (or with "Wr" save) a whole file by name: game state out, TOS in, Fopen/Fseek/Fread or Fwrite/Fclose, back
+name	$c02ca	file_io_2	; entry 4: the same, for the second parameter set
+name	$c03fc	mfp_quiet	; keep the MFP's interrupt enables and masks, then switch them off
+name	$c0730	io_params	; the parameters of file_io: +4 drive, +6 offset, +$A length, +$E buffer, +$12 "Wr", +$22 name
+name	$c07e6	low_ram_save	; offset from $C0808 to the saved low RAM (swap_low_ram)
+; TOS 1.04's GEMDOS, relocated: console.
+name	$c2296	rtc_digits	; the clock chip's BCD digits to a value
+name	$c35e8	con_check	; a key waiting? ^C ends the program (Pterm), ^S waits for ^Q
+name	$c37a6	con_put	; output with tab expansion and the ^C/^S check
+name	$c3a0c	con_get_echo	; one character in, echoed (Cconin)
+name	$c3b3a	con_puts	; a string out (Cconws)
+; Directory tree, drives, buffers and the FAT.
+name	$c3e20	dnd_free_tree	; free a directory node and its children
+name	$c3f02	drive_open	; build a drive's descriptors from its BPB: root, FAT and data areas
+name	$c4132	buf_flush	; write a changed buffer back (Rwabs), errors to long_jump
+name	$c4246	buf_flush_data	; write back the data buffers (_bufl[1]) of a drive
+name	$c42ee	get_record	; a logical record through the buffer lists: Mediach, Rwabs on a miss
+name	$c4504	fat_set	; write a FAT entry
+name	$c46dc	fat_get	; read a FAT entry
+name	$c4894	cluster_next	; the next cluster of a file, a new one when writing past the end
+name	$c499c	fat_find_free	; the first free cluster
+name	$c4a48	file_advance	; move a file's position on by d0 bytes
+name	$c4a8a	file_rw	; GEMDOS's read/write: whole sectors straight, parts through the buffers
+name	$c4e5c	drive_check	; check a drive and log it in (Getbpb, drive_open); ENSMEM
+name	$c4ff2	curdir_set	; a process's current directory on a drive
+name	$c502a	dir_open	; a file descriptor for a directory
+name	$c522e	path_drive	; the drive of a path ("X:"), else the current one
+name	$c52ca	path_find	; walk a path to its last directory
+name	$c5574	dta_fill	; a directory entry into the DTA (Fsfirst, Fsnext)
+name	$c55de	dir_free_slot	; a free entry in a directory, extending it when full
+name	$c59ac	search_first	; Fsfirst's search: path, name, DTA
+name	$c5c2c	dir_update	; write a file's directory entry back
+name	$c5de0	file_read	; file_rw for reading
+name	$c5e58	ofd_make	; an open-file descriptor for a directory entry
+name	$c5f68	file_create	; Fcreate and Dcreate: a new directory entry, opened
+name	$c6490	file_delete	; free a file's clusters and mark its entry deleted
+name	$c6902	file_seek	; a file position: walk its cluster chain
+name	$c6a42	handle_ofd	; a handle's open-file descriptor
+name	$c6b1e	handle_force	; Fforce: point a standard handle at another
+name	$c6d20	handle_new	; a free handle with a new descriptor
+name	$c6e8a	log2	; the base-2 logarithm of a power of two
+name	$c6eb0	copy_bytes	; copy d bytes
+name	$c6eda	name_to_entry	; a file name to the 11-character directory form, upper case
+name	$c6f26	name_match	; a directory entry against a name with wildcards
+name	$c6fce	path_element	; the next element of a path, in directory form
+name	$c70b2	path_step	; one step of path_find
+name	$c7112	entry_to_name	; a directory entry's name as NAME.EXT
+name	$c71c4	path_build	; a directory's path, built from its parents (Dgetpath)
+name	$c720c	dot_name	; "." or "..": which one, if either
+name	$c724e	compare_bytes	; compare d bytes: 1 if equal
+; Processes and memory.
+name	$c7316	process_close	; close a process's files and free its memory
+name	$c7b12	mem_alloc	; Malloc's allocator
+name	$c7cae	mem_free	; give a block back to the free list
+name	$c7eac	print_string	; a string to the console (Bconout)
+name	$c7ef8	pool_more	; more internal memory: a block in 70-byte pieces
+name	$c8292	pool_unlink	; unlink a piece from its list
+name	$c82f8	pool_put	; give a piece back to the pool
+name	$c8436	to_upper	; upper case of a character
+name	$c8460	jump_to	; jump to the address on the stack
+name	$c8466	swap_word	; a word's bytes swapped (the FAT's little-endian words)
+name	$c8472	swap_long	; a long's bytes swapped
+name	$c8482	set_jump	; setjmp: GEMDOS's error recovery point
+name	$c849e	long_jump	; longjmp to it
+name	$c88c2	dnd_forget_tree	; a changed medium: drop a directory node and its children
+name	$c21a2	rtc_probe	; Mega ST clock chip at $FFFFFC20 present? (a bus-error trap)
+name	$c21f4	rtc_read	; date and time from the Mega ST clock chip
+name	$c3510	con_status	; Bconstat of a handle's device
+name	$c36ae	con_reset	; empty a handle's input buffer
+name	$c36f2	con_put_raw	; Bconout of a character, keeping the cursor column
+name	$c3854	con_out	; one character to a console handle
+name	$c3942	con_get_raw	; Bconin of a handle's device
+name	$c3c86	con_readline	; an edited input line (Cconrs)
+name	$c3da0	dnd_reclaim	; out of internal memory: free directory nodes no file uses
+name	$c3eb2	dnd_new	; a new directory node from the internal pool
+name	$c44a6	get_fat_record	; get_record for the FAT
+name	$c50fa	dir_lookup	; a name in a directory, its entry and descriptor
+name	$c5d88	ofd_new	; a new open-file descriptor
+name	$c5e30	file_write	; file_rw for writing
+name	$c621a	file_open	; Fopen: find the entry, a handle for it
+name	$c67f2	rename_into	; Frename: the new entry in the target directory
+name	$c6a12	handle_std	; a standard handle (0-5) to the handle it stands for
+name	$c6d82	handle_slot	; a free handle slot
+name	$c787c	program_load	; Pexec: read and relocate a program (EPLFMT, ENSMEM)
+name	$c7e34	mem_keep	; Ptermres: keep the process's memory
+name	$c7e68	basepage_init	; Pexec: a new basepage
+name	$c7e9a	out_of_memory	; "*** OUT OF INTERNAL MEMORY ... SYSTEM HALTED ***"
+name	$c7f5a	pool_get	; a piece of internal memory (for descriptors and directory nodes)
+name	$c8008	pool_grow	; take memory for the internal pool
+name	$c8066	mem_take	; take a block from the free list
+name	$c8132	pool_find	; a free piece in the pool
+name	$c822a	pool_link	; link a piece into its list
+name	$c8322	mem_put	; give a block to the free list, merging neighbours
+name	$c83de	bios	; BIOS call for GEMDOS: the return address kept, trap #13
+name	$c83ee	xbios	; the same for XBIOS, trap #14
+name	$c85f2	gemdos_call	; a GEMDOS function from inside GEMDOS
+name	$c860c	time_update	; GEMDOS's date and time from the clock chip, if there is one
+name	$c8632	time_to_bios	; XBIOS Settime with GEMDOS's date and time
+name	$c8952	ofd_forget	; a changed medium: drop its open-file descriptors
+name	$c91f8	media_changed	; a drive's medium changed: forget it, log it in again
+name	$c935a	drive_reopen	; Getbpb and drive_open after a change
+name	$c854c	process_return	; return from the GEMDOS trap with d0 as the result, from the caller's saved context (also to the parent at Pterm)
+name	$c2112	mem_clear	; clear memory from a0 up to a1, 256 bytes at a time with movem
+name	$c8648	lmul	; long multiply (the C compiler's helper)
+name	$c869c	ldiv	; long divide (the C compiler's helper); traps on a zero divisor
+
+; TOS's RAM image at $d055c (TOS's address + $d055c): its vectors and code pointers
+code	$c0c02	bios_trap	; TRAP #13: TOS's dispatcher, the table below
+data	$c0c50	$c0c52	bios_count	; the number of BIOS functions: 12
+pointers	$c0c52	12	4	; BIOS's functions by number; $8000xxxx goes through the RAM vector xxxx
+name	$c0d8e	bios_Bconstat	; BIOS 1: Bconstat
+name	$c0d94	bios_Bconin	; BIOS 2: Bconin
+name	$c0d9a	bios_Bcostat	; BIOS 8: Bcostat
+name	$c0da0	bios_Bconout	; BIOS 3: Bconout
+name	$c0e30	bios_Drvmap	; BIOS 10: Drvmap
+name	$c0e36	bios_Kbshift	; BIOS 11: Kbshift
+name	$c0e48	bios_Getmpb	; BIOS 0: Getmpb
+name	$c0e74	bios_Setexc	; BIOS 5: Setexc
+name	$c0e8c	bios_Tickcal	; BIOS 6: Tickcal
+code	$c0bfc	xbios_trap	; TRAP #14: TOS's dispatcher, the table below
+data	$c0c82	$c0c84	xbios_count	; the number of XBIOS functions: 65
+pointers	$c0c84	65	4	; XBIOS's functions by number; $8000xxxx goes through the RAM vector xxxx
+name	$c0b94	bios_none	; XBIOS 1, 40, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63: nothing
+name	$c0be0	xbios_Vsync	; XBIOS 37: Vsync
+name	$c0d88	xbios_Supexec	; XBIOS 38: Supexec
+name	$c0e94	xbios_Physbase	; XBIOS 2: Physbase
+name	$c0ea4	xbios_Logbase	; XBIOS 3: Logbase
+name	$c0eaa	xbios_Getrez	; XBIOS 4: Getrez
+name	$c0eb6	xbios_Setscreen	; XBIOS 5: Setscreen
+name	$c0efc	xbios_Setpalette	; XBIOS 6: Setpalette
+name	$c0f04	xbios_Setcolor	; XBIOS 7: Setcolor
+name	$c0f28	xbios_Puntaes	; XBIOS 39: Puntaes
+name	$c101a	xbios_Scrdmp	; XBIOS 20: Scrdmp
+name	$c1116	xbios_Gettime	; XBIOS 23: Gettime
+name	$c1124	xbios_Settime	; XBIOS 22: Settime
+name	$c1174	xbios_Blitmode	; XBIOS 64: Blitmode
+name	$c11e6	xbios_Floprd	; XBIOS 8: Floprd
+name	$c12b6	xbios_Flopwr	; XBIOS 9: Flopwr
+name	$c1372	xbios_Flopfmt	; XBIOS 10: Flopfmt
+name	$c1532	xbios_Flopver	; XBIOS 19: Flopver
+name	$c1932	xbios_Floprate	; XBIOS 41: Floprate
+name	$c19cc	xbios_Dbmsg	; XBIOS 11: Dbmsg
+name	$c1f0a	xbios_Random	; XBIOS 17: Random
+name	$c1fd0	xbios_Protobt	; XBIOS 18: Protobt
+name	$c24ee	xbios_Midiws	; XBIOS 12: Midiws
+name	$c26d2	xbios_Ikbdws	; XBIOS 25: Ikbdws
+name	$c299c	xbios_Mfpint	; XBIOS 13: Mfpint
+name	$c29c6	xbios_Jdisint	; XBIOS 26: Jdisint
+name	$c29fe	xbios_Jenabint	; XBIOS 27: Jenabint
+name	$c2c34	xbios_Iorec	; XBIOS 14: Iorec
+name	$c2c4c	xbios_Rsconf	; XBIOS 15: Rsconf
+name	$c325e	xbios_Giaccess	; XBIOS 28: Giaccess
+name	$c3294	xbios_Ongibit	; XBIOS 30: Ongibit
+name	$c32ba	xbios_Offgibit	; XBIOS 29: Offgibit
+name	$c32e0	xbios_Initmous	; XBIOS 0: Initmous
+name	$c33aa	xbios_Xbtimer	; XBIOS 31: Xbtimer
+name	$c33e4	xbios_Keytbl	; XBIOS 16: Keytbl
+name	$c3410	xbios_Bioskeys	; XBIOS 24: Bioskeys
+name	$c342a	xbios_Dosound	; XBIOS 32: Dosound
+name	$c343e	xbios_Setprt	; XBIOS 33: Setprt
+name	$c3450	xbios_Kbrate	; XBIOS 35: Kbrate
+name	$c3472	xbios_Kbdvbase	; XBIOS 34: Kbdvbase
+name	$c98ce	xbios_Cursconf	; XBIOS 21: Cursconf
+pointers	$d0564	254	4	; the exception vectors $8-$3FF of TOS's image
+name	$c9a3e	linea_handler	; vector $28 in TOS's image
+name	$c0bb6	hbl	; vector $68 in TOS's image
+name	$c0bcc	vbl	; vector $70 in TOS's image
+name	$c83fe	trap2	; vector $88 in TOS's image
+name	$c347a	timer_c	; vector $114 in TOS's image
+name	$c2d20	ikbd_irq	; vector $118 in TOS's image
+name	$c0f42	exception	; TOS's exception handler: every vector without its own, the vector number in its high byte; bombs on the screen
+pointers	$d095c	3	4	; TOS's etv vectors at $400 in the image
+pointers	$d09c6	6	4	; TOS's hdv vectors at $46a in the image
+pointers	$d0a5e	5	4	; TOS's prv vectors at $502 in the image
+name	$c844c	etv_timer_handler	; system variable $400 in TOS's image
+name	$c0bf8	etv_critic_handler	; system variable $404 in TOS's image
+name	$c195a	hdv_init_handler	; system variable $46a in TOS's image
+name	$c0830	swv_vec_handler	; system variable $46e in TOS's image
+name	$c1f56	hdv_boot_handler	; system variable $47a in TOS's image
+name	$c1028	scr_dump_handler	; system variable $502 in TOS's image
+name	$c25ec	prv_lsto_handler	; system variable $506 in TOS's image
+name	$c2550	prv_lst_handler	; system variable $50a in TOS's image
+name	$c2660	prv_auxo_handler	; system variable $50e in TOS's image
+name	$c267a	prv_aux_handler	; system variable $512 in TOS's image
+; TOS 1.04's BIOS, relocated: start-up, floppy, serial, keyboard and the rest.
+name	$c0830	tos_start	; TOS's start-up (in TOS, swv_vec points here: a monitor change restarts): sound chip, palette, screen, system vectors
+name	$c0ab6	start_step	; a step of tos_start
+name	$c0ff2	critical_error	; through etv_critic: the critical-error handler
+name	$c1014	boot_none	; hdv_boot without a bootable disk
+name	$c119c	blitter_present	; start-up: the blitter's presence
+name	$c11a0	flop_init	; hdv_init: seek both floppy drives home, note which answer
+name	$c1294	flop_dma_buffer	; set the DMA address and direction for a floppy transfer
+name	$c13e8	flop_format_track	; Flopfmt: write one track
+name	$c152a	flop_format_done	; Flopfmt: the end of a track
+name	$c154e	flop_verify_track	; Flopfmt and Flopver: read a track back
+name	$c168c	flop_go	; select drive and side, spin up, seek: the start of every floppy operation
+name	$c1762	flop_fmt_err	; Flopfmt: its error exit
+name	$c1768	flop_restore	; seek to track 0 (restore)
+name	$c1780	flop_seek_verify	; seek with verify
+name	$c17b4	flop_read_track	; the track register, for Floprd and Flopwr
+name	$c17da	flop_seek	; seek to the track in the FDC's data register
+name	$c17f0	flop_command	; one FDC command, waited for
+name	$c1832	flop_wait	; wait for the FDC (MFP GPIP 5) with a timeout
+name	$c184c	flop_select	; select drive and side (sound chip port A)
+name	$c1874	flop_status	; the FDC status after a transfer
+name	$c1892	flop_select_bits	; the port A bits for a drive and side
+name	$c18b2	fdc_write_cmd	; write the FDC's command register through the DMA
+name	$c18ba	fdc_write	; write an FDC register through the DMA
+name	$c18c2	fdc_write_track	; write the FDC's track register
+name	$c18ca	fdc_read	; read an FDC register through the DMA
+name	$c18d0	fdc_delay	; the pause between DMA register accesses
+name	$c18e2	flop_lock	; take the floppy lock (flock) for an XBIOS floppy call
+name	$c1922	flop_unlock	; deselect and release
+name	$c1bee	flop_check_change	; floppy media change: the write-protect and boot-sector checks
+name	$c1d42	flop_rw_sectors	; flop_rw's work: logical sectors to track and side, Floprd/Flopwr/Flopver with retries
+name	$c20bc	boot_checksum	; a boot sector's word sum ($1234: executable)
+name	$c20ec	bpb_from_boot	; a BPB from a boot sector's fields
+name	$c217e	clock_init	; start-up: the clock chip's date and time to GEMDOS
+name	$c2406	ikbd_init	; start-up: the keyboard processor
+name	$c24dc	midi_put	; a byte to the MIDI ACIA
+name	$c25c0	prn_ready	; the printer port's busy line
+name	$c25c6	prn_put	; a byte to the printer port
+name	$c26b4	ikbd_send	; bytes to the keyboard processor
+name	$c26d0	ikbd_send_done	; the end of ikbd_send
+name	$c26dc	ikbd_mouse	; Initmous: the keyboard processor's mouse mode
+name	$c274e	mfp_init	; start-up: the MFP, the ACIAs, timers and interrupt vectors
+name	$c289e	mfp_vectors	; the MFP's interrupt vectors
+name	$c28f4	mfp_timer	; set an MFP timer: control and data registers
+name	$c2966	mfp_timer_stop	; stop an MFP timer
+name	$c296e	mfp_timer_regs	; an MFP timer's control and data register addresses
+name	$c29aa	mfp_irq	; set an MFP interrupt vector and its enable bit
+name	$c29d0	mfp_irq_off	; disable an MFP interrupt
+name	$c2a08	mfp_irq_on	; enable an MFP interrupt
+name	$c2a26	mfp_irq_bit	; the enable, pending and mask bits of an MFP interrupt
+name	$c2b6c	rs232_get	; a byte from the serial port's input buffer
+name	$c2bae	rs232_put	; a byte to the serial port's output buffer
+name	$c2bce	rs232_start	; start the serial transmitter
+name	$c2bf0	rs232_init	; the serial port's buffers
+name	$c2c0c	rs232_flow	; the serial port's flow control
+name	$c2c28	rs232_empty	; the serial output buffer empty?
+name	$c3266	psg_port_a	; set or clear bits of the sound chip's port A
+name	$c3290	psg_init	; start-up: the sound chip
+name	$c3390	mouse_params	; Initmous: its parameter block
+; GEMDOS's start and timer.
+name	$c7afa	gemdos_start_msg	; GEMDOS's start: BIOS output
+name	$c7eda	pool_init	; GEMDOS's start: its internal memory pool
+name	$c8396	gemdos_init_drive	; GEMDOS's start: the boot drive
+name	$c877e	gemdos_init	; GEMDOS's start: memory, drives, the default drive
+name	$c881a	gemdos_init_mem	; GEMDOS's start: its memory lists
+name	$c90b8	gemdos_tick	; etv_timer: GEMDOS's date and time, every tick
+; TRAP #2 and the blitter.
+name	$c99c8	vdi_aes	; TRAP #2: the VDI's entry (d0 = $73) and the AES's, as TOS 1.04 starts them
+name	$ca184	blitter_probe	; Blitmode: is there a blitter (a bus-error test)
+name	$ca1ac	blitter_mode	; Blitmode: its mode bits
+name	$ca1b4	vdi_dispatch	; the VDI's dispatcher
+name	$c10a7	no_hardcopy	; PP: TOS's bsr to its hard-copy routine (not in D15R) now points here, an odd address: Alt-Help would end in an address error
+name	$c0bf4	flop_nolock	; release the floppy lock (flock)
+name	$c113a	init_memory	; start-up: memory and the screen

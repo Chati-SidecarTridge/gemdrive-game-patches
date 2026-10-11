@@ -20,7 +20,9 @@ released (C-02).
 tools/dev/all_harness.sh
 ```
 
-Builds the disks, round-trips the `START.TOS` text, runs the launcher on all six setups, checks
+Builds the disks, round-trips the `START.TOS` text and every source of the launcher (EPIC-02:
+reassembled to the original bytes, and checked with a `nop` inserted), runs the launcher on all
+six setups, checks
 that the harness reports a failure, checks `LEMMINGS/` against `LEMMINGS.sha256` and that no
 Hatari is left. One line per check; exit 0 only if all pass. About two minutes.
 
@@ -30,11 +32,15 @@ Hatari is left. One line per check; exit 0 only if all pass. About two minutes.
 | --- | --- |
 | `toolchain.sh` | sourced: the pinned image (tag and digest), `tc_run`, `tc_path`, `tc_stage` |
 | `disasm.sh <bin> <vma> <out> [arch]` | objdump listing of a raw binary loaded at `<vma>`; `m68k:68000` unless told otherwise; `-z`, so zero runs are listed |
-| `asm.sh <src.s> <out.bin> [<listing>]` | vasm, Motorola syntax, 68000, `-Fbin`, `-no-opt`, every error reported |
+| `asm.sh [--tos] <src.s> <out.bin> [<listing>]` | vasm, Motorola syntax, 68000, `-Fbin` (or with `--tos` a GEMDOS program, `-Ftos -nosym`), `-no-opt`, every error reported; includes from the source's folder and the repository |
 | `listing2vasm.py [--verbose] <listing> <bin> <out.s>` | a listing turned into a vasm source that reassembles to `<bin>`; lines that will not are kept as `dc.w` with their disassembly |
-| `roundtrip.sh <src.s> <ref.bin>` | assemble and compare: PASS, or FAIL with the first differing offset |
+| `roundtrip.sh [--tos] <src.s> <ref.bin>` | assemble and compare: PASS, or FAIL with the first differing offset |
+| `m68k.py` | imported: 68000 instruction lengths, branch and call targets, absolute and PC-relative operands (EPIC-02) |
+| `mksource.py [--report] <stage.map> <out.s>` | a labelled source for a launcher stage from its map (entries, data, names, comments, pointer tables, run addresses, executed addresses) and its bytes; reassembles to them (EPIC-02 STORY-04) |
+| `shiftcheck.py [--tos] <src.s> <origin>` | inserts a `nop` mid-source, reassembles, and checks every reference moved with its target |
 | `make_disks.sh [<game folder>]` | `builds/disks/`: `gemdrive/` (drive C: for GEMDRIVE mode) and `ppdriver.img` (the PPDRIVER reference, D-09), from a copy of `LEMMINGS/` or of the folder given |
-| `hatari_harness.py --setup <s> --disk <d> [...]` | one Hatari run, headless, with a run folder in `logs/` |
+| `hatari_harness.py --setup <s> --disk <d> [...]` | one Hatari run, headless, with a run folder in `logs/`; `--start <path>` runs another program than `START.TOS` |
+| `../build_launcher.sh [<src>] [<out>]` | Lemmings' launcher built from `src/` into `builds/launcher/LEMMINGS/` (EPIC-02 STORY-06); then `make_disks.sh builds/launcher/LEMMINGS` |
 | `all_harness.sh` | all of the above, once |
 
 Examples:
@@ -56,7 +62,8 @@ Setups: `st-104` (ST, TOS 1.04), `ste-162` (STE, TOS 1.62), `ste-206` (STE, TOS 
 `gemdrive` (Hatari's GEMDOS drive, `--harddrive`) and `ppdriver` (the ACSI image, `--acsi`).
 Options: `--expect <file>` (default: wait 20 s, screenshot), `--parse <debugger script>`,
 `--memsize <MB>` (default 1, the game's minimum), `--no-auto` (desktop only, no
-`START.TOS`), `--step-time <s>` (default 60), `--name <suffix>`.
+`START.TOS`), `--start <path>` (another program to start, for example
+`C:\LEMMINGS\GXUT260.PRG`), `--step-time <s>` (default 60), `--name <suffix>`.
 
 Each run gets `tools/dev/logs/<date>-<setup>-<disk>[-name]/` (git-ignored):
 
@@ -133,6 +140,15 @@ off from there, which keeps instruction traces bounded.
 - `cpu_exception` tracing logs every interrupt (26, 28, 30 each frame) and traps; bus and
   address errors print as `Bus error …` lines, not as `cpu exception 2`.
 - Hatari matches GEMDOS-drive file names without regard to case, whatever the host file system.
+- Hatari's CPU profiler (`profile on`) compiles its data only when the emulation stops in the
+  debugger, and starts a new profile each time it leaves it: every `:file` breakpoint and every
+  `hatari-debug` command does both. Save with a real (not `:trace`) breakpoint whose file ends in
+  `profile save <file>` and `c`; the disassembly goes to `hatari.out`, not to the file
+  (`src/probes/epic02/profile_probe.py`).
+- Docker Desktop can wedge: containers stay "Created" and `docker rm` hangs. `docker desktop
+  restart` brings it back (an `osascript` quit did not).
+- objdump with `-m m68k:68000` reads `movec` and `pmove` as one-word `.short`s and loses step
+  after them: `mksource.py` hides them from objdump and writes them as `dc.w`.
 - A CPU trace (`--trace cpu_disasm`) gets huge: the first pass's reached 800 MB
   (`_archive/2026-04-first-pass/trace.log`). Bound it in time, and read traces with `grep`,
   `head`, `tail`, never whole.

@@ -58,7 +58,7 @@ onto the image's directories and FAT (record numbers are 1,024-byte logical sect
 | 813, 814, 815 × 100 → `$A00`, 915 | `MAIN` (105,220 bytes) |
 | 415 × 80 → `$10000`, 495, 496 | `INTROPAR` (83,362 bytes) |
 | 497, 498, 499 × 76 → `$A00`, 575 | `CODE` (80,639 bytes), over `MAIN` |
-| 677 × 2, 679, 680 | `LEVELDAT`, after the click on "1 PLAYER" |
+| 677 × 2, 679, 680 | `LEVELDAT`, at the title, before any click (first written here as after the click; corrected in EPIC-02 STORY-01) |
 | 407 × 2 → `$41800`, 409 | `LEVEL020`, the first level's data |
 
 Partial first and last sectors go through the driver's bounce buffers at `$B3100`/`$B5100`; the
@@ -76,7 +76,7 @@ memory writes bypass the I/O handlers (`STMemory_Write` writes the memory array,
 frame, the table the game's own IKBD sender reads (`$D0A0`: `01 0D`, one byte, the poll) into
 `06 0E 00 xh xl yh yl` (load mouse position) and restores it at the sender's `rts` (`$E996`);
 the IKBD then reports the new position and `event doubleclick` clicks there. Clicking "1 PLAYER"
-at (70,150) loads `LEVELDAT` and `LEVEL020`.
+at (70,150) loads `LEVEL020`.
 
 **Open issue: the reference does not reach the first level in Hatari.** Right after the level
 load the game raises an address error: `move.l (a0)+,(a1)+` at `$2B10` with `a0 = $3E409` (odd),

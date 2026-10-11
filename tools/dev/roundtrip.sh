@@ -4,15 +4,23 @@
 # assembles the source and compares the result with the original bytes
 # (EPIC-00 STORY-03).
 #
-# Usage: tools/dev/roundtrip.sh <source.s> <reference.bin>
+# Usage: tools/dev/roundtrip.sh [--tos] <source.s> <reference.bin>
+#
+# --tos assembles a GEMDOS program (tools/dev/asm.sh --tos) and compares the
+# whole file, header and relocation table included.
 #
 # Prints PASS, or FAIL with the first differing offset, both bytes there, both
 # lengths and both SHA-256. Exit 0 on PASS, 1 on FAIL or when the source does
 # not assemble. The assembled binary is kept in tools/dev/builds/roundtrip/.
 set -euo pipefail
 
+tos=()
+if [[ ${1:-} == --tos ]]; then
+  tos=(--tos)
+  shift
+fi
 if [[ $# -ne 2 ]]; then
-  echo "usage: $0 <source.s> <reference.bin>" >&2
+  echo "usage: $0 [--tos] <source.s> <reference.bin>" >&2
   exit 2
 fi
 src=$1 ref=$2
@@ -22,7 +30,7 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 out="$here/builds/roundtrip/$(basename "${src%.*}").bin"
 mkdir -p "$(dirname "$out")"
 rm -f "$out"
-if ! "$here/asm.sh" "$src" "$out"; then
+if ! "$here/asm.sh" ${tos[@]+"${tos[@]}"} "$src" "$out"; then
   echo "FAIL $src: does not assemble"
   exit 1
 fi

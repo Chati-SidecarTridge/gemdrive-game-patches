@@ -1,0 +1,114 @@
+; LEMLD2.TOS: the program START.TOS unpacks and runs (EPIC-02 STORY-01, STORY-02, STORY-04).
+binary	tools/dev/builds/epic02/unpacked/LEMLD2.TOS
+format	tos
+include	src/include/atari.i
+title	LEMLD2.TOS, unpacked from START.TOS: a GEMDOS program, text 34,910 bytes, BSS $1B046.
+title	PP's launcher for Lemmings: checks the machine, shows its info screen and cover picture,
+title	sets up Gamex, loads D15R and LS2DD, takes over PP's resident driver (or boots one from
+title	the disk) and hands over to D15R and its block at $80100. Notes: src/notes/launch-chain.md.
+run	$604	$c44	$80100	block	; copied to $80100 and run there (STORY-01)
+run	$912	$c44	$85000	loader	; block+$30E, copied on to $85000: PP's loader
+executed	src/lemld2/lemld2.executed
+
+; The launch, in the order it runs.
+code	$0	start	; entry from START.TOS's stub: detect the machine (hw_detect), then refuse 512 KB
+name	$36	fatal	; print the message at a0, wait for a key, Pterm0
+name	$46	fatal_512k	; "Min RAM: 1MB !"
+name	$4e	main	; past the checks: own stack, cut the TPA, low resolution, screen at $78000
+name	$11e	info_screen	; machine info and "GAMEX: key F9"; M opens the settings menu, any other key goes on
+name	$174	cover	; the cover picture: none on a TT, cover_falcon on a Falcon, cover_st otherwise
+name	$196	gamex_setup	; the Gamex header at $FFF40 (GAMEXdoc.html's PPGX fields) and stacks
+name	$200	load_d15r	; D15R_H5.FIC (D15R_F5.FIC on a Falcon), else in C:\GAMEX\; unpacked to $C0100
+name	$27a	save_low_ram	; TOS's low RAM ($8 up to text+$13E6) to $D7008, for the exit to the Desktop
+name	$2be	load_ls2dd	; LS2DD.FIC to $81000, a fixed 4,929 bytes
+name	$2f4	set_paths	; Dsetpath("FILES"); Dgetdrv to $C0734 and Dgetpath to $C0760 for D15R
+name	$324	check_pp_driver	; hdv_bpb preceded by the XBRA id "PPHD"? (EPIC-01)
+name	$334	reuse_pp_driver	; copy the resident driver to $B7180 and rewire it to D15R
+name	$3f4	set_buffers	; two GEMDOS buffer lists (_bufl) with 8 KB buffers from $AF100
+name	$482	no_pp_driver	; fallback: read the disk's boot sector by itself
+name	$49e	no_pp_driver_tos2	; TOS 2 and later: XBIOS DMAread on pun_ptr's device
+name	$4e8	boot_driver	; run the boot sector with trap1_stub giving the driver a fixed area
+name	$5d2	start_d15r	; call D15R's init ($C0100 + its fourth offset), copy the block, jump to it
+name	$83c	error_exit	; "This prg. requires PP, AHDI or Hddriver ..." and Pterm
+
+; The block: copied to $80100 (block_run) and run there.
+name	$604	block	; unpack LS2DD to $70000, copy the loader to $85000, patch LS2DD, start it
+name	$650	start_game	; $8014C, from LS2DD's jump to the game: patch MAIN, jmp $400
+code	$684	start_intro	; $80180, from MAIN: patch the intro (INTROPAR at $10000) and start it
+code	$6a6	load_code_main	; $801A2, from MAIN: the loader reads "CODE", back to LS2DD at $70030
+code	$6ba	load_code_intro	; $801B6, from the intro: the same, back to LS2DD at $70032
+data	$6ce	$6d4	code_name	; "CODE"
+code	$6d4	patch_code	; $801D0: PP's changes to CODE (the loader copied in, level entry "map 001-120"), jmp $400
+name	$912	loader	; $85000: PP's replacement for the game's floppy loader, through D15R
+
+; Machine information (hw_detect), copied into the block with it.
+name	$832	hw_tos_major	; TOS version, major
+name	$833	hw_tos_minor	; TOS version, minor
+name	$834	hw_tos_ram	; TOS's RAM in 512 KB steps
+name	$835	hw_machine	; 1 ST, 2 STE, 3 Mega STE, 4 Falcon, 5 TT
+name	$839	hw_ram	; real RAM in 512 KB steps
+name	$a06	is_falcon	; set by the Falcon setup: D15R_F5.FIC instead of D15R_H5.FIC
+
+; Routines.
+name	$b32	depack	; PP's packer: stream at a1 to a4 (src/notes/launcher-formats.md)
+code	$b6c	trap1_stub	; TRAP #1 while a driver boots: Malloc and Mshrink get the fixed area, the rest goes on
+name	$b80	trap1_old	; the jmp's operand: the previous TRAP #1 vector, written by boot_driver
+name	$bb0	boot_sector_sum	; word sum of the sector buffer ($1234 = executable)
+name	$bc6	acsi_read_sector0	; TOS 1: sector 0 through the ACSI DMA registers
+name	$be8	acsi_command	; one ACSI command and its DMA transfer
+name	$c88	acsi_wait	; wait for MFP GPIP 5 with a 10-tick _hz_200 timeout
+name	$cc0	ide_probe	; no ACSI answer: try the Falcon's IDE (bus error on an ST)
+name	$d2e	ide_buserr	; the bus-error handler of ide_probe
+name	$d38	ide_read_sector0	; sector 0 through the IDE registers at $FFF00000
+data	$d92	$d9c	ls2dd_name	; "LS2DD.FIC"
+data	$d9c	$da5	d15r_h5_gamex	; "C:\GAMEX\D15R_H5.FIC"; +9 is the bare name
+data	$db1	$dba	d15r_f5_gamex	; "C:\GAMEX\D15R_F5.FIC"; +9 is the bare name
+data	$dc6	$dcc	files_name	; "FILES"
+name	$dcc	cut_memory	; Supexec: phystop to $80000, _memtop lowered by the TOS state kept on top
+name	$e4e	tos_restore	; 512 bytes copied to $FFD20: Gamex's way back to the Desktop
+name	$f8e	hw_detect	; Supexec: TOS version, RAM sizes and machine type into hw_*
+name	$10ae	falcon_setup	; Falcon: bus and caches, 68030 MMU (pmove), sets is_falcon
+name	$117e	show_info	; print machine, TOS RAM, ST RAM, TOS version, "GAMEX: key F9"
+name	$12c6	print	; Cconws(a0)
+name	$12d2	two_digits	; d1 (0-99) as two ASCII digits at a1, a leading 0 as a space
+name	$13e6	low_ram_end	; up to here TOS's low RAM is saved; also LEMLD2's stack top
+name	$1406	settings_menu	; M at the info screen: Mega STE clock, Falcon bus and caches, TT caches
+name	$1aba	flush_keys	; Cconis/Crawcin until no key is waiting
+name	$1ad2	pch_name	; "LEMMINGS.PCH"
+name	$1ae4	cover_falcon	; the cover picture on a Falcon (VgetMonitor, its own screen)
+name	$1c46	falcon_picture	; the cover converted for the Falcon's screen
+name	$2052	cover_st	; the cover picture on an ST: LEMMINGS.PCH's frames with raster colours
+name	$20e4	pch_open	; Fopen("LEMMINGS.PCH") and read its 6-byte header
+name	$21d2	pch_show	; read the frames and run the display until a key or the timeout
+name	$2272	pch_read_screen	; Fread 32,000 bytes: a frame's screen
+name	$228c	pch_read_colours	; Fread 19,232 bytes: a frame's colours
+name	$22fc	pch_vbl	; VBL routine of the cover: the HBL colour routine for 50 or 60 Hz
+name	$800c	ikbd_quiet	; mouse off, pch_vbl into the VBL list
+name	$802c	ikbd_back	; pch_vbl out, mouse on again
+name	$8044	acia_flush	; read the keyboard ACIA until empty
+name	$822a	mste_speed_save	; Mega STE: keep the CPU speed register ($FFFF8E21) and set 8 MHz
+name	$8248	mste_speed_restore	; Mega STE: put the speed register back
+name	$825a	mste_8mhz	; Mega STE: 8 MHz, no cache
+name	$826a	screen_save	; Physbase, Getrez, Setscreen low resolution
+name	$82c4	screen_restore	; Setscreen back
+name	$82ec	mfp_save	; keep usp, HBL, VBL, ACIA vectors and the MFP's timers and masks
+name	$8340	mfp_restore	; put them back
+name	$839c	wait_key	; read keys while one is waiting, the last one in d0
+name	$8412	flush_keys_all	; flush_keys, all registers kept
+name	$8436	clear_screen	; clear the 32,000 bytes below a0+32000
+name	$885e	d15r_buffer	; BSS: D15R_*.FIC is read here (51,000 bytes at most)
+name	$8864	sector_buffer	; BSS: the boot sector read by no_pp_driver
+name	$1fb6	falcon_colours	; a lookup table from the ST's 16 colours to the Falcon's
+name	$1ffe	falcon_pixel	; store the Falcon colour for pixel value d4 at (a5)+
+name	$2010	planes_to_pixel	; one pixel's four bit-plane bits (d0-d3) into a 4-bit value in d4
+name	$202a	planes_to_pixels	; the same for the next pixel, then falcon_pixel
+name	$22a6	pch_frame0	; frame 0 to the screen, if header flag bit 0 is clear
+name	$22d0	pch_frame1	; frame 1 to its buffer, if header flag bit 1 is clear
+name	$c8c	acsi_wait_loop	; acsi_wait's polling loop, the timeout already set
+name	$9a6	loader_skip	; a request the loader leaves alone: d0 = 0
+name	$9aa	loader_low	; a destination below $800: the part under $800 first, then the rest
+name	$a00	loader_sr	; the caller's SR and stack pointer while D15R runs
+name	$b6e	trap1_frame	; the operand of trap1_stub's lea: 6, or 8 on the Falcon (the 68030's format word)
+name	$b90	trap1_area	; operand: what Malloc answers, $AF100 (Falcon and TT: $186000), set by boot_driver
+name	$b98	trap1_size	; operand: what Malloc(-1) answers, $10EB4 (Falcon and TT: $1F914)
+name	$ba0	trap1_area_check	; operand: the area Mshrink accepts, set with trap1_area

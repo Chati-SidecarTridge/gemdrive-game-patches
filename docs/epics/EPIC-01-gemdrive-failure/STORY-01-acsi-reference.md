@@ -33,8 +33,10 @@ data load on every setup, not the level itself (below).
 - `tools/dev/expect/reference-first-level.exp`: `start-tos`, `pch`, `ls2dd`, `files-dir`, then
   D15R's sector reads `root-dir` (65), `psyglogo` (387×8 → `$60000`), `dmalogo` (397×8),
   `main-file` (815×100 → `$A00`), `intropar` (415×80 → `$10000`), `code-file` (499×76 → `$A00`),
-  the title (no output for 4 s, about 17 s after start), a click on "1 PLAYER", `leveldat`
-  (677×2), `level-020` (407×2 → `$41800`). PASS on ST TOS 1.04 (run
+  `leveldat` (677×2), the title (no output for 4 s, about 17 s after start), a click on
+  "1 PLAYER", `level-020` (407×2 → `$41800`). (`LEVELDAT` is read at the title, before any
+  click; this note first put it after the click. Corrected in EPIC-02 STORY-01 from the 11
+  reference runs, the missed click included, and the expectations reordered.) PASS on ST TOS 1.04 (run
   `20261011-144024-st-104-ppdriver-first-level`, 34 s); the six gate runs of STORY-02 reach the
   title on STE 1.62 and 2.06 too.
 - The disk calls of a good boot, every `Rwabs` mapped onto the image's directories and FAT, are
