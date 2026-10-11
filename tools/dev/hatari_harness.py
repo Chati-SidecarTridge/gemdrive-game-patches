@@ -229,6 +229,7 @@ def main() -> int:
     ap.add_argument("--parse", type=Path, help="Hatari debugger script")
     ap.add_argument("--memsize", type=int, default=1, help="ST RAM in MB, at least 1 (C-04)")
     ap.add_argument("--no-auto", action="store_true", help="boot to the desktop only")
+    ap.add_argument("--start", default=AUTO, help=f"program to start (default {AUTO})")
     ap.add_argument("--step-time", type=float, default=60, help="seconds per step")
     ap.add_argument("--name", default="", help="suffix for the run folder")
     ap.add_argument("--trace", default="", help=f"Hatari trace flags to add to {TRACE}")
@@ -265,7 +266,7 @@ def main() -> int:
         subprocess.run(["cp", "-c", str(disks / "ppdriver.img"), str(run_dir)], check=True)
         cmd += ["--acsi", f"0={run_dir / 'ppdriver.img'}"]
     if not args.no_auto:
-        cmd += ["--auto", AUTO]
+        cmd += ["--auto", args.start]
     if args.parse:
         cmd += ["--parse", stage_debugger_script(args.parse, run_dir)]
     shutil.copy(disks / "SOURCE.txt", run_dir / "SOURCE.txt")

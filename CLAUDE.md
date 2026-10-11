@@ -94,7 +94,12 @@ python3 src/probes/epic01/gate_probe.py <setup> <disk>  # EPIC-01's breakpoint c
 tools/dev/disasm.sh <bin> <vma> <out.lst>      # objdump listing, 68000
 python3 tools/dev/listing2vasm.py <out.lst> <bin> <out.s>   # a source that reassembles to <bin>
 tools/dev/roundtrip.sh <src.s> <ref.bin>       # PASS, or FAIL at the first differing offset
-tools/dev/asm.sh <src.s> <out.bin> [<listing>] # vasm, 68000, -no-opt
+tools/dev/asm.sh [--tos] <src.s> <out.bin> [<listing>] # vasm, 68000, -no-opt (--tos: a GEMDOS program)
+python3 tools/dev/mksource.py src/<stage>/<stage>.map src/<stage>/<stage>.s   # a stage's source from its map
+python3 tools/dev/shiftcheck.py [--tos] <src.s> <origin>                     # still right with a nop inserted?
+python3 tools/unpack.py start|fic|text|relocate ...   # PP's formats unpacked; tools/pack.py packs them
+python3 src/probes/epic02/chain_probe.py <setup>      # a dump of every launcher stage at its entry
+tools/build_launcher.sh [<src folder>]                # the launcher built from src/ into tools/dev/builds/launcher/
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```
@@ -140,9 +145,15 @@ classified by how they run from a hard disk; EPIC-04, the GEMDRIVE fix for Lemmi
 - **Hatari's debugger writes memory behind the I/O handlers** (`STMemory_Write`): a `w` to the
   ACIA or the DMA registers changes nothing. To make the machine send an IKBD command, make its
   own code do it (the harness's `mouse` step). `w` values are in the current base: `$0e`.
-- **The launcher reads the game by sectors**, not by file name: after `Dsetpath("FILES")` every
-  access is BIOS `Rwabs` on drive C through the PP driver (`src/notes/gemdrive-failure.md`). A
-  GEMDOS drive has no sectors; that is the whole GEMDRIVE problem.
+- **The launcher reads the game by sectors**, not through the system's GEMDOS: the game asks
+  PP's loader for a file by name, and D15R (TOS 1.04 running from RAM, H-08) swaps in its own
+  TOS and reads the FAT volume with BIOS `Rwabs` through the PP driver
+  (`src/notes/gemdrive-failure.md`, `src/notes/launch-chain.md`). A GEMDOS drive has no sectors;
+  that is the whole GEMDRIVE problem.
+- **The sources in `src/` are generated from their maps** (`src/<stage>/<stage>.map`) by
+  `tools/dev/mksource.py`: change the map (names, comments, entries) and regenerate, then
+  `tools/dev/all_harness.sh`. Hand edits to a `.s` are lost on the next generation. D15R's two
+  sources are TOS 1.04's code and are not committed (D-13): `tools/make_sources.sh` makes them.
 - **Never read a trace whole.** `hatari.out` is tens of thousands of lines, and a CPU trace gets
   huge (the first pass's reached 800 MB); use `grep`, `head`, `tail` or `sed -n`, and bound CPU
   traces in time.

@@ -1,0 +1,58 @@
+; LS2DD: the stage LEMLD2's block unpacks to $70000 (EPIC-02 STORY-01, STORY-02, STORY-04).
+binary	tools/dev/builds/epic02/unpacked/LS2DD.bin
+format	bin
+origin	$70000
+include	src/include/atari.i
+title	LS2DD.FIC, unpacked: 7,168 bytes run at $70000, entered at $7005A.
+title	The game's own loader (not PP's): protection, an ICE depacker, palette fades and a
+title	floppy loader that drives the FDC itself. PP's block patches two places before it runs:
+title	the jump to the game ($70A8C) and the file loader ($70E38, to PP's loader at $85000).
+title	$70000-$709A5 is decrypted in place at run time (the loop at $709A6) and the code there
+title	runs changed; it is kept here as the stored bytes, not reconstructed (STORY-04 notes).
+executed	src/ls2dd/ls2dd.executed
+
+code	$7005a	start	; entry, from the block: VBL, MFP off, then the protection
+name	$700a0	bus_error	; LS2DD's bus-error handler, set at start
+name	$700c8	fault_loop	; flashes the background colour for ever: where a crash ends (EPIC-01)
+name	$70994	decrypt	; clears its own code, then the loop at $709A6 decrypts $6E9A4-$709A5
+name	$709ba	push_loop	; pushes the stack down over its own code: protection
+name	$70a8c	jump_game	; jmp $400; the block makes it jmp $8014C (start_game) first
+name	$70a92	vbl	; LS2DD's VBL handler
+name	$70a9c	fade_palette	; fade the hardware palette towards the 16 colours at a0, 16 steps, one per VBL
+name	$70aec	depack	; a depacker with a checksum (eor.l): the stream ends at a0+d0
+name	$70ba2	depack_bits	; its bit reader
+name	$70bbc	ice_depack	; ICE! 2.x depacker: the data at a0, checked for "Ice!"
+name	$70bea	ice_long	; read a long from (a0)+
+name	$70bf6	ice_strings	; ICE: one string or literal run
+name	$70c22	ice_bit	; ICE: next bit
+name	$70c2c	ice_bits	; ICE: next d1+1 bits
+name	$70ce4	fade_step	; move colour d1 one step towards d0, per component
+name	$70d56	ste_to_st	; colour with the STE's fourth bit moved to the low end
+name	$70d78	st_to_ste	; colour with the low bit moved back to the STE's fourth bit
+name	$70e38	load_file	; the game's file loader; PP replaces its start with jmp $85000
+name	$70ee8	read_sectors	; read sectors with up to 30 retries
+name	$70f96	select_side	; choose drive and side from d0
+name	$7101a	read_directory	; the disk's directory into the buffer at 4(a5)
+name	$7105e	find_entry	; directory entry d1: start and length of a file
+name	$710e0	copy_sector	; one 1,024-byte sector from the buffer to the destination
+name	$71112	seek_track	; seek to track 10 (moveq #10,d2) via fdc_command
+name	$71174	fdc_command	; one FDC operation through the DMA, with its status in d0
+name	$71234	fdc_status	; FDC status to an error code (-7, -5, ...)
+name	$7125a	fdc_setup	; select the drive (sound chip port A), DMA address and count
+name	$712dc	fdc_restore	; restore (track 0)
+name	$712f4	fdc_read	; read sectors
+name	$71330	fdc_seek	; seek
+name	$7135a	fdc_wait_ok	; wait for the command, fail on a CRC or record error
+name	$71374	fdc_wait	; wait for MFP GPIP 5 (FDC done) with a timeout
+name	$713ba	fdc_force	; force interrupt ($D0)
+name	$713da	fdc_track	; the track register, from the side and drive chosen
+name	$7141a	psg_drive	; select the drive and side on the sound chip's port A
+name	$71436	fdc_write_reg	; write d6 or d7 to an FDC register through the DMA
+name	$7143e	fdc_write	; write d7 to the FDC
+name	$71446	fdc_read_reg	; read an FDC register into d7
+name	$7144e	fdc_read_status	; read the FDC status into d0
+name	$71454	fdc_delay	; a short delay between DMA accesses
+name	$71466	deselect	; deselect the drives on the sound chip
+name	$7147e	vars	; the loader's variables (a5)
+name	$714ac	stack_top	; LS2DD's data from here
+name	$714ec	palette_buf	; the 16 colours fade_palette works on

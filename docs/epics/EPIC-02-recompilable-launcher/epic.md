@@ -2,7 +2,7 @@
 id: EPIC-02
 iteration: 1
 title: The PPera launcher reverse engineered and recompilable, tested with our own build
-status: todo
+status: done
 ---
 
 ## Goal
@@ -69,3 +69,13 @@ our bytes confirm it):
 - If H-08 holds, the TOS 1.04 ROM on this Mac (C-03) holds the unmodified GEMDOS 0.15. D15R's
   source can then start from a disassembly of the ROM's GEMDOS, and its differences are PP's
   changes.
+
+**Done 2026-10-11.** All seven stories done; Diego agreed at the checkpoint (STORY-07). Five
+sources in `src/` (`start`, `lemld2`, `ls2dd`, `d15r_h5`, `d15r_f5`), made from their maps by
+`tools/dev/mksource.py`, reassemble to PP's bytes and pass a `nop` check;
+`tools/build_launcher.sh` builds the launcher from them, and it boots the reference to the level
+load with PP's exact disk calls on all three setups. Notes: `src/notes/launch-chain.md`,
+`launcher-formats.md`, `disk-layer.md`, `launcher-signatures.md`. H-01, H-02, H-05 confirmed (H-05
+with a correction), H-08 confirmed and wider: D15R is TOS 1.04 in RAM. D15R's sources are made
+from their maps and not committed (D-13). Committed on `epic-02-recompilable-launcher`, cut from
+`main` (`7fcff84`), and merged into `main` at Diego's word.

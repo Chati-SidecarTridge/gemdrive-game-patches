@@ -47,7 +47,7 @@ BRANCHES = {"bra", "bsr"} | {"b" + c for c in CONDITIONS}
 SIZED |= BRANCHES
 # Mnemonics objdump prints that no 68000 has: kept as data without asking vasm.
 NOT_68000 = re.compile(r"^(chkl|linkl|extbl|bkpt|rtd|movec|moves|cas|callm|rtm|pack|unpk|"
-                       r"cmp2|chk2|bf|p[a-z]|f[a-z]|cp|trap(?!v?$)|mul[su]l|div[su]l)")
+                       r"cmp2|chk2|bf|p(?!ea$)[a-z]|f[a-z]|cp|trap(?!v?$)|mul[su]l|div[su]l)")
 
 INSN = re.compile(r"^\s*([0-9a-f]+):\t([0-9a-f ]+?)\s*\t(.*)$")
 CONT = re.compile(r"^\s*([0-9a-f]+):\t([0-9a-f ]+?)\s*$")

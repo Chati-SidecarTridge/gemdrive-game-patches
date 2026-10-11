@@ -5,3 +5,4 @@ tools/dev/builds/
 tools/dev/logs/
 tools/dev/dev.cfg
 .claude/settings.local.json
+src/d15r/*.s

@@ -1,0 +1,8 @@
+; START.TOS's text: the stub that unpacks LEMLD2.TOS (EPIC-02 STORY-01, STORY-02).
+binary	tools/dev/builds/epic02/unpacked/START.text
+format	bin
+origin	$0
+title	START.TOS's text, 230 bytes: copies the packed LEMLD2 up, unpacks it in place below
+title	itself, relocates it and jumps to it (src/notes/launcher-formats.md).
+code	$0	start	; entry: TOS's Pexec
+code	$32	unpack	; run from its copy at text+$8D40
