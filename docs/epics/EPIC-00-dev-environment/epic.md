@@ -2,7 +2,7 @@
 id: EPIC-00
 iteration: 1
 title: The development environment, the test tools, and Hatari as the test machine
-status: todo
+status: done
 ---
 
 ## Goal
@@ -77,3 +77,8 @@ on this Mac that Diego watches and agrees with.
 
 **Answered by Diego, 2026-10-11:** the ACSI reference uses the PPera driver, PPDRIVER, as built
 by `../atari-hd` (D-09). This is the "PP" of `README.TXT`'s "PP, AHDI or Hddriver".
+
+**Closing, 2026-10-11.** Every story done; Diego agreed at the checkpoint (STORY-07). The
+baseline is commit `54199f4` on `main`; the epic's work is committed on
+`epic-00-dev-environment`, cut from it. Last `tools/dev/all_harness.sh` from an empty
+`tools/dev/builds/`: 11 checks PASS in 132 s (STORY-06). D-04 to D-07 are still proposed.

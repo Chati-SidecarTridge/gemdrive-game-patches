@@ -1,0 +1,16 @@
+# tools/dev/dev.cfg: the paths the tools/dev scripts need on this computer
+# (EPIC-00 STORY-04). Copy this file to tools/dev/dev.cfg (git-ignored) and
+# adjust. One KEY=value per line, no quotes; a relative path is relative to the
+# repository root. Third-party binaries are never copied into the repository
+# (C-03).
+
+# Hatari 2.6.1, used as released (C-02).
+HATARI=/usr/local/bin/hatari
+
+# TOS images, one per test machine (ST and STE, TOS up to 2.06).
+TOS_ST_104=../sidecartos/Atari ST TOS Images /TOS 1.04 - English UK - 50Hz.img
+TOS_STE_162=../sidecartos/Atari STE TOS Images/TOS 1.62 - English-UK - 50Hz
+TOS_STE_206=../sidecartos/Atari STE TOS Images/TOS 2.06 - English-UK - 50Hz
+
+# sidecartridge/atari-hd checkout: builds the PPDRIVER reference image (D-09).
+ATARI_HD=../atari-hd

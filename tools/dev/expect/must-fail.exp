@@ -1,0 +1,4 @@
+# A step that cannot happen: the harness must report FAIL, with a screenshot
+# (EPIC-00 STORY-05). tools/dev/all_harness.sh checks that it does.
+expect start-tos Pexec\(0, "C:\\LEMMINGS\\START\.TOS"
+expect never Fopen\("NO_SUCH\.FIL"
