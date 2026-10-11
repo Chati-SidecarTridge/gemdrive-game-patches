@@ -12,8 +12,9 @@ digits of its SHA-256, and what it is:
             level holding programs, or "choice" for each when there are several
   family    PP's file-name families (src/notes/pp-modes.md): D15R, T14, HAGA module, GXUT, PCH,
             state save (GSxx.TOS), floppy image, AUTO, HOLE, text
-  kind      from the first bytes: program (0x601A), PP packed (the "C3" header), ICE, ATM5, zip,
-            MSA image, STX image, ST image (by name, whole sectors), text, data
+  kind      from the first bytes: program (0x601A), PP packed (the "C3" header), ICE, ATM5, FWRD
+            (PP's file-wise RAM disk), zip, MSA image, STX image, ST image (by name, whole
+            sectors), text, data
   detail    program: text+data+bss and "PP stub" for PP's self-unpacking START.TOS stub;
             PP packed: the name in its header and its unpacked size; ICE: its unpacked size
   marks     byte patterns from src/notes/launcher-signatures.md found in the file as it is:
@@ -66,6 +67,8 @@ def describe(path: str, data: bytes) -> tuple[str, str]:
         return "ICE", str(struct.unpack(">I", data[8:12])[0]) if len(data) >= 12 else ""
     if data[:4] == b"ATM5":
         return "ATM5", ""
+    if data[:4] == b"FWRD":  # PP's "filewise ramdisk": every file of the game in one (EPIC-03 STORY-03)
+        return "FWRD", str(struct.unpack(">H", data[4:6])[0]) + " files"
     if data[:4] == b"PK\x03\x04":
         return "zip", ""
     if data[:2] == b"\x0e\x0f":

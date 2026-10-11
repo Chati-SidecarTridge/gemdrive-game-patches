@@ -52,3 +52,20 @@ Master; Lemmings 1): `tools/unpack.py start` now accepts that.
 The `PPHD` check alone does not mark a game that fails: the HAGA modules have it too (`HAGA`
 +$2C2, `HAGE` and `HAG2` +$2CA) and their games run from a GEMDOS drive. The launchers that stop
 there have all three driver checks and load a GOS4 or GOS5 file.
+
+## Disk access
+
+EPIC-03 STORY-04 (`strategies.md`, `tools/survey/classify.py`). Looked for in a program's text
+section at even offsets, PP's stub unpacked first, and in PP-packed files unpacked:
+
+| access | pattern | what it is |
+| --- | --- | --- |
+| GEMDOS file | `3F3C 003D 4E41`, `3F3C 003F 4E41`, `3F3C 004B 4E41`; `703D 3F00 4E41`, `703F 3F00 4E41` | `Fopen`, `Fread`, `Pexec` through `TRAP #1` (HAGA's file service puts the number in `d0` first) |
+| BIOS `Rwabs` | `3F3C 0004 4E4D` | sectors through the driver |
+| XBIOS `Floprd` | `3F3C 0008 4E4E` | floppy sectors |
+| XBIOS `DMAread` | `3F3C 002A 4E4E` | ACSI sectors (TOS 2.x) |
+| DMA / floppy-controller registers | `FFFF 8604`-`FFFF 860D`; `lea $8604.w`/`$8606.w` (`41F8`…`4BF8 8604`/`8606`); `move.w #…,$8604.w`/`$8606.w` (`31FC xxxx 8604`/`8606`) | the hardware itself: ACSI or the floppy controller |
+
+A hit is a place to look, not a proof: data can hold the same bytes (an odd-offset hit in Lords of
+Chaos' `RUNME.TOS` was data), and a routine can be present and never run.
+

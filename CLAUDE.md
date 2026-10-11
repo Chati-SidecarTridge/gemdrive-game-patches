@@ -106,6 +106,7 @@ python3 tools/survey/mirror.py                 # resume or refresh the copy of P
 python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
 python3 tools/survey/unpack_games.py           # every archive in the mirror into tools/dev/builds/survey/games/
 python3 tools/survey/inventory.py              # src/survey/files.csv: every file of every adaptation
+python3 tools/survey/classify.py               # src/survey/migration.csv: every game's strategy, from its files
 python3 src/probes/epic03/mode_probe.py <ZIP> [--disk gemdrive|ppdriver] [--start <prg>]  # one game from the mirror, as it is
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```
