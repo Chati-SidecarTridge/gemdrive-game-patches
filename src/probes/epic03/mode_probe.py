@@ -3,7 +3,7 @@
 and report how it reached its files.
 
 Usage: mode_probe.py <ZIP> [--disk gemdrive|ppdriver] [--setup st-104|ste-162|ste-206]
-                     [--start <program>] [--monitor mono]
+                     [--start <program>] [--monitor mono] [--memsize MB]
        mode_probe.py --report <run folder>...
 
 <ZIP> is a file name in the mirror's site/ (dev.cfg MIRROR, D-11). The archive is unpacked
@@ -102,6 +102,7 @@ def main() -> int:
     ap.add_argument("--setup", default="st-104")
     ap.add_argument("--start")
     ap.add_argument("--monitor", choices=("mono", "rgb", "vga", "tv"))
+    ap.add_argument("--memsize", type=int, default=1)
     ap.add_argument("--report", nargs="+", type=Path)
     args = ap.parse_args()
     if args.report:
@@ -119,10 +120,12 @@ def main() -> int:
     exp.write_text("\n".join([
         f'expect start Pexec\\(0, "C:\\\\LEMMINGS\\\\{re.escape(start)}"',
         "sleep 10", "shot s10", "sleep 20", "shot s30", "key space", "sleep 15", "shot s45", ""]))
-    name = game.name.lower() + (f"-{args.monitor}" if args.monitor else "")
+    name = game.name.lower() + (f"-{args.monitor}" if args.monitor else "") + \
+        (f"-{args.memsize}mb" if args.memsize != 1 else "")
     cmd = [sys.executable, "-I", str(REPO / "tools" / "dev" / "hatari_harness.py"),
            "--setup", args.setup, "--disk", args.disk, "--start", f"C:\\LEMMINGS\\{start}",
-           "--expect", str(exp), "--name", name] + (["--monitor", args.monitor] if args.monitor else [])
+           "--expect", str(exp), "--name", name, "--memsize", str(args.memsize)] + \
+        (["--monitor", args.monitor] if args.monitor else [])
     out = subprocess.run(cmd, capture_output=True, text=True).stdout
     runs = re.findall(r"tools/dev/logs/\S+", out)
     if not runs:

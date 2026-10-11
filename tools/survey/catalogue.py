@@ -22,6 +22,7 @@ from __future__ import annotations
 import collections
 import csv
 import html
+import posixpath
 import re
 import sys
 from pathlib import Path
@@ -146,12 +147,16 @@ def parse_code(code: str) -> dict[str, str]:
     return parts
 
 
-def downloads_of(raw: str) -> list[tuple[str, str, str, str]]:
-    """(archive, RAM, version, machines) for every download a page offers (dwnld.php?get=NAME or an
-    archive linked directly), the last three as its label, up to the line's end, names them."""
+def downloads_of(raw: str, page: str) -> list[tuple[str, str, str, str]]:
+    """(archive, RAM, version, machines) for every download page offers (dwnld.php?get=NAME or an
+    archive linked directly); the archive as its path in the mirror's site/, the last three as its
+    label, up to the line's end, names them."""
     out = []
-    for name, after in re.findall(r'href="[^"]*?(?:dwnld\.php\?get=|/)([^"/&#?]+\.(?:zip|7z|rar|lzh))"[^>]*>'
-                                  r'(.*?)(?=href="|$)', raw, re.S | re.I):
+    for href, after in re.findall(r'href="([^"]*?\.(?:zip|7z|rar|lzh))"[^>]*>(.*?)(?=href="|$)', raw, re.S | re.I):
+        if "dwnld.php?get=" in href:
+            name = href.split("dwnld.php?get=", 1)[1]
+        else:
+            name = posixpath.normpath(posixpath.join(posixpath.dirname(page), href))
         label = text(re.split(r"<br|</p|</td|</tr", after, maxsplit=1, flags=re.I)[0]).lower()
         m = re.search(r"(\d)\s*mb|512\s*k", label)
         ram = (m.group(1) + "M" if m.group(1) else "512K") if m else ""
@@ -170,13 +175,13 @@ def read_page(site: Path, page: str) -> dict[str, str]:
     raw = (site / page).read_text(encoding="latin-1")
     t = text(raw)
     low = t.lower()
-    links = downloads_of(raw)
+    links = downloads_of(raw, page)
     archive_page = ""
     if not links:  # some pages send their download to PP's game archive (ASTGA/)
         m = re.search(r'href="\.\./(ASTGA/[^"]+)"', raw)
         if m and (site / m.group(1)).is_file():
             archive_page = m.group(1)
-            links = downloads_of((site / archive_page).read_text(encoding="latin-1"))
+            links = downloads_of((site / archive_page).read_text(encoding="latin-1"), archive_page)
     downloads = [d[0] for d in links]
     m = re.search(r"Cat\s*:\s*([A-Za-z0-9/]+)", t)
     code = m.group(1).upper().replace("/", "") if m else ""

@@ -256,7 +256,7 @@ Terms from the list's Note column and the game pages, and where they belong:
 | "TOS 1.04 in RAM", "single D15R*" | `D15RU.FIC`, one GOS for every machine | HAGA |
 | singleparted, singlepart | the RAM at the game's start, packed, restored from disk (`agcat.html` 3) | Cat `S…` |
 | filed | a game stored outside the file system made into files (`playfhd.html`: "transfer disk content to file(s)") | Lemmings |
-| filewise ramdisked | not defined by PP. `playfhd.html` calls a RAM disk the "usual way" for games that load during play; Lemmings, though, reads its level files from the disk during play (EPIC-02), so it does not mean all files in RAM. Open | Lemmings |
+| filewise ramdisked | all the game's files in one file, `FWRD` (a directory, then the files), read whole into RAM at the start: Lemmings' 2 MB download `LEMMSRD.ZIP` (EPIC-03 STORY-03); `playfhd.html` calls a RAM disk the "usual way" for games that load during play. Only two adaptations have one (Lemmings, Pick'n'Pile) | Lemmings |
 | "redirect to hard disk" (325 pages) | the game's floppy paths changed to the hard disk (`agcat.html` 2: "path corrections in code") | Cat 2 |
 | "instead ramdisk, load from drive" | levels read from disk during play instead of a RAM disk (Clever & Smart's page) | GOS5 |
 | "xbios loads directed to image files on hard disk" | the XBIOS floppy reads served from an image file (Black Cauldron) | Cat 5 |
@@ -278,3 +278,8 @@ filed, filewise ramdisked"; no `Cat:`. Its launcher has the three driver checks 
 files are read by GOS by sectors through PP's driver copy (`src/notes/disk-layer.md`), and from a
 GEMDOS drive it stops at the check (EPIC-01). In this note's terms: mode Gamex + GOS5, first guess
 "fix", like the other 166 archives of §3.3.
+
+Its page offers a second download, `LEMMSRD.ZIP` ("2MB RAM min"), PP's other Lemmings adaptation:
+no GOS, no driver check, every file in one `FWRD` file read whole into RAM ("filewise ramdisked").
+It reaches the title menu from the GEMDOS drive as it is (EPIC-03 STORY-03); whether it plays a
+level there is STORY-05's to show.

@@ -104,6 +104,8 @@ python3 src/probes/epic02/chain_probe.py <setup>      # a dump of every launcher
 tools/build_launcher.sh [<src folder>]                # the launcher built from src/ into tools/dev/builds/launcher/
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
 python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
+python3 tools/survey/unpack_games.py           # every archive in the mirror into tools/dev/builds/survey/games/
+python3 tools/survey/inventory.py              # src/survey/files.csv: every file of every adaptation
 python3 src/probes/epic03/mode_probe.py <ZIP> [--disk gemdrive|ppdriver] [--start <prg>]  # one game from the mirror, as it is
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```

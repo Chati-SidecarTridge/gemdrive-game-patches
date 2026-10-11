@@ -36,8 +36,8 @@ glossary).
   a game page), from the list as mirrored at 2026-10-11T14:29:26Z; 1,829 pages (two pairs of
   records share one). The list states no total of its own ("Over 1700 games").
 - PP's text stays in the mirror (D-11): a row keeps the list's cells (RAM, GX, TOS 1.04, TOS
-  2.06, MSTE16, Falcon, TT, Note, Date, Val), the page's URL, its downloads (2,261 links to 2,006
-  archives, with the RAM, version and machines their labels name), and what is read from the page with
+  2.06, MSTE16, Falcon, TT, Note, Date, Val), the page's URL, its downloads (2,324 links to 2,064
+  archives, as their paths in the mirror, with the RAM, version and machines their labels name), and what is read from the page with
   STORY-01's glossary: the category code and its parts, the TOS dependence, the source PP
   started from (STX/ST/MSA, original or crack), the monitor it needs (18 mono only, 75 colour
   and mono), the adaptation terms, and **the mode the page names**: Gamex 266, HAGA 158, HAGE 42,
