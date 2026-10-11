@@ -5,7 +5,7 @@ a list of expected steps (EPIC-00 STORY-05).
 
 Usage: hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver
                          [--expect FILE] [--parse FILE] [--memsize MB] [--no-auto]
-                         [--step-time S] [--name NAME]
+                         [--step-time S] [--name NAME] [--trace FLAGS] [--key-hold S]
 
 Hatari is used as released (C-02). Each run gets a folder under tools/dev/logs/:
 
@@ -26,6 +26,13 @@ comment:
   quiet <name> <seconds>  no new line of output for <seconds>
   key <key>               press and release a key: space, return, esc, f1-f10,
                           0-9, or an ST scan code such as 0x39
+  event <name>            a raw Hatari control event: doubleclick, rightdown, rightup
+  debug <command>         a Hatari debugger command while the machine runs; {run} in
+                          it becomes the run folder's path (for :file and loadbin)
+  mouse <x> <y>           put the game's mouse at (x, y): Lemmings polls the IKBD in
+                          absolute mode, so the harness makes the game's own IKBD
+                          sender transmit a "load mouse position" command (see
+                          MOUSE_*); a following `event doubleclick` clicks there
   shot <name>             a screenshot, shots/<name>.png
   sleep <seconds>
 
@@ -77,6 +84,15 @@ KEYS.update({f"f{n}": 0x3A + n for n in range(1, 11)})
 KEYS.update({str(n): 0x01 + n for n in range(1, 10)})
 KEYS["0"] = 0x0B
 DEFAULT_STEPS = [("sleep", "20"), ("shot", "desktop")]
+# Lemmings' IKBD sender (EPIC-01 STORY-01): a table-driven routine entered at
+# MOUSE_SEND with a0 at a table of <count><bytes...>; its poll entry at
+# MOUSE_TABLE is "01 0D" (one byte, interrogate absolute mouse position), sent
+# once per frame; MOUSE_SEND_END is the rts after the bytes went out. Hatari's
+# debugger cannot write the ACIA itself (its memory writes bypass the I/O
+# handlers), so the harness rewrites the table for one frame into
+# "06 0E 00 xh xl yh yl" (load mouse position) and restores it afterwards.
+MOUSE_SEND, MOUSE_SEND_END, MOUSE_TABLE = 0x21A6, 0xE996, 0xD0A0
+MOUSE_TABLE_ORIGINAL = "$01 $0d $01 $16 $05 $09 $01"
 PC_LINE = re.compile(r"^Next PC: [0-9a-fA-F]+")
 FILE_OPT = re.compile(r":file\s+(\S+)")
 
@@ -153,7 +169,11 @@ def parse_steps(path: Path) -> list[tuple[str, ...]]:
         elif kind == "quiet":
             name, _, secs = rest.partition(" ")
             steps.append((kind, name, str(float(secs))))
-        elif kind in ("key", "shot", "sleep"):
+        elif kind in ("key", "shot", "sleep", "event", "debug", "mouse"):
+            if kind == "mouse":
+                x, y = (int(v) for v in rest.split())
+                if not (0 <= x < 65536 and 0 <= y < 65536):
+                    sys.exit(f"error: {path}:{n}: mouse needs two coordinates")
             if kind == "key":
                 keycode(rest)
             if kind == "sleep":
@@ -174,16 +194,17 @@ def keycode(key: str) -> int:
 
 
 def stage_debugger_script(script: Path, run_dir: Path) -> str:
-    """Copy a debugger script and the command files it names with :file into
-    the run folder, pointing it at the copies: Hatari runs a :file from that
-    file's own folder, so relative paths it saves to land in the run folder."""
+    """Copy a debugger script, the command files it names with :file, and the
+    ones those name in turn, into the run folder, each pointing at the copies:
+    Hatari runs a :file from that file's own folder, so relative paths they
+    save to land in the run folder."""
     text = script.read_text()
     for name in set(FILE_OPT.findall(text)):
         src = Path(name) if Path(name).is_absolute() else script.parent / name
         if not src.is_file():
             sys.exit(f"error: {script}: no such :file {name}")
-        shutil.copy(src, run_dir / src.name)
-        text = text.replace(f":file {name}", f":file {run_dir / src.name}")
+        staged_child = stage_debugger_script(src, run_dir)
+        text = text.replace(f":file {name}", f":file {staged_child}")
     staged = run_dir / script.name
     staged.write_text(text)
     return str(staged)
@@ -210,6 +231,8 @@ def main() -> int:
     ap.add_argument("--no-auto", action="store_true", help="boot to the desktop only")
     ap.add_argument("--step-time", type=float, default=60, help="seconds per step")
     ap.add_argument("--name", default="", help="suffix for the run folder")
+    ap.add_argument("--trace", default="", help=f"Hatari trace flags to add to {TRACE}")
+    ap.add_argument("--key-hold", type=float, default=0.1, help="seconds a key stays down")
     args = ap.parse_args()
 
     if not 1 <= args.memsize <= 14:
@@ -234,7 +257,7 @@ def main() -> int:
            "--sound", "off", "--confirm-quit", "false", "--fast-forward", "yes",
            "--statusbar", "false", "--drive-led", "false",
            "--log-file", str(run_dir / "hatari.log"), "--screenshot-dir", str(run_dir / "shots"),
-           "--trace", TRACE]
+           "--trace", TRACE + (f",{args.trace}" if args.trace else "")]
     if args.disk == "gemdrive":
         shutil.copytree(disks / "gemdrive", run_dir / "drive", copy_function=shutil.copy2)
         cmd += ["--harddrive", str(run_dir / "drive")]
@@ -322,9 +345,28 @@ def main() -> int:
                 # character, not as a scan code ("1" would type the digit 1).
                 code = f"0x{keycode(step[1]):02x}"
                 command(f"hatari-event keydown {code}")
-                time.sleep(0.1)
+                time.sleep(args.key_hold)
                 command(f"hatari-event keyup {code}")
                 say(f"key {step[1]}")
+            elif kind == "event":
+                command(f"hatari-event {step[1]}")
+                say(f"event {step[1]}")
+            elif kind == "debug":
+                text = step[1].replace("{run}", str(run_dir))
+                command(f"hatari-debug {text}")
+                say(f"debug {text}")
+            elif kind == "mouse":
+                x, y = (int(v) for v in step[1].split())
+                restore = run_dir / "mouse-restore.ini"
+                restore.write_text(f"w ${MOUSE_TABLE:x} {MOUSE_TABLE_ORIGINAL}\n")
+                setpos = run_dir / "mouse-set.ini"
+                setpos.write_text(
+                    f"w ${MOUSE_TABLE:x} $06 $0e $00 ${x >> 8:02x} ${x & 255:02x} "
+                    f"${y >> 8:02x} ${y & 255:02x}\n"
+                    f"b pc = ${MOUSE_SEND_END:x} :once :trace :file {restore}\n")
+                command(f"hatari-debug b pc = ${MOUSE_SEND:x} :once :trace :file {setpos}")
+                time.sleep(0.3)
+                say(f"mouse {x},{y}")
             elif kind == "shot":
                 path = shot(step[1])
                 say(f"screenshot {path.relative_to(REPO) if path else '(none)'}")
