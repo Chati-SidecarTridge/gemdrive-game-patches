@@ -103,6 +103,7 @@ python3 tools/unpack.py start|fic|text|relocate ...   # PP's formats unpacked; t
 python3 src/probes/epic02/chain_probe.py <setup>      # a dump of every launcher stage at its entry
 tools/build_launcher.sh [<src folder>]                # the launcher built from src/ into tools/dev/builds/launcher/
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
+python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
 python3 src/probes/epic03/mode_probe.py <ZIP> [--disk gemdrive|ppdriver] [--start <prg>]  # one game from the mirror, as it is
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```

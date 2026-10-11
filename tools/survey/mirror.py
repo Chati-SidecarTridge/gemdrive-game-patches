@@ -6,9 +6,10 @@
 
 Copies into MIRROR (tools/dev/dev.cfg, outside the repository, never
 committed): the list page fromhd3.php, every game page it links (SCRSH/), every
-download those pages offer (dwnld.php?get=NAME, saved under its own name), PP's
-documentation pages and the archives they link, then the images of every page
-saved. One request at a time with a pause; a file already on disk is not
+download those pages offer (dwnld.php?get=NAME, saved under its own name, or an
+archive linked directly), the game-archive pages (ASTGA/) a game page sends its
+download to and their downloads, PP's documentation pages and the archives they
+link, then the images of every page saved. One request at a time with a pause; a file already on disk is not
 fetched again, so a stopped run resumes. Every fetch is a line of
 MIRROR/manifest.tsv: time, url, final url, path, status, bytes, sha256.
 """
@@ -132,15 +133,31 @@ def main() -> None:
     print(f"{len(games)} game pages", flush=True)
 
     downloads: list[str] = []
+    archive_pages: list[str] = []
+
+    def offered(page: Path, url: str) -> None:
+        for u in links(page, url):
+            if u in downloads:
+                continue
+            if "dwnld.php" in u or ARCHIVE.search(urllib.parse.urlsplit(u).path):
+                downloads.append(u)
+            elif "/ASTGA/" in u and "/ASTGA/" not in url and u not in archive_pages:
+                archive_pages.append(u)
+
     for url in games:
         page = fetch(url, local(url))
         if page is None:
             continue
         pages.append((page, url))
-        downloads += [u for u in links(page, url) if "dwnld.php" in u and u not in downloads]
-    print(f"{len(downloads)} game downloads", flush=True)
+        offered(page, url)
+    for url in archive_pages:  # where some game pages send their download
+        page = fetch(url, local(url))
+        if page is not None:
+            pages.append((page, url))
+            offered(page, url)
+    print(f"{len(downloads)} game downloads, {len(archive_pages)} game-archive pages", flush=True)
     for url in downloads:
-        fetch(url, download_path(url))
+        fetch(url, download_path(url) if "dwnld.php" in url else local(url))
 
     for name in DOCS:
         page = fetch(SITE + name, ROOT / name)

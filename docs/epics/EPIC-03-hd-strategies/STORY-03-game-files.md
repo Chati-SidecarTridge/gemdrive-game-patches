@@ -39,3 +39,12 @@ From STORY-01: `LEMMINGS.ZIP` in the mirror holds the same 76 files as `LEMMINGS
 SHA-256 (`LEMMSRD.ZIP` still to set against it). `tools/unpack.py start` now accepts up to 3 zero
 bytes after the packed program: several `START.TOS` stubs pad their data to a multiple of 4.
 `ALISTR.ZIP` (PP's AUTOlist Run) answered 404.
+
+From STORY-02: the first mirror followed only `dwnld.php` links. 48 game pages send their download
+to PP's game-archive pages (`ASTGA/`), and others link archives directly (floppy versions, Gamex
+versions…); `tools/survey/mirror.py` now follows both (the archive pages' downloads include PP's
+STX images of the original disks). The resumed run fetched 381 more files (the mirror is 1.4 GB);
+16 more answered 404 (14 STX images on the archive pages, `AIGLEPR.ZIP`, one picture). Every
+record of `catalogue.csv` now has at least one archive on disk; 21 of its 2,006 archives are
+404s on PP's site, each on a record that has another (F1 GP's are `F1GP_GX.ZIP` and
+`F1GPFLOV.ZIP`).
