@@ -40,3 +40,10 @@ with what would settle them.
 
 The harness's `key`, `mouse` and `event` steps give a game the input it needs to get past its
 title; a game that needs more is "unsure" until it gets it.
+
+From STORY-01: `src/probes/epic03/mode_probe.py` already runs one game from the mirror on one
+disk and reports its file opens, sector reads, ACSI commands, CPU faults and halts; `run_all.py`
+can start from it. Some games need a monochrome monitor ("Needs monochrome capable monitor" on
+their page): the harness's `--monitor mono` gives them one. A game may also need more RAM in
+Hatari than its page says: Vector Invaders halts with 1 MB on both disks and plays with 2 MB, so a
+game that fails on both disks with 1 MB is run again with 2 MB before its verdict.

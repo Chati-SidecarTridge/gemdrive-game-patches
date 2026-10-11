@@ -78,6 +78,8 @@ Each run gets `tools/dev/logs/<date>-<setup>-<disk>[-name]/` (git-ignored):
 Options added in EPIC-01: `--trace <flags>` adds Hatari trace flags to the default
 `gemdos,bios,xbios,scsi_cmd` (`ikbd_cmds` shows the game's IKBD commands; `cpu_exception` logs
 every interrupt too and defeats `quiet`); `--key-hold <s>` is how long a key stays down.
+Added in EPIC-03: `--monitor mono` (or `rgb`, `vga`, `tv`) for games that need a monochrome
+monitor; without it Hatari's default, colour.
 
 Expectations file (`tools/dev/expect/*.exp`): one step per line, `#` at the start of a line for a
 comment.

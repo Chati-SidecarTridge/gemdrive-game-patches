@@ -6,6 +6,7 @@ a list of expected steps (EPIC-00 STORY-05).
 Usage: hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver
                          [--expect FILE] [--parse FILE] [--memsize MB] [--no-auto]
                          [--step-time S] [--name NAME] [--trace FLAGS] [--key-hold S]
+                         [--monitor mono|rgb|vga|tv]
 
 Hatari is used as released (C-02). Each run gets a folder under tools/dev/logs/:
 
@@ -234,6 +235,8 @@ def main() -> int:
     ap.add_argument("--name", default="", help="suffix for the run folder")
     ap.add_argument("--trace", default="", help=f"Hatari trace flags to add to {TRACE}")
     ap.add_argument("--key-hold", type=float, default=0.1, help="seconds a key stays down")
+    ap.add_argument("--monitor", choices=("mono", "rgb", "vga", "tv"),
+                    help="Hatari's monitor (default: Hatari's, colour); mono for monochrome games")
     args = ap.parse_args()
 
     if not 1 <= args.memsize <= 14:
@@ -259,6 +262,8 @@ def main() -> int:
            "--statusbar", "false", "--drive-led", "false",
            "--log-file", str(run_dir / "hatari.log"), "--screenshot-dir", str(run_dir / "shots"),
            "--trace", TRACE + (f",{args.trace}" if args.trace else "")]
+    if args.monitor:
+        cmd += ["--monitor", args.monitor]
     if args.disk == "gemdrive":
         shutil.copytree(disks / "gemdrive", run_dir / "drive", copy_function=shutil.copy2)
         cmd += ["--harddrive", str(run_dir / "drive")]

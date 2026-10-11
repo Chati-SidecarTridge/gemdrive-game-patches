@@ -25,7 +25,30 @@ Not signatures of the launcher: `LS2DD` is the game's own loader (protection, IC
 code) and changes from game to game; PP's patches to it and to the game (LEMLD2's block) are
 specific to Lemmings.
 
-How to use them (EPIC-03 STORY-03): the PP-driver check and the requirement message mark a game
-that cannot run from a GEMDOS drive as it is; the GOS patterns mark one whose files are read by
-PP's GEMDOS in RAM, which reaches the disk by sectors through the driver; the packer header and
-the stub mark files to unpack first (`tools/unpack.py`) before looking further.
+How to use them (EPIC-03 STORY-03): the PP-driver check in a `START.TOS` launcher, with the
+requirement message or the `DMAread` fallback ("Other modes"), marks a game that cannot run from a
+GEMDOS drive as it is (the HAGA modules have the check too, and their games run); the GOS
+patterns mark one whose files are read by PP's GEMDOS in RAM, which reaches the disk by sectors
+through the driver; the packer header and the stub mark files to unpack first (`tools/unpack.py`)
+before looking further.
+
+## Other modes
+
+EPIC-03 STORY-01, 2026-10-11 (`pp-modes.md`). Checked on the files named, as stored or unpacked
+by `tools/unpack.py` (`start` for `START.TOS`):
+
+| mode | pattern | found in |
+| --- | --- | --- |
+| HAGA family launcher | `"C:\GAMEX\HAG"` + `A`/`E`/`2`, and `"Starting GOS ..."` | `RUNME.TOS` of Wormhole (+$44F, +$5B8), Quest for Galaxia, Breakout ACC, Vector Invaders |
+| HAGA family module | starts `0100` then 15 more word offsets; `"GSAU.TOS"`; `"FILES\D15H5.FIC"` | `HAGA` (+$3F8), `HAGE`, `HAG2` (+$3D2) |
+| HAGE / HAG2 | `"T14AG.FIC"` / `"T14GG.FIC"` | `HAGE`, `HAG2` (+$2AF7) |
+| GOS4/GOS5 launcher, driver checks | `2278 0472 0CA9 5050 4844 FFF8` (`PPHD`); `2278 0516` … `3F3C 002A 4E4E` (`pun_ptr`, `DMAread`); `263C 444D 4172` (`'DMAr'`) | unpacked `START.TOS` of Lemmings (+$340, +$4BA, +$4EE), Magnetik Tank (+$358, +$4B0, +$4E4), Clever & Smart (+$31C, +$496, +$4CA), Bubble Dizzy (+$3CA, +$408, +$43C); not in Garfield's or Castle Master's |
+| GOS builds | packed-file header (`4333 0000`) names: `D15R_NG1.PRG`, `D15R_F12.PRG` (GOS 1.00); `D15R_H62.PRG`, `D15R_F69.TOS` (GOS4); `G552`, `GF552`, `G158`, `GF158` (GOS5); `GH5R4`, `GF5R4` (`5H`/`5F`); `D15RH.TOS`, `D15RF.TOS`, `D15RU.TOS` (HAGA); `D15I81.TOS` (iTOS) | the most common version of each file |
+| TOS in RAM | header names `T14AGHnn.TOS` (with GEM), `T14Gnn.TOS` (without) | `T14AG.FIC`, `T14GG.FIC` |
+
+`START.TOS` stubs pad their data with up to 3 zero bytes (Clever & Smart, Bubble Dizzy, Castle
+Master; Lemmings 1): `tools/unpack.py start` now accepts that.
+
+The `PPHD` check alone does not mark a game that fails: the HAGA modules have it too (`HAGA`
++$2C2, `HAGE` and `HAG2` +$2CA) and their games run from a GEMDOS drive. The launchers that stop
+there have all three driver checks and load a GOS4 or GOS5 file.

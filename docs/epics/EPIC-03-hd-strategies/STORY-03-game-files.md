@@ -34,3 +34,8 @@ it is not (a broken link, an unknown archive format). Git tracks nothing from th
 `tools/dev/builds/survey/`.
 
 ## Notes
+
+From STORY-01: `LEMMINGS.ZIP` in the mirror holds the same 76 files as `LEMMINGS/`, SHA-256 for
+SHA-256 (`LEMMSRD.ZIP` still to set against it). `tools/unpack.py start` now accepts up to 3 zero
+bytes after the packed program: several `START.TOS` stubs pad their data to a multiple of 4.
+`ALISTR.ZIP` (PP's AUTOlist Run) answered 404.
