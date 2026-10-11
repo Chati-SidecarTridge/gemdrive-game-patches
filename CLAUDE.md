@@ -57,7 +57,8 @@ drive at this repository's root.
 
 - `docs/epics/`: the backlog (committed, D-03).
 - `src/`: what this project produces: unpacked stages, reconstructed sources (vasm Motorola
-  syntax, D-05) that reassemble byte for byte to the original, and notes (`src/notes/`).
+  syntax, D-05) that reassemble byte for byte to the original, notes (`src/notes/`; the GEMDRIVE
+  cause is `gemdrive-failure.md`) and the debugger probes of each epic (`src/probes/`).
 - `tools/`: the project's own unpackers and packers (standard-library Python).
 - `tools/dev/`: the development environment from EPIC-00: pinned toolchain scripts, the
   round-trip check, the Hatari disk setups and harness. `builds/`, `logs/` and `dev.cfg` are
@@ -74,7 +75,8 @@ machine: Docker running with `logronoide/atarist-toolkit-docker-x86_64:1.4.0`, a
 tools/dev/all_harness.sh                       # check everything: disks, round trip, 6 Hatari runs (~2 min)
 tools/dev/make_disks.sh [<game folder>]        # builds/disks/: gemdrive/ and ppdriver.img from LEMMINGS/ or a patched tree
 python3 tools/dev/hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver \
-    [--expect tools/dev/expect/launcher-start.exp] [--parse <debugger script>] [--no-auto]
+    [--expect tools/dev/expect/launcher-start.exp] [--parse <debugger script>] [--no-auto] [--trace <flags>]
+python3 src/probes/epic01/gate_probe.py <setup> <disk>  # EPIC-01's breakpoint chains; read_probe.py <run>
 tools/dev/disasm.sh <bin> <vma> <out.lst>      # objdump listing, 68000
 python3 tools/dev/listing2vasm.py <out.lst> <bin> <out.s>   # a source that reassembles to <bin>
 tools/dev/roundtrip.sh <src.s> <ref.bin>       # PASS, or FAIL at the first differing offset
@@ -120,6 +122,12 @@ Lemmings.
 - **Hatari loads its saved configuration** (`~/Library/Application Support/Hatari/hatari.cfg`)
   unless `HOME` points elsewhere; the harness gives each run its own. Control-socket keys go in
   hex (`0x39`): a single character is typed as that character.
+- **Hatari's debugger writes memory behind the I/O handlers** (`STMemory_Write`): a `w` to the
+  ACIA or the DMA registers changes nothing. To make the machine send an IKBD command, make its
+  own code do it (the harness's `mouse` step). `w` values are in the current base: `$0e`.
+- **The launcher reads the game by sectors**, not by file name: after `Dsetpath("FILES")` every
+  access is BIOS `Rwabs` on drive C through the PP driver (`src/notes/gemdrive-failure.md`). A
+  GEMDOS drive has no sectors; that is the whole GEMDRIVE problem.
 - **Never read a trace whole.** `hatari.out` is tens of thousands of lines, and a CPU trace gets
   huge (the first pass's reached 800 MB); use `grep`, `head`, `tail` or `sed -n`, and bound CPU
   traces in time.

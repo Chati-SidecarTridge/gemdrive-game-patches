@@ -2,7 +2,7 @@
 id: EPIC-01
 iteration: 1
 title: Why the game fails in Hatari's GEMDRIVE mode
-status: todo
+status: done
 ---
 
 ## Goal
@@ -40,3 +40,8 @@ What GEMDRIVE mode is: Hatari serves the drive's GEMDOS calls (`Fopen`, `Fread`,
 from a host folder by intercepting `TRAP #1`; the drive has no sectors behind it, so a program
 that reads it through BIOS `Rwabs`, XBIOS `DMAread` or the ACSI registers finds no disk. To be
 checked against `../hatari`'s sources and a run in STORY-02, not assumed.
+
+**Done 2026-10-11.** All six stories done; Diego agreed with the cause and the dependency list
+at the checkpoint (STORY-06). The cause and its evidence are in `src/notes/gemdrive-failure.md`. Found on the way and not this epic's:
+the game crashes after "1 PLAYER" on the reference too (STORY-01, a candidate in
+`ITERATIONS.md`). Work uncommitted on `epic-01-gemdrive-failure`, cut from `main` (`1cbdfc1`).

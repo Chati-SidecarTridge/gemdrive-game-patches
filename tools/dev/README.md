@@ -68,6 +68,10 @@ Each run gets `tools/dev/logs/<date>-<setup>-<disk>[-name]/` (git-ignored):
 - `drive/` or `ppdriver.img`: the run's own copy of the disk, with whatever the program wrote
 - `result.txt`: PASS or FAIL, the steps reached, the PC at the end
 
+Options added in EPIC-01: `--trace <flags>` adds Hatari trace flags to the default
+`gemdos,bios,xbios,scsi_cmd` (`ikbd_cmds` shows the game's IKBD commands; `cpu_exception` logs
+every interrupt too and defeats `quiet`); `--key-hold <s>` is how long a key stays down.
+
 Expectations file (`tools/dev/expect/*.exp`): one step per line, `#` at the start of a line for a
 comment.
 
@@ -75,13 +79,32 @@ comment.
 expect <name> <regex>    a line of hatari.out matching <regex> within --step-time
 quiet <name> <seconds>   no new output for <seconds>
 key <key>                press and release: space, return, esc, tab, backspace, f1-f10, 0-9, or a scan code (0x39)
+event <name>             a raw control-socket event: doubleclick, rightdown, rightup (no left press, no motion)
+debug <command>          a debugger command while the machine runs; {run} becomes the run folder
+mouse <x> <y>            put Lemmings' mouse at (x, y); see below
 shot <name>
 sleep <seconds>
 ```
 
-Debugger script: Hatari's own syntax. Copied into the run folder with every `:file` it names, so
-`savebin` with a relative path writes into the run folder. To stop at a program's first
-instruction: `b pc = TEXT && pc < $e00000 :once :trace :file dump.ini`.
+`tools/dev/expect/launcher-start.exp` is the launcher up to `Dsetpath("FILES")` on any disk;
+`reference-first-level.exp` is the PPDRIVER reference through the title and the first level's
+data load.
+
+**The mouse.** Lemmings polls the IKBD in absolute mode once per frame; the control socket has no
+mouse motion and the debugger cannot write the ACIA (its `w` writes the memory array, bypassing
+the I/O handlers). `mouse x y` rewrites, for one frame, the byte table the game's own IKBD
+sender reads (`$D0A0`, "01 0D") into a "load mouse position" command and restores it at the
+sender's `rts` (`$E996`); the game transmits it, the IKBD reports the new position, and
+`event doubleclick` clicks there. The addresses are Lemmings' title-screen code (`MOUSE_*` in
+the harness). "1 PLAYER" is at (70,150).
+
+Debugger script: Hatari's own syntax. Copied into the run folder with every `:file` it names,
+recursively, so `savebin` with a relative path writes into the run folder (`loadbin` is not
+staged: give it an absolute path). To stop at a program's first instruction:
+`b pc = TEXT && pc < $e00000 :once :trace :file dump.ini`. Chains of single-shot breakpoints,
+each file setting the next, are how `src/probes/epic01/*.py` follow a path and answer the disk
+by hand (`r d0=0`, `loadbin <file> <address>`); `trace <flags>` in a file switches tracing on or
+off from there, which keeps instruction traces bounded.
 
 ## Gotchas
 
@@ -98,6 +121,17 @@ instruction: `b pc = TEXT && pc < $e00000 :once :trace :file dump.ini`.
   elsewhere; the harness gives each run its own `HOME`.
 - Control-socket keys go in hex: Hatari takes a single character as a character.
 - `TEXT` in a breakpoint first matches TOS's own ROM program; add `&& pc < $e00000`.
+- A trap's traced PC (`… at PC 0x…`) is the return address, two bytes past the `trap`.
+- A `:once` breakpoint set, from a hit's file, on the same PC fires at once: the CPU has not
+  moved yet. Set it on a later instruction.
+- Breakpoint conditions take `(pc).w` but no arithmetic inside the parentheses, and `m`/`d`
+  take `a1` but not `a1-8`; `d $start-$end` disassembles a range.
+- `w` values are in the current number base, decimal by default: write `$0e`, not `0e`.
+- TOS 1.04 fills its exception vectors with the vector number in the high byte, so its handler
+  is reached at `$3FC0B0A` for an address error, `$2FC0B0A` for a bus error; break there, with
+  `m a7 16` for the frame (access address, instruction, SR, PC).
+- `cpu_exception` tracing logs every interrupt (26, 28, 30 each frame) and traps; bus and
+  address errors print as `Bus error …` lines, not as `cpu exception 2`.
 - Hatari matches GEMDOS-drive file names without regard to case, whatever the host file system.
 - A CPU trace (`--trace cpu_disasm`) gets huge: the first pass's reached 800 MB
   (`_archive/2026-04-first-pass/trace.log`). Bound it in time, and read traces with `grep`,
