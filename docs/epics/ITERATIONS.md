@@ -7,7 +7,7 @@ refute (D-01).
 
 | Iteration | Theme | Status |
 | --- | --- | --- |
-| 1 | **GEMDRIVE**: Lemmings launched from Hatari's GEMDOS drive, without changing Hatari | planned |
+| 1 | **GEMDRIVE**: Lemmings launched from Hatari's GEMDOS drive, without changing Hatari; PP's adaptations classified by how they run from a hard disk | planned |
 
 ---
 
@@ -29,7 +29,7 @@ to `_archive/2026-04-first-pass/`.
 ## Hypotheses
 
 None is a fact here until a story observes it. H-01 to H-06 are the first pass's findings; H-07 is
-Diego's guess.
+Diego's guess. H-08 comes from PP's own documentation.
 
 | ID | Hypothesis | Tested by | Verdict |
 | --- | --- | --- | --- |
@@ -40,6 +40,7 @@ Diego's guess.
 | H-05 | The loader hooks `TRAP #1` only for `Malloc` and `Mshrink`, which always get a fixed heap at `$AF100`, and passes every other GEMDOS call to TOS. | EPIC-02 STORY-04 | open; seen in EPIC-01: by the first `Rwabs`, `$84` points to D15R's handler at `$C84A0`, which returns 0 for GEMDOS 1–11 and saves context for the rest (`gemdrive-failure.md` §3) |
 | H-06 | Under TOS 2.06 the loader takes the XBIOS path and works through whatever driver is installed. | EPIC-01 STORY-02 | **refuted** (2026-10-11): it takes the XBIOS `DMAread` path, a raw ACSI read on the `PUN_INFO` device; with no driver `pun_ptr` is 0 and the read returns -1. `gemdrive-failure.md` §3. |
 | H-07 | **The game fails in GEMDRIVE mode because of the PPera driver embedded in the launcher.** Diego, 2026-10-11. | EPIC-01 STORY-03 | **confirmed in substance, restated** (2026-10-11): the launcher embeds no driver; it requires PP's resident driver (XBRA `PPHD` before `hdv_bpb`), copies and patches it, and its loader D15R reads the FAT volume by sectors through it (`Getbpb`, `Mediach`, `Rwabs`); GEMDRIVE has neither. `gemdrive-failure.md` §1, §4. |
+| H-08 | **D15R is PP's GOS**: the GEMDOS 0.15 of TOS 1.04, modded and relocated to high RAM, with the hard-disk driver installed again below it (GOS5 in PP's `GAMEXdoc.html`, which puts the driver and buffers at 700-768 KB and the modded GEMDOS at 768-830 KB). PP's Starglider launcher source (`GamexLSrc3.html`) loads `D15R_NG1.FIC`, "Packed GEMDOS, GOS 1.00". From PP's documents, 2026-10-11. | EPIC-02 STORY-05 | open; consistent with EPIC-01's addresses: buffers at `$AF100`, the relocated driver at `$B7180`, D15R at `$C0100`, `$84` at D15R's `TRAP #1` handler (`gemdrive-failure.md` §3) |
 
 ---
 
@@ -49,26 +50,31 @@ Diego's guess.
 to a hard-disk image, with Hatari unchanged (C-02). On the way:
 
 - the reason it fails today, shown by runs;
-- every PPera launcher program as sources that rebuild into a launcher we can test.
+- every PPera launcher program as sources that rebuild into a launcher we can test;
+- every game in PP's list of hard-disk adaptations classified by the strategy that runs it from a
+  hard disk, in a migration table that says for each game whether it works from a GEMDOS drive
+  as it is or needs adapting, and how. PP's site is mirrored first, on 2026-10-11, out of the
+  epic order (D-12).
 
-It ends with Diego launching Lemmings in GEMDRIVE mode with the fix (EPIC-03 STORY-05).
+It ends with Diego launching Lemmings in GEMDRIVE mode with the fix (EPIC-04 STORY-05).
 
 ### Implementation path
 
 Epic numbers are the execution order. One epic at a time, each on its own `epic-NN-<slug>` branch
 (D-07), each ending with a verification story that is Diego's checkpoint. Order set by Diego,
-2026-10-11 (D-08).
+2026-10-11 (D-08, D-10).
 
 | # | Epic | Why at this point |
 | --- | --- | --- |
 | EPIC-00 | The development environment, the test tools, and Hatari as the test machine | Asked by Diego, 2026-10-11: epic 0, as in the sibling repositories. Every later story is a run of these tools: the clean workspace and git, the pinned toolchain, the round-trip check, the GEMDRIVE and PPDRIVER setups on the ST and STE up to TOS 2.06, and the harness. |
-| EPIC-01 | Why the game fails in Hatari's GEMDRIVE mode | First, confirm before building: Diego's guess (H-07) is checked against a working reference booted by PPDRIVER (D-09), and the result is the full list of what GEMDRIVE lacks, which sets EPIC-03's scope. |
-| EPIC-02 | The PPera launcher reverse engineered and recompilable, tested with our own build | A fix needs a launcher we can change and test: every stage as sources that reassemble, our own build booting the game like the original, and the PPera driver's interface documented. |
-| EPIC-03 | GEMDRIVE mode as an alternative way to launch Lemmings | Last: it needs the list from EPIC-01 and the sources from EPIC-02. The approach is Diego's choice (EPIC-03 STORY-01). |
+| EPIC-01 | Why the game fails in Hatari's GEMDRIVE mode | First, confirm before building: Diego's guess (H-07) is checked against a working reference booted by PPDRIVER (D-09), and the result is the full list of what GEMDRIVE lacks, which sets EPIC-04's scope. |
+| EPIC-02 | The PPera launcher reverse engineered and recompilable, tested with our own build | A fix needs a launcher we can change and test: every stage as sources that reassemble, our own build booting the game like the original, and the disk layer (D15R and the driver it uses) documented. Its signatures feed EPIC-03. |
+| EPIC-03 | The ways PP's adaptations run from a hard disk, classified | Asked by Diego, 2026-10-11 (D-10). After EPIC-02, whose unpackers and signatures of Lemmings' launcher are where the survey's signatures start; before EPIC-04, so the approach chosen for Lemmings is weighed against every strategy it might also cover. |
+| EPIC-04 | GEMDRIVE mode as an alternative way to launch Lemmings | Last: it needs the list from EPIC-01, the sources from EPIC-02 and the strategies from EPIC-03. The approach is Diego's choice (EPIC-04 STORY-01). |
 
 ### Candidates, not yet epics
 
-Kept out of iteration 1 by Diego, 2026-10-11 (D-08), or found on the way. Each waits for Diego to
+Kept out of iteration 1 by Diego, 2026-10-11 (D-08, D-10), or found on the way. Each waits for Diego to
 choose it into an epic.
 
 - **The reference does not reach the first level in Hatari.** Found in EPIC-01 STORY-01,
@@ -76,11 +82,16 @@ choose it into an epic.
   (bytes verified equal to the file) and the game then raises an address error at `$2B10`
   (`move.l (a0)+,(a1)+`, `a0 = $3E409` from `($36,a3)`), on ST TOS 1.04 with 1 or 4 MB and on
   STE TOS 2.06 alike. The game's own code, or its interaction with Hatari; not the launcher.
-  Needed before EPIC-03 STORY-03 (play), where it would block.
+  Needed before EPIC-04 STORY-03 (play), where it would block.
 
-- **Other PPera games.** "Only Lemmings by now." EPIC-03 STORY-01 records whether the chosen
-  approach would carry over to other games that use PPera's launchers and drivers.
+- **Adapting every game that does not work as it is, one generic way at a time.** Diego,
+  2026-10-11 (D-10): "implement generic ways in the future (using SidecarTridge GEMDRIVE) to make
+  them all running with gemdrive or gemdos in hatari", and "try to adapt all the games that dont
+  already work in GEMDOS/GEMDRIVE mode in Hatari". EPIC-03 STORY-05 sketches the ways and names one
+  for each game in `migration.csv`; EPIC-04 STORY-01 records which strategies Lemmings' approach
+  would also cover. Each way becomes an epic when Diego chooses it.
 - **The SidecarTridge's GEMDRIVE** (`../atarist-sidecart-gemdrive`). "GEMDRIVE only for Hatari.
-  We will work later on the sidecartridge GEMDRIVE."
+  We will work later on the sidecartridge GEMDRIVE." EPIC-03 notes where it would differ from
+  Hatari's.
 
 **Outcome:** _pending._

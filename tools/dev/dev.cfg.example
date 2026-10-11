@@ -14,3 +14,9 @@ TOS_STE_206=../sidecartos/Atari STE TOS Images/TOS 2.06 - English-UK - 50Hz
 
 # sidecartridge/atari-hd checkout: builds the PPDRIVER reference image (D-09).
 ATARI_HD=../atari-hd
+
+# Local copy of PP's adaptations site, made by tools/survey/mirror.py (D-11,
+# D-12), a few GB. Outside the repository: never committed, and safe from a
+# clean of tools/dev/builds/ or a git clean. On Diego's Mac it is on the MacData
+# volume.
+MIRROR=/Volumes/MacData/8bitchip-mirror

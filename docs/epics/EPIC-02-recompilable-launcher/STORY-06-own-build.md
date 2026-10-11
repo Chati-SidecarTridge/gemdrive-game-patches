@@ -15,8 +15,8 @@ exactly as from the originals.
 - [ ] `tools/build_launcher.sh`: assembles every stage (`tools/dev/asm.sh`), packs them
       (`tools/pack.py`) and writes the launcher files into a disk tree under
       `tools/dev/builds/`, next to a copy of `FILES/`.
-- [ ] Our build boots the PPDRIVER reference to the first level on every setup, with the same
-      milestones and the same disk calls as the originals.
+- [ ] Our build boots the PPDRIVER reference to the level load on every setup, with the same
+      milestones and the same disk calls as the originals (`reference-first-level.exp`).
 - [ ] Our build in GEMDRIVE mode stops where the original stops (EPIC-01 STORY-02).
 - [ ] Proof it is ours: a visible change in one source (for example a text on the launcher's
       screen) appears in the run, and reverting it restores the original bytes.

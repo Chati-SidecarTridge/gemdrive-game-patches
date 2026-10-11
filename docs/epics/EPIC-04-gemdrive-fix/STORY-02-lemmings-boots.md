@@ -1,6 +1,6 @@
 ---
 id: STORY-02
-epic: EPIC-03
+epic: EPIC-04
 title: Lemmings boots in GEMDRIVE mode
 status: todo
 ---

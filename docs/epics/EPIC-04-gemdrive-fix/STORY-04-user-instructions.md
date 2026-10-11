@@ -1,6 +1,6 @@
 ---
 id: STORY-04
-epic: EPIC-03
+epic: EPIC-04
 title: How a user applies it
 status: todo
 ---

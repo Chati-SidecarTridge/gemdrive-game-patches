@@ -6,16 +6,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A reverse-engineering workspace for **PP's (PPera's) Gamex hard-disk launcher** for *Lemmings* on
 the Atari ST: the 2011 adaptation (`LEMMINGS/README.TXT`) that runs the game from a hard disk. The
-target is the launcher and its embedded driver, not the game. The aim is **GEMDRIVE mode**: the
-game started from a Hatari GEMDOS drive (`--harddrive`) instead of a hard-disk image. Three goals,
-one epic each, in this order (D-08):
+target is the launcher and the disk layer it installs (its loader D15R and a copy of PP's
+resident driver), not the game. The aim is **GEMDRIVE mode**: the game started from a Hatari GEMDOS
+drive (`--harddrive`) instead of a hard-disk image. Four goals, one epic each, in this order (D-08,
+D-10):
 
 1. **Why it fails** in Hatari's GEMDRIVE mode today. Diego's guess, to confirm first: the PPera
    driver embedded in the launcher (H-07). EPIC-01.
 2. **Recompilable launcher**: every PPera launcher program reverse engineered into 68000 sources
    that reassemble to the original bytes, and our own build of them booting the game. EPIC-02.
-3. **The fix**: GEMDRIVE mode as an alternative way to launch Lemmings. EPIC-03. Other PPera
-   games and the SidecarTridge's GEMDRIVE come later (`ITERATIONS.md` candidates).
+3. **The ways PP's adaptations run from a hard disk**: every game in PP's list
+   (<https://atari.8bitchip.info/fromhd3.php>) classified by the strategy that runs it from a hard
+   disk, in a migration table that says for each game whether it works from a GEMDOS drive as it
+   is or needs adapting, and how. EPIC-03. The site was mirrored first (D-12): work from the
+   mirror (`MIRROR` in `tools/dev/dev.cfg`), not the site.
+4. **The fix**: GEMDRIVE mode as an alternative way to launch Lemmings. EPIC-04. Adapting the
+   other games, one generic way at a time, and the SidecarTridge's GEMDRIVE come later
+   (`ITERATIONS.md` candidates).
 
 **Hatari's code is never modified** (C-02): every fix lives on the Atari side.
 
@@ -50,6 +57,12 @@ PP's original files, **never modified** (C-01): runs, patches and experiments wo
 - `README.TXT`: any ST, STE, Mega ST, Mega STE or Falcon with at least 1 MB, "PP, AHDI or Hddriver"
   driver, a partition under 512 MB; on the Falcon, start from ST medium resolution (C-04).
 
+**PP's own documentation**, on <https://atari.8bitchip.info>: `GAMEXdoc.html` (Gamex, and GOS,
+his modded GEMDOS 0.15 of TOS 1.04 that runs in high RAM; H-08), `agcat.html` (his classification
+of the games by floppy access), `GamexLSrc.html`, `GamexLSrc2.html` and `GamexLSrc3.html` (three of
+his launcher sources, 2009), `fromhd.php` (his view of GEMdrive). All of it is in the mirror
+(D-12). Cite it by URL and never copy it into the repository (D-11). A claim from them counts only once a run shows it (D-01).
+
 `DESKTOP.INF` in the root is the first pass's emulated `C:` desktop: it pointed a Hatari GEMDOS
 drive at this repository's root.
 
@@ -59,7 +72,8 @@ drive at this repository's root.
 - `src/`: what this project produces: unpacked stages, reconstructed sources (vasm Motorola
   syntax, D-05) that reassemble byte for byte to the original, notes (`src/notes/`; the GEMDRIVE
   cause is `gemdrive-failure.md`) and the debugger probes of each epic (`src/probes/`).
-- `tools/`: the project's own unpackers and packers (standard-library Python).
+- `tools/`: the project's own unpackers and packers (standard-library Python); `tools/survey/`,
+  EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`.
 - `tools/dev/`: the development environment from EPIC-00: pinned toolchain scripts, the
   round-trip check, the Hatari disk setups and harness. `builds/`, `logs/` and `dev.cfg` are
   git-ignored.
@@ -81,6 +95,7 @@ tools/dev/disasm.sh <bin> <vma> <out.lst>      # objdump listing, 68000
 python3 tools/dev/listing2vasm.py <out.lst> <bin> <out.s>   # a source that reassembles to <bin>
 tools/dev/roundtrip.sh <src.s> <ref.bin>       # PASS, or FAIL at the first differing offset
 tools/dev/asm.sh <src.s> <out.bin> [<listing>] # vasm, 68000, -no-opt
+python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```
 
@@ -107,8 +122,8 @@ backlog is committed, code and notes only when Diego says so (D-03). Each epic o
 Iteration 1 is **GEMDRIVE**: EPIC-00, the development environment, the test tools and Hatari as
 the test machine (ST and STE, TOS up to 2.06; GEMDRIVE mode, and an ACSI image booted by PP's
 driver, PPDRIVER, as the working reference); EPIC-01, why the game fails in GEMDRIVE mode;
-EPIC-02, the launcher recompilable and tested with our own build; EPIC-03, the GEMDRIVE fix for
-Lemmings.
+EPIC-02, the launcher recompilable and tested with our own build; EPIC-03, PP's adaptations
+classified by how they run from a hard disk; EPIC-04, the GEMDRIVE fix for Lemmings.
 
 ## Conventions and gotchas
 
@@ -208,7 +223,7 @@ You MUST execute every task on your own, with what this computer has:
   one will meet.
 
 Do not hand Diego work you can do. A task is his only when it needs his decision or approval: the
-checkpoints and the choice of approach (EPIC-03 STORY-01). Do not turn "Diego does it" into a
+checkpoints and the choice of approach (EPIC-04 STORY-01). Do not turn "Diego does it" into a
 shot list or a checklist for him.
 
 Evidence comes from this computer: Hatari runs, memory dumps, traces, round trips.

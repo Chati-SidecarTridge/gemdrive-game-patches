@@ -206,7 +206,7 @@ In the order the launcher needs them:
    the level at `$41800`.
 7. **`TRAP #1`** goes to D15R's hook from the first `Rwabs` on; in GEMDRIVE mode Hatari's own
    cartridge hook on `TRAP #1` is what serves the GEMDOS drive. Any fix that wants GEMDOS file
-   calls from inside the game has to live with both (to be checked in EPIC-03).
+   calls from inside the game has to live with both (to be checked in EPIC-04).
 
 Case of file names (H-04) plays no part: no file name is looked up on the disk after
 `Dsetpath("FILES")`; D15R walks directories itself, and Hatari matches GEMDOS-drive names

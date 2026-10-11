@@ -1,6 +1,6 @@
 ---
 id: STORY-05
-epic: EPIC-03
+epic: EPIC-04
 title: Verification (Diego's checkpoint)
 status: todo
 ---
