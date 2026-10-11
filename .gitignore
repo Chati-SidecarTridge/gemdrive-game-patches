@@ -1,0 +1,7 @@
+.DS_Store
+__pycache__/
+*.log
+tools/dev/builds/
+tools/dev/logs/
+tools/dev/dev.cfg
+.claude/settings.local.json
