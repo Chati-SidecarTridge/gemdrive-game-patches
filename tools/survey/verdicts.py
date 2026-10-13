@@ -31,6 +31,10 @@ listed in tools/dev/builds/survey/stale.txt, which review.py shows again as not 
 A run that reads C: by sectors (BIOS Rwabs, Getbpb over and over) sets the access column to
 "sectors" where STORY-04 found no such access in the programs' code (STORY-05 task 5).
 
+Every "fix" gets its solution (STORY-06, src/notes/hd-strategies.md) from src/survey/solutions.tsv
+(a row number, or a strategy, and the solution), and the game's other downloads that run as it is
+from the GEMDOS drive (tools/dev/builds/survey/runs-other.tsv, run_other.py).
+
 Prints the counts, the access corrected, and the findings that contradict an answer of Diego's.
 Standard library only.
 """
@@ -45,6 +49,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import run_all  # noqa: E402
+import run_other  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]
 SURVEY = REPO / "tools" / "dev" / "builds" / "survey"
@@ -136,6 +141,20 @@ def main() -> int:
             g["reason"] = ("broken in its run, the cause still to find: " if proposal == "broken" else "") + run.get("reason", "")
         else:
             g["by"], g["verdict"], g["reason"] = "", "unsure", "not run"
+    solutions = {s["match"]: s["solution"]
+                 for s in csv.DictReader((REPO / "src" / "survey" / "solutions.tsv").open(), delimiter="\t")}
+    others = collections.defaultdict(list)
+    if (SURVEY / "runs-other.tsv").exists():
+        for r in csv.DictReader((SURVEY / "runs-other.tsv").open(), delimiter="\t"):
+            if r["disk"] == "gemdrive" and r["proposal"] == "as it is":
+                folder = "".join(f" in C:\\{f}" for f in run_other.FOLDERS.get(r["download"], ()))
+                others[r["row"]].append(f"{r['download']} ({r['strategy']}) runs as it is{folder}")
+    for g in games:
+        fix = g["verdict"] == "fix"
+        g["solution"] = "; or ".join(filter(None, [solutions.get(g["row"]) or solutions.get(g["strategy"], "")]
+                                             + others[g["row"]])) if fix else ""
+        if fix and not g["solution"]:
+            print(f"  no solution: {g['row']} {g['name']}")
     fields = list(games[0].keys())
     if "by" not in fields:
         fields.insert(fields.index("reason") + 1, "by")

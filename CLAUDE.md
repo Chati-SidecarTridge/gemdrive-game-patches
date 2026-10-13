@@ -73,7 +73,8 @@ drive at this repository's root.
 - `docs/epics/`: the backlog (committed, D-03).
 - `src/`: what this project produces: unpacked stages, reconstructed sources (vasm Motorola
   syntax, D-05) that reassemble byte for byte to the original, notes (`src/notes/`; the GEMDRIVE
-  cause is `gemdrive-failure.md`) and the debugger probes of each epic (`src/probes/`).
+  cause is `gemdrive-failure.md`, every game's verdict and the solutions `hd-strategies.md`) and
+  the debugger probes of each epic (`src/probes/`).
 - `tools/`: the project's own unpackers and packers (standard-library Python); `tools/survey/`,
   EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`.
 - `tools/dev/`: the development environment from EPIC-00: pinned toolchain scripts, the
@@ -111,7 +112,8 @@ python3 src/probes/epic03/mode_probe.py <ZIP> [--disk gemdrive|ppdriver] [--star
 python3 tools/survey/run_all.py [--jobs 5] [--only <name> ...] [--disk ppdriver] [--setup ste-162] [--redo|--retry|--reanalyse]
                                                # every game run in Hatari: builds/survey/runs.tsv, snapshots/
 python3 tools/survey/review.py [--host 0.0.0.0]  # Diego's OK/Broken/Not sure per run, into src/survey/review.tsv
-python3 tools/survey/verdicts.py               # runs, Diego's answers and findings.tsv into migration.csv's verdicts
+python3 tools/survey/run_other.py [--jobs 5] [--only <ZIP> ...]  # the GOS games' other downloads: builds/survey/runs-other.tsv
+python3 tools/survey/verdicts.py               # runs, Diego's answers, findings.tsv and solutions.tsv into migration.csv
 python3 tools/survey/screens.py <png> ...      # is this screenshot the TOS desktop (its menu bar, any colours)
 python3 tools/survey/sheet.py [--all]          # a contact sheet of the runs not shown yet
 ./docs/epics/cockpit.sh                        # after editing any epic or story

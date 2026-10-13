@@ -6,7 +6,8 @@ Usage: run_all.py [--jobs N] [--only NAME ...] [--strategy S] [--limit N] [--dis
        run_all.py --reanalyse [--only NAME ...]   (not while another run_all.py writes runs.tsv)
 
 For every game of src/survey/migration.csv (its main download, unpacked by unpack_games.py), the
-harness starts its program from a GEMDOS drive whose C:\\GAME\\ is the game's folder, on ST TOS 1.04,
+harness starts its program from a GEMDOS drive whose C:\\GAME\\ is the game's folder (and whose root holds
+what the download keeps beside that folder: Maddog Williams' C:\\PABISYS.FIL), on ST TOS 1.04,
 with the largest RAM the list (MinRAM, GX) and the page give, 1 or 2 MB, and a monochrome monitor
 when the page or the game's README asks for one. A game that halts, quits, ends on an empty desktop
 or a blank screen, or seeks before the start of its floppy image runs again with 2 MB, then 4 MB;
@@ -23,8 +24,9 @@ where it stopped (--redo runs every game again, --retry the ones not "as it is")
 
   opened      files opened by name after the start; missing: the ones not found that PP's archive
               has (a name nowhere in it is a file the game does without, missing from any disk)
-  sectors_c   BIOS Rwabs on a hard-disk drive (C: to P:): nothing answers them on a GEMDOS drive;
-              a program asking for C:'s boot block (Getbpb) 8 times or more reads by sectors too
+  sectors_c   BIOS Rwabs on C:, the GEMDOS drive: nothing answers them there; a program asking for
+              C:'s boot block (Getbpb) 8 times or more reads by sectors too (other letters are RAM
+              disks the programs make: Weird Dreams' M:)
   floppy      BIOS Rwabs on A:/B: and XBIOS Floprd
   desktop     GEMDOS calls from the ROM's desktop after the start: the program went back to it
   exit        the start program ended (Pterm0, Pterm or Ptermres: breakpoints on GemdosOpcode print
@@ -114,8 +116,10 @@ def plan(game: dict, files: list[dict], record: dict) -> dict | None:
     # Oxyd Highres)
     mono = game["monitor"] == "mono only" or bool(MONO.search(readme)) or \
         bool(re.search(r"\bmono\b|monochr|high ?res|hi-res", game["name"], re.I))
+    # what the download keeps beside the game's folder goes to the drive's root (Maddog Williams' PABISYS.FIL)
+    extra = [e for e in folder.parents[len(Path(root).parts) - 1].iterdir() if e.name != root.split("/")[0]] if root else []
     return {"folder": folder, "start": start[len(root) + 1:] if root else start, "memsize": ram,
-            "monitor": "mono" if mono else ""}
+            "monitor": "mono" if mono else "", "extra": extra}
 
 
 def expectation(start: str, path: Path) -> None:
@@ -164,14 +168,14 @@ def analyse(run: Path, strategy: str, archive: Path | None = None) -> dict:
             (missing if "didn't find" in nxt or "ERROR -" in nxt else opened).append(m.group(1))
         m = re.match(r"BIOS 0x04 Rwabs\(\d+,0x[0-9a-f]+,\d+,\d+,(\d+)\)", line, re.I)
         if m:
-            if 2 <= int(m.group(1)) <= 15:  # C: to P: (Pole Position asks device 52)
+            if int(m.group(1)) == 2:  # C: (Weird Dreams' RAM disk is M:, 12; Pole Position asks 52)
                 sectors_c += 1
             elif int(m.group(1)) < 2:
                 floppy += 1
-        # a program asking again and again for the boot block of C: and up waits for a disk it reads
-        # by sectors (Crystals of Arborea's START.PRG; a GOS4 launcher: Defender 2)
+        # a program asking again and again for the boot block of C: waits for a disk it reads by
+        # sectors (Crystals of Arborea's START.PRG; a GOS4 launcher: Defender 2)
         m = re.match(r"(?:(\d+) repeats of: )?BIOS 0x07 Getbpb\(0x([0-9A-F]+)\)", line, re.I)
-        if m and 2 <= int(m.group(2), 16) <= 15:
+        if m and int(m.group(2), 16) == 2:
             bpb_c += int(m.group(1) or 1)
         if line.startswith("XBIOS 0x08 Floprd"):
             floppy += 1
@@ -313,12 +317,19 @@ def snapshot(run: Path, row: str, name: str, setup: str, disk: str) -> str:
     return target.name
 
 
-def run_one(game: dict, p: dict, setup: str, disk: str) -> dict:
+def run_one(game: dict, p: dict, setup: str, disk: str, links: tuple = ()) -> dict:
+    """One run; links: other names the game's folder also has in the drive's root (COMP.ZIP's README
+    puts it in C:\\COMP). The download's other entries (plan's extra) are on the GEMDOS drive only."""
     name = re.sub(r"[^a-z0-9]+", "-", game["name"].lower()).strip("-")[:30] or "game"
     with tempfile.TemporaryDirectory(dir=SURVEY) as stage:
         stage = Path(stage)
         (stage / "drive").mkdir()
         (stage / "drive" / "GAME").symlink_to(p["folder"], target_is_directory=True)
+        for e in p.get("extra", []):
+            if e.name.upper() != "GAME":
+                (stage / "drive" / e.name).symlink_to(e, target_is_directory=e.is_dir())
+        for link in links:
+            (stage / "drive" / link).symlink_to(p["folder"], target_is_directory=True)
         exp = stage / "game.exp"
         expectation(p["start"], exp)
         (stage / "exits.dbg").write_text("\n".join(EXITS) + "\n")
@@ -355,6 +366,25 @@ def run_one(game: dict, p: dict, setup: str, disk: str) -> dict:
             img.unlink()
     else:
         row.update({"result": "no run", "proposal": "unsure", "reason": out.strip()[-100:]})
+    return row
+
+
+def run_game(game: dict, p: dict, setup: str, disk: str, links: tuple = ()) -> dict:
+    """run_one, again with more RAM while the run ends in trouble."""
+    row = run_one(game, p, setup, disk, links)
+    # some need more RAM in Hatari than their page says: Vector Invaders 2 MB, Laser Chess 4 MB;
+    # when more RAM does not help (the same halt at 1, 2 and 4 MB), the first run counts
+    first = row
+    for more in (2, 4):
+        trouble = row.get("halt") or "empty desktop" in row.get("screen", "") or row.get("screen") == "blank" or \
+            "negative seek" in row.get("screen", "") or row.get("proposal") == "unsure" and "quit" in row.get("reason", "")
+        if row["proposal"] in ("as it is", "fix") or not trouble or p["memsize"] >= more:
+            continue
+        p["memsize"] = more
+        row = run_one(game, p, setup, disk, links)
+    if row is not first and row["proposal"] == first["proposal"] and row.get("reason") == first.get("reason"):
+        row = first
+        row["snapshot"] = snapshot(RUNS / row["run"], row["row"], row["name"], setup, disk)
     return row
 
 
@@ -414,20 +444,7 @@ def main() -> int:
             row = {"row": game["row"], "name": game["name"], "strategy": game["strategy"], "setup": args.setup,
                    "disk": args.disk, "proposal": "unsure", "reason": "no program to start in PP's archive"}
         else:
-            row = run_one(game, p, args.setup, args.disk)
-            # some need more RAM in Hatari than their page says: Vector Invaders 2 MB, Laser Chess 4 MB;
-            # when more RAM does not help (the same halt at 1, 2 and 4 MB), the first run counts
-            first = row
-            for more in (2, 4):
-                trouble = row.get("halt") or "empty desktop" in row.get("screen", "") or row.get("screen") == "blank" or \
-                    "negative seek" in row.get("screen", "") or row.get("proposal") == "unsure" and "quit" in row.get("reason", "")
-                if row["proposal"] in ("as it is", "fix") or not trouble or p["memsize"] >= more:
-                    continue
-                p["memsize"] = more
-                row = run_one(game, p, args.setup, args.disk)
-            if row is not first and row["proposal"] == first["proposal"] and row.get("reason") == first.get("reason"):
-                row = first
-                row["snapshot"] = snapshot(RUNS / row["run"], row["row"], row["name"], args.setup, args.disk)
+            row = run_game(game, p, args.setup, args.disk)
         line = "\t".join(str(row.get(k, "")).replace("\t", " ") for k in FIELDS) + "\n"
         key = (row["row"], row["setup"], row["disk"])
         with LOCK:  # one line per game, setup and disk: a new run replaces the old line

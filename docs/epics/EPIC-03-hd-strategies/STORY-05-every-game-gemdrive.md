@@ -137,6 +137,10 @@ checks, each from a run that showed it:
   it." (ACC-TRIS, Algebra): PP's driver and TOS 2.06 leave HAGE too little low RAM in 1 MB; the
   GEMDOS drive takes none of the Atari's RAM, and from it they run.
 
+Corrected in STORY-06 (2026-10-13; `src/notes/hd-strategies.md` §6): Weird Dreams and Maddog
+Williams as it is, Aquanaut fix, Great Giana Sisters STE not feasible; the counts are now 1,608 as
+it is, 212 fix, 1 not feasible, 10 unsure. The results as STORY-05 left them:
+
 **Results (2026-10-13)**, `src/survey/migration.csv` from `tools/survey/verdicts.py`: 1,831 games,
 **1,606 as it is, 213 fix, 12 unsure, 0 not feasible**; by whose word: the run 1,489, its PPDRIVER
 comparison 96, Diego 243, a trace looked into 3. 2,070 runs in `tools/dev/builds/survey/runs.tsv`

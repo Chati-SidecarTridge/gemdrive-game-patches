@@ -101,6 +101,23 @@ What is known already, as input for those epics:
   We will work later on the sidecartridge GEMDRIVE." EPIC-03 notes where it would differ from
   Hatari's; each solution epic says whether its solution would carry over.
 
+### The solutions EPIC-03 proposes
+
+From EPIC-03 STORY-06 (`src/notes/hd-strategies.md` §4; each "fix" row of
+`src/survey/migration.csv` names its solution). 212 games to fix of 1,831; each solution would be
+an epic of its own, for Diego to choose and order at EPIC-03's checkpoint (STORY-08).
+
+| | solution | games | first test game | what the epic would build | shown so far |
+| --- | --- | --- | --- | --- | --- |
+| S1 | GOS reads through the GEMDOS drive | 204 (GOS4 117, GOS5 87) | Lemmings | a patch of each launcher's driver checks and of GOS's GEMDOS entry (13 ST/STE builds of D15R), as tools that change a user's copy; the 204 games run | a proposal: Hatari's hook needs none of TOS's RAM (its source); PP's HAGA reads the same way |
+| S2 | a BPB for the GEMDOS drive | 4 (Silmarils: Crystals of Arborea, Targhan, Robinsons Requiem, Storm Master) | Crystals of Arborea | a resident program from `C:\AUTO\` that answers `Getbpb` for the GEMDOS drive | trials: all four play or reach their title |
+| S3 | the fastload bit | 3 (Spy vs Spy 2, Strike Force Harrier, Aquanaut) | Spy vs Spy 2 | the bit set in the started program's header | trials: all three |
+| S4 | Rody and Mastico 4's `RUNME.TOS` | 1 (Rody and Mastico 2) | itself | instructions only | a trial |
+
+43 of S1's games already run from the GEMDOS drive through another download of PP's (Lemmings'
+`LEMMSRD.ZIP`, 2 MB, among them; `hd-strategies.md` §5). One game is not feasible (Great Giana
+Sisters STE: it streams its music by sectors itself) and 10 are unsure (§3.6 of the note).
+
 ### Candidates, not yet epics
 
 Found on the way. Each waits for Diego to choose it into an epic.
@@ -112,5 +129,13 @@ Found on the way. Each waits for Diego to choose it into an epic.
   TOS 1.04 with 1 or 4 MB and on STE TOS 2.06 alike. The game's own code (perhaps with PP's
   patches to it, EPIC-02 STORY-04), or its interaction with Hatari; not the launcher. Needed
   before the GOS solution's play session with Lemmings, where it would block.
+- **The 10 unsure games.** Found in EPIC-03 STORY-05/06: six fail from PPDRIVER too (Lords of
+  Doom, Substation, Roger, Zero-5, Spitting Images, Utopos), three only from the GEMDOS drive by
+  Diego's look (Super Breakout mono, 9 Lives, Little Puff in Dragonland), and Ice and Fire has
+  only floppy images (`hd-strategies.md` §3.6). Each needs its traces read, as S2 and S3's were.
+- **Hatari's `Pexec` and the caller's stack.** Found in EPIC-03 STORY-06: Hatari's GEMDOS drive
+  clears a started program's free memory before it rewrites the caller's saved `Pexec` call, so a
+  caller whose stack lies there ends instead (S3). Not a change here (C-02); a report to Hatari's
+  maintainers would leave this Mac, so it waits for Diego (D-15).
 
 **Outcome:** _pending._

@@ -1,0 +1,11 @@
+match	solution
+Gamex + GOS4	S1: GOS reads through the GEMDOS drive
+Gamex + GOS5	S1: GOS reads through the GEMDOS drive
+1698	S2: a BPB for the GEMDOS drive
+1699	S2: a BPB for the GEMDOS drive
+1774	S2: a BPB for the GEMDOS drive
+1808	S2: a BPB for the GEMDOS drive
+1804	S3: the fastload bit in the program it starts
+1813	S3: the fastload bit in the program it starts
+1826	S3: the fastload bit in the program it starts
+41	S4: Rody and Mastico 4's RUNME.TOS in its folder
