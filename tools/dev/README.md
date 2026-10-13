@@ -38,7 +38,7 @@ Hatari is left. One line per check; exit 0 only if all pass. About two minutes.
 | `m68k.py` | imported: 68000 instruction lengths, branch and call targets, absolute and PC-relative operands (EPIC-02) |
 | `mksource.py [--report] <stage.map> <out.s>` | a labelled source for a launcher stage from its map (entries, data, names, comments, pointer tables, run addresses, executed addresses) and its bytes; reassembles to them (EPIC-02 STORY-04) |
 | `shiftcheck.py [--tos] <src.s> <origin>` | inserts a `nop` mid-source, reassembles, and checks every reference moved with its target |
-| `make_disks.sh [<game folder>]` | `builds/disks/`: `gemdrive/` (drive C: for GEMDRIVE mode) and `ppdriver.img` (the PPDRIVER reference, D-09), from a copy of `LEMMINGS/` or of the folder given |
+| `make_disks.sh [<game folder> [<out folder>]]` | `builds/disks/` (or `<out folder>`): `gemdrive/` (drive C: for GEMDRIVE mode) and `ppdriver.img` (the PPDRIVER reference, D-09), from a copy of `LEMMINGS/` or of the folder given |
 | `hatari_harness.py --setup <s> --disk <d> [...]` | one Hatari run, headless, with a run folder in `logs/`; `--start <path>` runs another program than `START.TOS` |
 | `../build_launcher.sh [<src>] [<out>]` | Lemmings' launcher built from `src/` into `builds/launcher/LEMMINGS/` (EPIC-02 STORY-06); then `make_disks.sh builds/launcher/LEMMINGS` |
 | `all_harness.sh` | all of the above, once |
@@ -79,7 +79,11 @@ Options added in EPIC-01: `--trace <flags>` adds Hatari trace flags to the defau
 `gemdos,bios,xbios,scsi_cmd` (`ikbd_cmds` shows the game's IKBD commands; `cpu_exception` logs
 every interrupt too and defeats `quiet`); `--key-hold <s>` is how long a key stays down.
 Added in EPIC-03: `--monitor mono` (or `rgb`, `vga`, `tv`) for games that need a monochrome
-monitor; without it Hatari's default, colour.
+monitor; without it Hatari's default, colour. `--drive <folder>` gives a GEMDOS-drive run its own
+C: instead of `builds/disks/gemdrive` (parallel runs of different games), `--image <file>` gives a
+PPDRIVER run its own image instead of `builds/disks/ppdriver.img` (`make_disks.sh <game folder>
+<out folder>` builds one elsewhere), and `--log-root <folder>` puts the run folder elsewhere than
+`tools/dev/logs/` (`tools/survey/run_all.py` uses all three).
 
 Expectations file (`tools/dev/expect/*.exp`): one step per line, `#` at the start of a line for a
 comment.

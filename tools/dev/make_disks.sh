@@ -4,10 +4,11 @@
 # copy of the game folder and never from LEMMINGS/ itself (EPIC-00 STORY-04,
 # C-01).
 #
-# Usage: tools/dev/make_disks.sh [<game folder>]
+# Usage: tools/dev/make_disks.sh [<game folder> [<out folder>]]
 #
 #   <game folder>  default LEMMINGS/; or a patched or rebuilt tree with the
 #                  same layout
+#   <out folder>   default tools/dev/builds/disks/ (another one: parallel runs)
 #
 # Writes tools/dev/builds/disks/ (emptied first):
 #   gemdrive/LEMMINGS/  the folder Hatari mounts as drive C: in GEMDRIVE mode
@@ -24,8 +25,8 @@
 # checked by copying everything back out and comparing every SHA-256.
 set -euo pipefail
 
-if [[ $# -gt 1 ]]; then
-  echo "usage: $0 [<game folder>]" >&2
+if [[ $# -gt 2 ]]; then
+  echo "usage: $0 [<game folder> [<out folder>]]" >&2
   exit 2
 fi
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -39,7 +40,7 @@ for tool in mcopy mdir rsync; do
 done
 export MTOOLS_SKIP_CHECK=1
 
-out="$repo/tools/dev/builds/disks"
+out="${2:-$repo/tools/dev/builds/disks}"
 rm -rf "$out"
 mkdir -p "$out/gemdrive"
 

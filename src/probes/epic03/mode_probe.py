@@ -16,7 +16,7 @@ bar, a screenshot 15 s later.
 The report, from hatari.out after the program's Pexec: every file opened by name (on the
 GEMDOS drive, Hatari also says which ones it did not find), the BIOS Rwabs calls per drive,
 the ACSI commands, the exceptions and CPU halts Hatari printed, the address and bus errors in
-hatari.log (not the hardware probes at $FFFF8000 and up), and the PC at the end.
+hatari.log (not the hardware probes at $F00000 and up), and the PC at the end.
 """
 
 from __future__ import annotations
@@ -82,7 +82,9 @@ def report(run: Path) -> str:
             exc.append(line.strip()[:100])
     log = (run / "hatari.log").read_text(errors="replace") if (run / "hatari.log").exists() else ""
     faults = [l.split(":", 1)[1].strip()[:70] for l in log.splitlines()
-              if re.search(r"(Address|Bus) Error", l) and not re.search(r"address \$ffff[89a-f]", l)]
+              if (m := re.search(r"(Address|Bus) Error \w+ at address \$([0-9a-f]+), PC=\$([0-9a-f]+)", l))
+              and (m.group(1) == "Address" or (int(m.group(2), 16) & 0xFFFFFF < 0xF00000
+                                               and not 0xFC0000 <= int(m.group(3), 16) < 0xFF0000))]
     pc = re.search(r"PC[^\n]*", result)
     lines = [f"run      {run.relative_to(REPO)}",
              f"result   {result.splitlines()[0] if result else '?'}",

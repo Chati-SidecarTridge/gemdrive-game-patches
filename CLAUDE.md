@@ -108,6 +108,12 @@ python3 tools/survey/unpack_games.py           # every archive in the mirror int
 python3 tools/survey/inventory.py              # src/survey/files.csv: every file of every adaptation
 python3 tools/survey/classify.py               # src/survey/migration.csv: every game's strategy, from its files
 python3 src/probes/epic03/mode_probe.py <ZIP> [--disk gemdrive|ppdriver] [--start <prg>]  # one game from the mirror, as it is
+python3 tools/survey/run_all.py [--jobs 5] [--only <name> ...] [--disk ppdriver] [--setup ste-162] [--redo|--retry|--reanalyse]
+                                               # every game run in Hatari: builds/survey/runs.tsv, snapshots/
+python3 tools/survey/review.py [--host 0.0.0.0]  # Diego's OK/Broken/Not sure per run, into src/survey/review.tsv
+python3 tools/survey/verdicts.py               # runs, Diego's answers and findings.tsv into migration.csv's verdicts
+python3 tools/survey/screens.py <png> ...      # is this screenshot the TOS desktop (its menu bar, any colours)
+python3 tools/survey/sheet.py [--all]          # a contact sheet of the runs not shown yet
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```
 

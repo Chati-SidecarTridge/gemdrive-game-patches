@@ -1,0 +1,353 @@
+time	row	name	verdict	note	run	proposal
+2026-10-11T21:12:51	1	Algebra compil	ok		20261011-210725-st-104-gemdrive-1-algebra-compil	unsure
+2026-10-11T21:12:54	2	ACC-TRIS	ok		20261011-210725-st-104-gemdrive-2-acc-tris	unsure
+2026-10-11T21:12:56	3	Knephren	ok		20261011-210725-st-104-gemdrive-3-knephren	unsure
+2026-10-11T21:13:00	4	Mindfighter	ok		20261011-210725-st-104-gemdrive-4-mindfighter	unsure
+2026-10-11T21:13:04	5	Quink	ok		20261011-204647-st-104-gemdrive-5-quink	as it is
+2026-10-11T21:14:00	8	Going Down With the Captain	ok		20261011-210725-st-104-gemdrive-8-going-down-with-the-captain	unsure
+2026-10-11T21:14:02	9	Data Chess	ok		20261011-210816-st-104-gemdrive-9-data-chess	unsure
+2026-10-11T21:14:05	10	Color Beyond Time	broken		20261011-210816-st-104-gemdrive-10-color-beyond-time	unsure
+2026-10-11T21:14:08	11	Kleur Boek	ok		20261011-210816-st-104-gemdrive-11-kleur-boek	unsure
+2026-10-11T21:14:10	12	Reederei	ok		20261011-210816-st-104-gemdrive-12-reederei	unsure
+2026-10-11T21:14:15	14	Joey the Dungeon King	broken		20261011-210816-st-104-gemdrive-14-joey-the-dungeon-king	unsure
+2026-10-11T21:14:21	15	Gerhild's Challenge	ok		20261011-210908-st-104-gemdrive-15-gerhild-s-challenge	unsure
+2026-10-11T21:14:24	16	Laser Chess	broken		20261011-210908-st-104-gemdrive-16-laser-chess	unsure
+2026-10-11T21:14:26	17	Artefact	ok		20261011-210908-st-104-gemdrive-17-artefact	unsure
+2026-10-11T21:14:28	18	Columns II	ok		20261011-210908-st-104-gemdrive-18-columns-ii	unsure
+2026-10-11T21:14:29	19	Balade Outre Rhin	ok		20261011-210908-st-104-gemdrive-19-balade-outre-rhin	unsure
+2026-10-11T21:14:31	20	German Master	ok		20261011-210959-st-104-gemdrive-20-german-master	unsure
+2026-10-11T21:14:35	22	Atari ST Tour '	ok		20261011-211000-st-104-gemdrive-22-atari-st-tour	unsure
+2026-10-11T21:14:37	23	PuffysSaga	ok		20261011-205225-st-104-gemdrive-23-puffyssaga	as it is
+2026-10-11T21:14:40	24	Mavis Beacon Teaches Typing	ok		20261011-211000-st-104-gemdrive-24-mavis-beacon-teaches-typing	unsure
+2026-10-11T21:14:41	23	PuffysSaga	ok		20261011-205225-st-104-gemdrive-23-puffyssaga	as it is
+2026-10-11T21:15:20	31	Football Simulation	ok		20261011-211050-st-104-gemdrive-31-football-simulation	unsure
+2026-10-11T21:15:21	33	Back to the Golden Age	ok		20261011-211147-st-104-gemdrive-33-back-to-the-golden-age	unsure
+2026-10-11T21:15:25	35	Rambo III	ok		20261011-211147-st-104-gemdrive-35-rambo-iii	unsure
+2026-10-11T21:15:34	610	Breakout ACC	ok		20261011-211050-st-104-gemdrive-610-breakout-acc	unsure
+2026-10-11T21:15:41	1200	Quest for Galaxia	ok		20261011-204053-st-104-gemdrive-1200-quest-for-galaxia	as it is
+2026-10-11T21:15:44	1742	Castle Master	ok		20261011-210525-st-104-gemdrive-1742-castle-master	as it is
+2026-10-11T21:15:47	1744	Garfield	ok		20261011-204138-st-104-gemdrive-1744-garfield	as it is
+2026-10-11T21:31:59	83	Eaglestar	ok		20261011-213051-st-104-gemdrive-83-eaglestar	unsure
+2026-10-11T22:07:59	127	Lords of Doom	broken		20261011-213828-st-104-gemdrive-127-lords-of-doom	unsure
+2026-10-11T22:08:46	137	Overscan Invaders	ok		20261011-214032-st-104-gemdrive-137-overscan-invaders	unsure
+2026-10-11T22:09:15	149	Cards	broken		20261011-214459-st-104-gemdrive-149-cards	broken
+2026-10-11T22:10:26	163	Magic Stones	broken		20261011-214739-st-104-gemdrive-163-magic-stones	broken
+2026-10-11T22:14:55	231	Fraction Action	broken		20261011-220101-st-104-gemdrive-231-fraction-action	broken
+2026-10-11T22:15:30	248	Col-Tris	broken		20261011-220432-st-104-gemdrive-248-col-tris	broken
+2026-10-11T22:21:20	322	Air Warrior	ok		20261011-221852-st-104-gemdrive-322-air-warrior	unsure
+2026-10-11T22:21:41	325	Tetris Abersoft	ok		20261011-221910-st-104-gemdrive-325-tetris-abersoft	unsure
+2026-10-11T22:43:42	163	Magic Stones	ok		20261011-223809-st-104-gemdrive-163-magic-stones	as it is
+2026-10-11T22:47:42	14	Joey the Dungeon King	ok		20261011-223715-st-104-gemdrive-14-joey-the-dungeon-king	broken
+2026-10-11T22:47:51	16	Laser Chess	ok		20261011-223715-st-104-gemdrive-16-laser-chess	broken
+2026-10-11T22:47:56	82	Empire Strikes Back PD	broken		20261011-223813-st-104-gemdrive-82-empire-strikes-back-pd	broken
+2026-10-11T23:53:59	697	Critical Mass	ok		20261011-235112-st-104-gemdrive-697-critical-mass	unsure
+2026-10-11T23:55:07	690	Rodney vs KFC	ok		20261011-235129-st-104-gemdrive-690-rodney-vs-kfc	broken
+2026-10-12T00:02:07	738	Super Breakout mono	ok		20261011-235955-st-104-gemdrive-738-super-breakout-mono	as it is
+2026-10-12T00:02:10	738	Super Breakout mono	broken		20261011-235955-st-104-gemdrive-738-super-breakout-mono	as it is
+2026-10-12T00:19:38	836	Alcatraz	unsure		20261012-001700-st-104-gemdrive-836-alcatraz	as it is
+2026-10-12T11:11:18	694	Glad Killing Impact	ok		20261011-235159-st-104-gemdrive-694-glad-killing-impact	broken
+2026-10-12T11:12:18	710	Temple of Apshai	ok		20261011-235547-st-104-gemdrive-710-temple-of-apshai	broken
+2026-10-12T11:12:30	711	Sorcerer Lord	ok		20261011-235550-st-104-gemdrive-711-sorcerer-lord	broken
+2026-10-12T11:12:49	718	Final Command	ok		20261011-235737-st-104-gemdrive-718-final-command	broken
+2026-10-12T11:16:38	813	Ishar 2	ok		20261012-001402-st-104-gemdrive-813-ishar-2	broken
+2026-10-12T11:17:37	865	Mean 18	ok		20261012-002324-st-104-gemdrive-865-mean-18	broken
+2026-10-12T11:17:41	876	Final Legacy	ok		20261012-002524-st-104-gemdrive-876-final-legacy	broken
+2026-10-12T11:18:38	885	Hard 'n' Heavy	ok		20261012-002833-st-104-gemdrive-885-hard-n-heavy	broken
+2026-10-12T11:19:29	922	Trivial Pursuit	ok		20261012-003625-st-104-gemdrive-922-trivial-pursuit	broken
+2026-10-12T11:19:37	923	9 Lives	broken		20261012-003658-st-104-gemdrive-923-9-lives	broken
+2026-10-12T11:19:57	923	9 Lives	broken		20261012-003658-st-104-gemdrive-923-9-lives	broken
+2026-10-12T11:21:14	976	Macadam Bumper	ok		20261012-004642-st-104-gemdrive-976-macadam-bumper	broken
+2026-10-12T11:21:15	981	Mindshadow	ok		20261012-004730-st-104-gemdrive-981-mindshadow	broken
+2026-10-12T11:21:18	982	Tass Times ..	ok		20261012-004757-st-104-gemdrive-982-tass-times	broken
+2026-10-12T11:21:21	983	Borrowed Time	ok		20261012-004735-st-104-gemdrive-983-borrowed-time	broken
+2026-10-12T11:21:48	1027	Balance of Power 1990	ok		20261012-005618-st-104-gemdrive-1027-balance-of-power-1990	broken
+2026-10-12T11:22:06	1033	Hard Drivin 2	ok		20261012-005528-st-104-gemdrive-1033-hard-drivin-2	unsure
+2026-10-12T11:22:24	1051	Crown	ok		20261012-010149-st-104-gemdrive-1051-crown	broken
+2026-10-12T11:22:33	1056	Super Breakout	ok		20261012-010118-st-104-gemdrive-1056-super-breakout	broken
+2026-10-12T11:22:40	1064	Intruder	ok		20261012-010501-st-104-gemdrive-1064-intruder	broken
+2026-10-12T11:22:44	1066	Ancient Games	ok		20261012-010537-st-104-gemdrive-1066-ancient-games	broken
+2026-10-12T11:22:50	1085	Artificial Dreams	ok		20261012-010944-st-104-gemdrive-1085-artificial-dreams	broken
+2026-10-12T11:22:52	1091	Hunt for Red October	ok		20261012-011001-st-104-gemdrive-1091-hunt-for-red-october	broken
+2026-10-12T11:24:13	1094	Volleyball Simulator	ok		20261012-011218-st-104-gemdrive-1094-volleyball-simulator	broken
+2026-10-12T11:24:25	1112	Great Giana Sisters STE	ok		20261012-011400-st-104-gemdrive-1112-great-giana-sisters-ste	broken
+2026-10-12T11:25:07	1139	F1 GP Ultimate	ok		20261012-012016-st-104-gemdrive-1139-f1-gp-ultimate	broken
+2026-10-12T11:25:12	1147	Warlocks Quest	ok		20261012-012238-st-104-gemdrive-1147-warlocks-quest	broken
+2026-10-12T11:25:30	1177	Wizmo	unsure		20261012-012652-st-104-gemdrive-1177-wizmo	broken
+2026-10-12T11:25:49	1195	Operation Stealth	broken		20261012-012833-st-104-gemdrive-1195-operation-stealth	fix
+2026-10-12T11:25:56	1212	Cave Runner 2	ok		20261012-013304-st-104-gemdrive-1212-cave-runner-2	broken
+2026-10-12T11:26:21	1260	Lethal Weapon	ok		20261012-014144-st-104-gemdrive-1260-lethal-weapon	broken
+2026-10-12T11:26:24	1266	Monkeys and Balloons	ok		20261012-014400-st-104-gemdrive-1266-monkeys-and-balloons	broken
+2026-10-12T11:26:52	1275	Deadland	ok		20261012-014450-st-104-gemdrive-1275-deadland	broken
+2026-10-12T11:27:14	1303	Little Puff in Dragonland	broken		20261012-015008-st-104-gemdrive-1303-little-puff-in-dragonland	broken
+2026-10-12T11:27:54	1345	To Be On Top	ok		20261012-015820-st-104-gemdrive-1345-to-be-on-top	broken
+2026-10-12T11:28:00	1345	To Be On Top	broken		20261012-015820-st-104-gemdrive-1345-to-be-on-top	broken
+2026-10-12T11:28:15	1363	Dream Zone	unsure		20261012-020117-st-104-gemdrive-1363-dream-zone	unsure
+2026-10-12T11:28:56	1402	No Limit 2	unsure		20261012-020815-st-104-gemdrive-1402-no-limit-2	unsure
+2026-10-12T11:29:08	1403	Robotron 2084	ok		20261012-020647-st-104-gemdrive-1403-robotron-2084	fix
+2026-10-12T11:29:18	1405	Cyber Assault	unsure		20261012-020725-st-104-gemdrive-1405-cyber-assault	unsure
+2026-10-12T11:29:27	1407	Elf	unsure		20261012-020734-st-104-gemdrive-1407-elf	unsure
+2026-10-12T11:29:39	1433	Escape from the Planet of the Robot Monsters	unsure		20261012-031820-st-104-gemdrive-1433-escape-from-the-planet-of-the-	unsure
+2026-10-12T11:29:40	1434	Silkworm	unsure		20261012-031820-st-104-gemdrive-1434-silkworm	unsure
+2026-10-12T11:29:41	1435	Wacky Races	unsure		20261012-031820-st-104-gemdrive-1435-wacky-races	unsure
+2026-10-12T11:29:43	1439	Never Mind	unsure		20261012-032055-st-104-gemdrive-1439-never-mind	unsure
+2026-10-12T11:29:45	1440	Skychase	unsure		20261012-032056-st-104-gemdrive-1440-skychase	unsure
+2026-10-12T11:30:01	1452	Shiftrix	unsure		20261012-060118-st-104-gemdrive-1452-shiftrix	unsure
+2026-10-12T11:30:03	1453	Vroom	unsure		20261012-060137-st-104-gemdrive-1453-vroom	unsure
+2026-10-12T11:30:04	1454	F1 (Domark)	unsure		20261012-060138-st-104-gemdrive-1454-f1-domark	unsure
+2026-10-12T11:30:06	1455	Maupiti Island	unsure		20261012-060139-st-104-gemdrive-1455-maupiti-island	unsure
+2026-10-12T11:30:27	1464	Mystical	broken		20261012-074012-st-104-gemdrive-1464-mystical	unsure
+2026-10-12T11:30:29	1465	Galaxy Force	unsure		20261012-074012-st-104-gemdrive-1465-galaxy-force	unsure
+2026-10-12T11:30:56	1473	Space Ace II	unsure		20261012-090323-st-104-gemdrive-1473-space-ace-ii	unsure
+2026-10-12T11:31:06	1474	Outrun	broken		20261012-090324-st-104-gemdrive-1474-outrun	unsure
+2026-10-12T11:31:07	1475	Spindizzy Worlds	broken		20261012-090326-st-104-gemdrive-1475-spindizzy-worlds	unsure
+2026-10-12T11:31:10	1473	Space Ace II	broken		20261012-090323-st-104-gemdrive-1473-space-ace-ii	unsure
+2026-10-12T11:31:11	1476	Thunderhawk AH-73M	broken		20261012-094035-st-104-gemdrive-1476-thunderhawk-ah-73m	fix
+2026-10-12T11:31:12	1477	Awesome	broken		20261012-094035-st-104-gemdrive-1477-awesome	fix
+2026-10-12T11:31:13	1478	Jet	broken		20261012-094035-st-104-gemdrive-1478-jet	fix
+2026-10-12T11:31:15	1479	Last Ninja 3	broken		20261012-094046-st-104-gemdrive-1479-last-ninja-3	fix
+2026-10-12T11:31:16	1480	Marble Madness	broken		20261012-094046-st-104-gemdrive-1480-marble-madness	fix
+2026-10-12T11:31:19	1481	Minigolf	broken		20261012-094134-st-104-gemdrive-1481-minigolf	fix
+2026-10-12T11:31:19	1482	Ninja Remix	broken		20261012-094134-st-104-gemdrive-1482-ninja-remix	fix
+2026-10-12T11:31:20	1483	Prison	broken		20261012-094134-st-104-gemdrive-1483-prison	fix
+2026-10-12T11:31:22	1484	Resolution 101	broken		20261012-094135-st-104-gemdrive-1484-resolution-101	as it is
+2026-10-12T11:31:24	1485	Masterblazer	broken		20261012-094135-st-104-gemdrive-1485-masterblazer	fix
+2026-10-12T11:31:28	1486	Motörhead	broken		20261012-094221-st-104-gemdrive-1486-mot-rhead	fix
+2026-10-12T11:31:30	1487	Silent Service	broken		20261012-094221-st-104-gemdrive-1487-silent-service	fix
+2026-10-12T11:31:31	1488	Hoog	broken		20261012-094221-st-104-gemdrive-1488-hoog	fix
+2026-10-12T11:31:32	1489	Z-Out	broken		20261012-094223-st-104-gemdrive-1489-z-out	fix
+2026-10-12T11:31:34	1490	Magic Fly	broken		20261012-094223-st-104-gemdrive-1490-magic-fly	fix
+2026-10-12T11:31:35	1491	Pegasus	broken		20261012-100019-st-104-gemdrive-1491-pegasus	fix
+2026-10-12T11:31:36	1492	Legend	broken		20261012-100019-st-104-gemdrive-1492-legend	fix
+2026-10-12T11:31:38	1493	Jupiter Probe	ok		20261012-100019-st-104-gemdrive-1493-jupiter-probe	as it is
+2026-10-12T11:31:39	1494	Gemstone Legend	broken		20261012-100019-st-104-gemdrive-1494-gemstone-legend	fix
+2026-10-12T11:31:40	1495	Heavy Metal Heroes	broken		20261012-100019-st-104-gemdrive-1495-heavy-metal-heroes	fix
+2026-10-12T11:31:42	1496	Captain Planet	broken		20261012-100109-st-104-gemdrive-1496-captain-planet	fix
+2026-10-12T11:31:43	1497	Battle Probe	broken		20261012-100109-st-104-gemdrive-1497-battle-probe	fix
+2026-10-12T11:31:45	1498	Fireblaster	broken		20261012-100109-st-104-gemdrive-1498-fireblaster	fix
+2026-10-12T11:31:46	1499	Silicon Dreams	broken		20261012-100109-st-104-gemdrive-1499-silicon-dreams	fix
+2026-10-12T11:31:49	1500	Kult	broken		20261012-100109-st-104-gemdrive-1500-kult	fix
+2026-10-12T11:31:51	1501	Kid Gloves	broken		20261012-100159-st-104-gemdrive-1501-kid-gloves	fix
+2026-10-12T11:31:58	1502	Kingmaker	unsure		20261012-100248-st-104-gemdrive-1502-kingmaker	unsure
+2026-10-12T11:32:00	1503	Emmanuelle	broken		20261012-100159-st-104-gemdrive-1503-emmanuelle	fix
+2026-10-12T11:32:00	1504	Karate King	broken		20261012-100159-st-104-gemdrive-1504-karate-king	fix
+2026-10-12T11:32:02	1505	Crossbow	broken		20261012-100159-st-104-gemdrive-1505-crossbow	fix
+2026-10-12T11:32:04	1506	Deathbringer	broken		20261012-100248-st-104-gemdrive-1506-deathbringer	fix
+2026-10-12T11:32:05	1507	Technocop	broken		20261012-100248-st-104-gemdrive-1507-technocop	fix
+2026-10-12T11:32:07	1508	Tintin on the Moon	broken		20261012-100248-st-104-gemdrive-1508-tintin-on-the-moon	fix
+2026-10-12T11:32:08	1509	Deliverance	broken		20261012-100248-st-104-gemdrive-1509-deliverance	fix
+2026-10-12T11:32:09	1510	Enterprise	broken		20261012-100337-st-104-gemdrive-1510-enterprise	fix
+2026-10-12T11:32:12	1511	Frost Byte	broken		20261012-100337-st-104-gemdrive-1511-frost-byte	fix
+2026-10-12T11:32:13	1512	Galactic Conqueror	broken		20261012-100337-st-104-gemdrive-1512-galactic-conqueror	fix
+2026-10-12T11:32:14	1513	Titus the Fox	broken		20261012-100337-st-104-gemdrive-1513-titus-the-fox	fix
+2026-10-12T11:32:15	1514	Venus the Flytrap	broken		20261012-100337-st-104-gemdrive-1514-venus-the-flytrap	fix
+2026-10-12T11:32:16	1515	Total Eclipse	broken		20261012-100426-st-104-gemdrive-1515-total-eclipse	fix
+2026-10-12T11:32:21	1516	Popeye 2	broken		20261012-100426-st-104-gemdrive-1516-popeye-2	fix
+2026-10-12T11:32:23	1517	Trantor	broken		20261012-100426-st-104-gemdrive-1517-trantor	fix
+2026-10-12T11:32:24	1518	Herman	broken		20261012-100426-st-104-gemdrive-1518-herman	fix
+2026-10-12T11:32:25	1519	Tusker	broken		20261012-100426-st-104-gemdrive-1519-tusker	fix
+2026-10-12T11:32:26	1520	Amazing Spiderman	broken		20261012-100515-st-104-gemdrive-1520-amazing-spiderman	fix
+2026-10-12T11:32:29	1521	Amberstar	ok		20261012-100515-st-104-gemdrive-1521-amberstar	as it is
+2026-10-12T11:32:38	1522	Ammotrack	ok		20261012-100721-st-104-gemdrive-1522-ammotrack	broken
+2026-10-12T11:32:42	1523	Apache Flight	broken		20261012-100515-st-104-gemdrive-1523-apache-flight	fix
+2026-10-12T11:32:43	1524	Artura	broken		20261012-100515-st-104-gemdrive-1524-artura	fix
+2026-10-12T11:32:44	1525	Battletech	broken		20261012-100605-st-104-gemdrive-1525-battletech	fix
+2026-10-12T11:32:46	1526	Crossland	broken		20261012-100605-st-104-gemdrive-1526-crossland	fix
+2026-10-12T11:32:54	1527	Dragonflight	unsure		20261012-100605-st-104-gemdrive-1527-dragonflight	as it is
+2026-10-12T11:32:56	1528	Fusion	ok		20261012-100605-st-104-gemdrive-1528-fusion	fix
+2026-10-12T11:32:58	1528	Fusion	broken		20261012-100605-st-104-gemdrive-1528-fusion	fix
+2026-10-12T11:32:59	1529	Interchange	broken		20261012-100654-st-104-gemdrive-1529-interchange	fix
+2026-10-12T11:33:01	1530	Jupiters Masterdrive	broken		20261012-100654-st-104-gemdrive-1530-jupiters-masterdrive	fix
+2026-10-12T11:33:03	1531	Phoenix	broken		20261012-100654-st-104-gemdrive-1531-phoenix	fix
+2026-10-12T11:33:08	1532	Rogue	ok		20261012-100832-st-104-gemdrive-1532-rogue	unsure
+2026-10-12T11:33:11	1533	Spellfire the Sorceror	ok		20261012-100743-st-104-gemdrive-1533-spellfire-the-sorceror	as it is
+2026-10-12T11:33:14	1533	Spellfire the Sorceror	ok		20261012-100743-st-104-gemdrive-1533-spellfire-the-sorceror	as it is
+2026-10-12T11:33:16	1534	Time Runner	broken		20261012-100743-st-104-gemdrive-1534-time-runner	fix
+2026-10-12T11:33:18	1535	Warp	broken		20261012-100743-st-104-gemdrive-1535-warp	fix
+2026-10-12T11:33:21	1536	Wrath of the Demon	broken		20261012-100809-st-104-gemdrive-1536-wrath-of-the-demon	fix
+2026-10-12T11:33:22	1537	International Soccer Challenge	broken		20261012-100832-st-104-gemdrive-1537-international-soccer-challenge	fix
+2026-10-12T11:33:23	1538	Castle Warrior	broken		20261012-100832-st-104-gemdrive-1538-castle-warrior	fix
+2026-10-12T11:33:25	1539	Chariots of Wrath	broken		20261012-100832-st-104-gemdrive-1539-chariots-of-wrath	fix
+2026-10-12T11:33:26	1540	Gold of the Aztecs, The	broken		20261012-100856-st-104-gemdrive-1540-gold-of-the-aztecs-the	fix
+2026-10-12T11:33:30	1541	Mad Professor Mariarti	broken		20261012-100921-st-104-gemdrive-1541-mad-professor-mariarti	fix
+2026-10-12T11:33:31	1542	Magic Shop, The	broken		20261012-100921-st-104-gemdrive-1542-magic-shop-the	as it is
+2026-10-12T11:33:32	1542	Magic Shop, The	ok		20261012-100921-st-104-gemdrive-1542-magic-shop-the	as it is
+2026-10-12T11:33:33	1543	Bad Company	broken		20261012-100921-st-104-gemdrive-1543-bad-company	fix
+2026-10-12T11:33:34	1544	Slightly Magic	broken		20261012-100921-st-104-gemdrive-1544-slightly-magic	fix
+2026-10-12T11:33:35	1545	Space Racer	broken		20261012-100944-st-104-gemdrive-1545-space-racer	fix
+2026-10-12T11:33:37	1546	Alien World	broken		20261012-101010-st-104-gemdrive-1546-alien-world	fix
+2026-10-12T11:33:38	1547	Pro Tennis Tour	broken		20261012-101010-st-104-gemdrive-1547-pro-tennis-tour	fix
+2026-10-12T11:33:39	1548	Grand Monster Slam	broken		20261012-101010-st-104-gemdrive-1548-grand-monster-slam	fix
+2026-10-12T11:33:44	1551	Starblaze	broken		20261012-101100-st-104-gemdrive-1551-starblaze	fix
+2026-10-12T11:33:45	1552	Sleeping Gods Lie	broken		20261012-101100-st-104-gemdrive-1552-sleeping-gods-lie	fix
+2026-10-12T11:33:46	1553	Microprose F1 GP	broken		20261012-101100-st-104-gemdrive-1553-microprose-f1-gp	fix
+2026-10-12T11:33:48	1554	Trex Warrior	broken		20261012-101100-st-104-gemdrive-1554-trex-warrior	fix
+2026-10-12T11:33:49	1555	Shadow of the Beast	broken		20261012-101119-st-104-gemdrive-1555-shadow-of-the-beast	fix
+2026-10-12T11:33:50	1556	California Games II	broken		20261012-101149-st-104-gemdrive-1556-california-games-ii	fix
+2026-10-12T11:33:54	1558	Fire and Forget II	broken		20261012-101149-st-104-gemdrive-1558-fire-and-forget-ii	fix
+2026-10-12T11:33:56	1559	Lode Runner	broken		20261012-101149-st-104-gemdrive-1559-lode-runner	fix
+2026-10-12T11:33:57	1560	Flood	broken		20261012-101207-st-104-gemdrive-1560-flood	fix
+2026-10-12T11:34:01	1562	Hook	broken		20261012-101238-st-104-gemdrive-1562-hook	fix
+2026-10-12T11:34:02	1563	Lombard Rally	broken		20261012-101238-st-104-gemdrive-1563-lombard-rally	fix
+2026-10-12T11:34:03	1564	B.A.T. II	broken		20261012-101238-st-104-gemdrive-1564-b-a-t-ii	fix
+2026-10-12T11:34:05	1565	Captain Blood	broken		20261012-101254-st-104-gemdrive-1565-captain-blood	fix
+2026-10-12T11:34:08	1566	Kristal, The	broken		20261012-101328-st-104-gemdrive-1566-kristal-the	fix
+2026-10-12T11:34:13	1569	Armour-Geddon	broken		20261012-101328-st-104-gemdrive-1569-armour-geddon	fix
+2026-10-12T11:34:16	1571	Exile	broken		20261012-101417-st-104-gemdrive-1571-exile	fix
+2026-10-12T11:34:17	1572	Dragon Breed	broken		20261012-101417-st-104-gemdrive-1572-dragon-breed	fix
+2026-10-12T11:34:19	1573	Flight Simulator 2	broken		20261012-101417-st-104-gemdrive-1573-flight-simulator-2	fix
+2026-10-12T11:34:20	1574	Starglider	broken		20261012-101417-st-104-gemdrive-1574-starglider	fix
+2026-10-12T11:34:26	1576	Time	broken		20261012-101506-st-104-gemdrive-1576-time	fix
+2026-10-12T11:34:27	1577	Heimdall	broken		20261012-101506-st-104-gemdrive-1577-heimdall	fix
+2026-10-12T11:34:28	1578	No Second Prize	broken		20261012-101506-st-104-gemdrive-1578-no-second-prize	fix
+2026-10-12T11:34:30	1579	Police Quest II	broken		20261012-101506-st-104-gemdrive-1579-police-quest-ii	broken
+2026-10-12T11:34:31	1580	Robocop 3	broken		20261012-101517-st-104-gemdrive-1580-robocop-3	fix
+2026-10-12T11:34:34	1581	Creatures	broken		20261012-101556-st-104-gemdrive-1581-creatures	fix
+2026-10-12T11:34:35	1582	Impossible Mission 2	broken		20261012-101556-st-104-gemdrive-1582-impossible-mission-2	fix
+2026-10-12T11:34:36	1583	Interphase	broken		20261012-101556-st-104-gemdrive-1583-interphase	as it is
+2026-10-12T11:34:38	1583	Interphase	ok		20261012-101556-st-104-gemdrive-1583-interphase	as it is
+2026-10-12T11:34:50	1584	Corruption	broken		20261012-101556-st-104-gemdrive-1584-corruption	fix
+2026-10-12T11:35:06	1586	Fish	broken		20261012-101646-st-104-gemdrive-1586-fish	fix
+2026-10-12T11:35:07	1587	Guild of Thieves	broken		20261012-101646-st-104-gemdrive-1587-guild-of-thieves	fix
+2026-10-12T11:35:08	1588	Starblade	broken		20261012-101646-st-104-gemdrive-1588-starblade	fix
+2026-10-12T11:35:09	1589	Windsurf Willy	broken		20261012-101646-st-104-gemdrive-1589-windsurf-willy	fix
+2026-10-12T11:35:11	1590	First Person Pinball	broken		20261012-101653-st-104-gemdrive-1590-first-person-pinball	fix
+2026-10-12T11:35:19	1595	Magic Boy	broken		20261012-101741-st-104-gemdrive-1595-magic-boy	fix
+2026-10-12T11:35:22	1598	Drakkhen	broken		20261012-101824-st-104-gemdrive-1598-drakkhen	fix
+2026-10-12T11:35:23	1599	Dragonlord	broken		20261012-101824-st-104-gemdrive-1599-dragonlord	fix
+2026-10-12T11:35:24	1600	Xybots	broken		20261012-101829-st-104-gemdrive-1600-xybots	fix
+2026-10-12T11:35:27	1601	Robocop	broken		20261012-101913-st-104-gemdrive-1601-robocop	fix
+2026-10-12T11:35:28	1602	Robocop 2	broken		20261012-101913-st-104-gemdrive-1602-robocop-2	fix
+2026-10-12T11:35:29	1603	Astate	broken		20261012-101913-st-104-gemdrive-1603-astate	fix
+2026-10-12T11:35:30	1604	Grandad	broken		20261012-101913-st-104-gemdrive-1604-grandad	fix
+2026-10-12T11:35:31	1605	Grandad 2	broken		20261012-101918-st-104-gemdrive-1605-grandad-2	fix
+2026-10-12T11:35:41	1608	Leisure Suit Larry	unsure		20261012-102003-st-104-gemdrive-1608-leisure-suit-larry	unsure
+2026-10-12T11:35:44	1609	Leisure Suit Larry 2	broken		20261012-102003-st-104-gemdrive-1609-leisure-suit-larry-2	broken
+2026-10-12T11:35:46	1610	Leisure Suit Larry 3	broken		20261012-102006-st-104-gemdrive-1610-leisure-suit-larry-3	broken
+2026-10-12T11:35:54	1609	Leisure Suit Larry 2	unsure		20261012-102003-st-104-gemdrive-1609-leisure-suit-larry-2	broken
+2026-10-12T11:36:00	1610	Leisure Suit Larry 3	unsure		20261012-102006-st-104-gemdrive-1610-leisure-suit-larry-3	broken
+2026-10-12T11:37:26	1611	Golden Path	broken		20261012-102053-st-104-gemdrive-1611-golden-path	fix
+2026-10-12T11:37:27	1612	Ninja Mission	broken		20261012-102053-st-104-gemdrive-1612-ninja-mission	fix
+2026-10-12T11:37:28	1613	Pit Fighter	broken		20261012-102053-st-104-gemdrive-1613-pit-fighter	fix
+2026-10-12T11:37:32	1614	Sentinel	unsure		20261012-102053-st-104-gemdrive-1614-sentinel	as it is
+2026-10-12T11:37:35	1615	ST Karate	broken		20261012-102053-st-104-gemdrive-1615-st-karate	fix
+2026-10-12T11:37:37	1616	Bobo	broken		20261012-102143-st-104-gemdrive-1616-bobo	fix
+2026-10-12T11:37:42	1617	Codename Iceman	unsure		20261012-102143-st-104-gemdrive-1617-codename-iceman	broken
+2026-10-12T11:37:42	1618	Conquests of Camelot	unsure		20261012-102143-st-104-gemdrive-1618-conquests-of-camelot	broken
+2026-10-12T11:37:54	1619	GBA Basketball	broken		20261012-102143-st-104-gemdrive-1619-gba-basketball	fix
+2026-10-12T11:38:01	1620	Kings Quest IV	unsure		20261012-102143-st-104-gemdrive-1620-kings-quest-iv	broken
+2026-10-12T11:38:09	1621	Deja Vu II	unsure		20261012-102412-st-104-gemdrive-1621-deja-vu-ii	unsure
+2026-10-12T11:38:11	1622	Kings Quest	broken		20261012-102233-st-104-gemdrive-1622-kings-quest	fix
+2026-10-12T11:38:12	1623	Kings Quest III	broken		20261012-102233-st-104-gemdrive-1623-kings-quest-iii	fix
+2026-10-12T11:38:14	1624	Man Hunter	broken		20261012-102233-st-104-gemdrive-1624-man-hunter	fix
+2026-10-12T11:38:14	1625	Man Hunter 2	broken		20261012-102233-st-104-gemdrive-1625-man-hunter-2	fix
+2026-10-12T11:38:18	1626	Space Quest	broken		20261012-102323-st-104-gemdrive-1626-space-quest	fix
+2026-10-12T11:38:19	1627	Space Quest II	broken		20261012-102323-st-104-gemdrive-1627-space-quest-ii	fix
+2026-10-12T11:38:23	1628	Space Quest III	unsure		20261012-102323-st-104-gemdrive-1628-space-quest-iii	broken
+2026-10-12T11:38:25	1629	Shadowgate	unsure		20261012-102412-st-104-gemdrive-1629-shadowgate	unsure
+2026-10-12T11:38:27	1630	Uninvited	unsure		20261012-102502-st-104-gemdrive-1630-uninvited	unsure
+2026-10-12T11:38:32	1631	Maniac Mansion	broken		20261012-102412-st-104-gemdrive-1631-maniac-mansion	fix
+2026-10-12T11:38:33	1632	Renegade (Taito)	broken		20261012-102412-st-104-gemdrive-1632-renegade-taito	fix
+2026-10-12T11:38:35	1633	Substation	broken		20261012-102551-st-104-gemdrive-1633-substation	unsure
+2026-10-12T11:38:41	1634	Noddys Playtime	broken		20261012-102502-st-104-gemdrive-1634-noddys-playtime	fix
+2026-10-12T11:38:50	1636	Striker	broken		20261012-102502-st-104-gemdrive-1636-striker	fix
+2026-10-12T11:38:51	1637	Secret of Monkey Island	broken		20261012-102551-st-104-gemdrive-1637-secret-of-monkey-island	fix
+2026-10-12T11:38:52	1638	Hunter	broken		20261012-102551-st-104-gemdrive-1638-hunter	fix
+2026-10-12T11:38:53	1639	G.Nius	broken		20261012-102551-st-104-gemdrive-1639-g-nius	fix
+2026-10-12T11:38:54	1640	Outzone	broken		20261012-102552-st-104-gemdrive-1640-outzone	fix
+2026-10-12T11:38:56	1641	The Games Summer Edition	broken		20261012-102642-st-104-gemdrive-1641-the-games-summer-edition	fix
+2026-10-12T11:39:02	1643	Night Hunter	broken		20261012-102642-st-104-gemdrive-1643-night-hunter	fix
+2026-10-12T11:39:03	1644	Winter Games	broken		20261012-102642-st-104-gemdrive-1644-winter-games	fix
+2026-10-12T11:39:06	1646	Killing Cloud	broken		20261012-102732-st-104-gemdrive-1646-killing-cloud	fix
+2026-10-12T11:39:07	1647	Zany Golf	broken		20261012-102732-st-104-gemdrive-1647-zany-golf	fix
+2026-10-12T11:39:08	1648	Gem X	broken		20261012-102732-st-104-gemdrive-1648-gem-x	fix
+2026-10-12T11:39:14	1649	Wolfenstein 3D	unsure		20261012-102822-st-104-gemdrive-1649-wolfenstein-3d	unsure
+2026-10-12T11:39:19	1650	Clever and Smart	broken		20261012-102732-st-104-gemdrive-1650-clever-and-smart	fix
+2026-10-12T11:39:24	1651	Zero Gravity	broken		20261012-102822-st-104-gemdrive-1651-zero-gravity	fix
+2026-10-12T11:39:25	1652	Asterix Operation Getafix	broken		20261012-102822-st-104-gemdrive-1652-asterix-operation-getafix	fix
+2026-10-12T11:39:27	1653	Enduro Racer	broken		20261012-102822-st-104-gemdrive-1653-enduro-racer	fix
+2026-10-12T11:39:28	1654	Super Monaco G.P.	broken		20261012-102822-st-104-gemdrive-1654-super-monaco-g-p	fix
+2026-10-12T11:39:34	1655	Roger	broken		20261012-103004-st-104-gemdrive-1655-roger	unsure
+2026-10-12T11:39:38	1656	Amazon	unsure		20261012-103008-st-104-gemdrive-1656-amazon	broken
+2026-10-12T11:39:40	1657	Chrono Quest II	broken		20261012-102912-st-104-gemdrive-1657-chrono-quest-ii	fix
+2026-10-12T11:39:41	1658	Chrono Quest	unsure		20261012-103004-st-104-gemdrive-1658-chrono-quest	unsure
+2026-10-12T11:39:42	1659	Erik	broken		20261012-102912-st-104-gemdrive-1659-erik	fix
+2026-10-12T11:39:43	1660	Shadow Warriors	broken		20261012-103004-st-104-gemdrive-1660-shadow-warriors	fix
+2026-10-12T11:39:47	1661	Bad Cat	broken		20261012-103006-st-104-gemdrive-1661-bad-cat	fix
+2026-10-12T11:39:50	1664	Spherical	broken		20261012-103053-st-104-gemdrive-1664-spherical	fix
+2026-10-12T11:39:51	1665	Mata Hari	broken		20261012-103054-st-104-gemdrive-1665-mata-hari	fix
+2026-10-12T11:39:54	1666	Magnetik Tank	broken		20261011-210525-st-104-gemdrive-1666-magnetik-tank	fix
+2026-10-12T11:39:55	1667	Brataccas	broken		20261012-103104-st-104-gemdrive-1667-brataccas	as it is
+2026-10-12T11:39:57	1667	Brataccas	ok		20261012-103104-st-104-gemdrive-1667-brataccas	as it is
+2026-10-12T11:40:01	1668	Zero-5	broken		20261012-103230-st-104-gemdrive-1668-zero-5	unsure
+2026-10-12T11:40:07	1670	Ranx	broken		20261012-103144-st-104-gemdrive-1670-ranx	fix
+2026-10-12T11:40:10	1672	Adv. of Maddog Williams...	broken		20261012-103328-st-104-gemdrive-1672-adv-of-maddog-williams	unsure
+2026-10-12T11:40:18	1674	Mortville Manor	unsure		20261012-103322-st-104-gemdrive-1674-mortville-manor	unsure
+2026-10-12T11:40:33	1676	Locomotion -Byte Back	broken		20261012-103318-st-104-gemdrive-1676-locomotion-byte-back	fix
+2026-10-12T11:40:34	1678	Exolon	broken		20261012-103322-st-104-gemdrive-1678-exolon	fix
+2026-10-12T11:40:35	1679	Muzzy	broken		20261012-103406-st-104-gemdrive-1679-muzzy	fix
+2026-10-12T11:40:37	1680	Matrix Marauders	broken		20261012-103410-st-104-gemdrive-1680-matrix-marauders	fix
+2026-10-12T11:40:40	1681	Logical	broken		20261012-103410-st-104-gemdrive-1681-logical	fix
+2026-10-12T11:40:40	1682	Legends of Valour	broken		20261012-103410-st-104-gemdrive-1682-legends-of-valour	fix
+2026-10-12T11:40:41	1683	Liberator	broken		20261012-103416-st-104-gemdrive-1683-liberator	fix
+2026-10-12T11:40:42	1684	Jetsons	broken		20261012-103453-st-104-gemdrive-1684-jetsons	fix
+2026-10-12T11:40:44	1685	Khalaan	unsure		20261012-103638-st-104-gemdrive-1685-khalaan	unsure
+2026-10-12T11:40:51	1686	Gravity	broken		20261012-103500-st-104-gemdrive-1686-gravity	fix
+2026-10-12T11:40:52	1687	A.G.E	broken		20261012-103500-st-104-gemdrive-1687-a-g-e	fix
+2026-10-12T11:40:54	1688	Elite	broken		20261012-103504-st-104-gemdrive-1688-elite	fix
+2026-10-12T11:40:56	1689	Tai-Pan	broken		20261012-103541-st-104-gemdrive-1689-tai-pan	fix
+2026-10-12T11:40:58	1690	Dive Bomber	broken		20261012-103549-st-104-gemdrive-1690-dive-bomber	fix
+2026-10-12T11:41:00	1692	Reach for the Skies	broken		20261012-103552-st-104-gemdrive-1692-reach-for-the-skies	fix
+2026-10-12T11:41:01	1693	Dan Dare 3	broken		20261012-103629-st-104-gemdrive-1693-dan-dare-3	fix
+2026-10-12T11:41:18	1695	Builderland	unsure		20261012-103727-st-104-gemdrive-1695-builderland	unsure
+2026-10-12T11:41:26	1696	Bargon Attack	unsure		20261012-103640-st-104-gemdrive-1696-bargon-attack	unsure
+2026-10-12T11:41:31	1698	Crystals of Arborea	unsure		20261012-103727-st-104-gemdrive-1698-crystals-of-arborea	as it is
+2026-10-12T11:41:32	1699	Targhan	unsure		20261012-103727-st-104-gemdrive-1699-targhan	as it is
+2026-10-12T11:41:39	1700	Better Dead than ALien	unsure		20261012-103907-st-104-gemdrive-1700-better-dead-than-alien	unsure
+2026-10-12T11:41:51	1701	Bubble Ghost	unsure		20261012-103941-st-104-gemdrive-1701-bubble-ghost	broken
+2026-10-12T11:41:59	1707	Orbiter	unsure		20261012-103958-st-104-gemdrive-1707-orbiter	unsure
+2026-10-12T11:42:02	1708	Pirates	unsure		20261012-103958-st-104-gemdrive-1708-pirates	unsure
+2026-10-12T11:42:04	1709	Rocket Ranger	unsure		20261012-104047-st-104-gemdrive-1709-rocket-ranger	unsure
+2026-10-12T11:42:06	1715	Pacman	unsure		20261012-104311-st-104-gemdrive-1715-pacman	unsure
+2026-10-12T11:42:16	1722	Cyberdrome	unsure		20261012-104336-st-104-gemdrive-1722-cyberdrome	unsure
+2026-10-12T11:42:18	1725	Heros Quest	unsure		20261012-104406-st-104-gemdrive-1725-heros-quest	broken
+2026-10-12T11:42:20	1726	Loom	unsure		20261012-104447-st-104-gemdrive-1726-loom	unsure
+2026-10-12T11:42:23	1727	Civilization	unsure		20261012-104457-st-104-gemdrive-1727-civilization	unsure
+2026-10-12T11:42:25	1729	Gobliiins	unsure		20261012-104424-st-104-gemdrive-1729-gobliiins	unsure
+2026-10-12T11:42:26	1730	Gobliiins 2	unsure		20261012-104455-st-104-gemdrive-1730-gobliiins-2	unsure
+2026-10-12T11:42:31	1743	Bombuzal	unsure		20261012-104848-st-104-gemdrive-1743-bombuzal	unsure
+2026-10-12T11:42:34	1750	Ultima III	unsure		20261012-105032-st-104-gemdrive-1750-ultima-iii	unsure
+2026-10-12T11:42:35	1751	Oxyd 2	unsure		20261012-105034-st-104-gemdrive-1751-oxyd-2	unsure
+2026-10-12T11:42:39	1752	Oxyd Color (V3)	unsure		20261012-105059-st-104-gemdrive-1752-oxyd-color-v3	broken
+2026-10-12T11:42:41	1753	Oxyd Falcon V 3.2	unsure		20261012-105110-st-104-gemdrive-1753-oxyd-falcon-v-3-2	unsure
+2026-10-12T11:42:44	1754	Oxyd Highres	unsure		20261012-105213-st-104-gemdrive-1754-oxyd-highres	unsure
+2026-10-12T11:42:46	1755	Oxyd Magnum	unsure		20261012-105120-st-104-gemdrive-1755-oxyd-magnum	unsure
+2026-10-12T11:42:55	1758	Utopos	broken		20261012-105334-st-104-gemdrive-1758-utopos	unsure
+2026-10-12T11:43:23	1759	Weird Dreams	unsure		20261012-105208-st-104-gemdrive-1759-weird-dreams	fix
+2026-10-12T11:43:33	1767	Spitting Images	unsure		20261012-105347-st-104-gemdrive-1767-spitting-images	as it is
+2026-10-12T11:43:36	1769	Ultima IV	unsure		20261012-105550-st-104-gemdrive-1769-ultima-iv	unsure
+2026-10-12T11:43:40	1775	Road Wars	unsure		20261012-105658-st-104-gemdrive-1775-road-wars	unsure
+2026-10-12T11:43:43	1779	Quadralien	unsure		20261012-105800-st-104-gemdrive-1779-quadralien	unsure
+2026-10-12T11:43:47	1788	Pac-Land	unsure		20261012-105816-st-104-gemdrive-1788-pac-land	unsure
+2026-10-12T11:43:50	1791	Heroes of the Lance	unsure		20261012-110017-st-104-gemdrive-1791-heroes-of-the-lance	unsure
+2026-10-12T11:43:53	1794	Fascination	unsure		20261012-105913-st-104-gemdrive-1794-fascination	unsure
+2026-10-12T11:43:57	1799	Mickey's Runaway Zoo	unsure		20261012-110203-st-104-gemdrive-1799-mickey-s-runaway-zoo	unsure
+2026-10-12T11:43:59	1804	Spy vs Spy 2	unsure		20261012-110321-st-104-gemdrive-1804-spy-vs-spy-2	unsure
+2026-10-12T11:44:01	1806	Space Quest 3	unsure		20261012-110330-st-104-gemdrive-1806-space-quest-3	unsure
+2026-10-12T11:44:06	1813	Strike Force Harrier	unsure		20261012-110541-st-104-gemdrive-1813-strike-force-harrier	unsure
+2026-10-12T11:44:15	1814	Journey to the Centre of the Earth	unsure		20261012-110547-st-104-gemdrive-1814-journey-to-the-centre-of-the-e	unsure
+2026-10-12T11:44:18	1816	Proflight	unsure		20261012-110601-st-104-gemdrive-1816-proflight	unsure
+2026-10-12T11:44:21	1817	Obsession	unsure		20261012-110604-st-104-gemdrive-1817-obsession	unsure
+2026-10-12T11:44:27	1819	Light Corridor	unsure		20261012-110549-st-104-gemdrive-1819-light-corridor	unsure
+2026-10-12T11:44:28	1820	Locomotion	unsure		20261012-110803-st-104-gemdrive-1820-locomotion	unsure
+2026-10-12T11:44:31	1823	Flight of the Intruder	unsure		20261012-110653-st-104-gemdrive-1823-flight-of-the-intruder	unsure
+2026-10-12T11:44:38	1824	F16 Falcon	broken		20261012-110654-st-104-gemdrive-1824-f16-falcon	fix
+2026-10-12T11:44:41	1826	Aquanaut	broken		20261012-110915-st-104-gemdrive-1826-aquanaut	unsure
+2026-10-12T11:44:44	1827	Deja Vu	unsure		20261012-110915-st-104-gemdrive-1827-deja-vu	unsure
+2026-10-12T11:44:48	1829	Silent Service II	unsure		20261012-111024-st-104-gemdrive-1829-silent-service-ii	unsure
+2026-10-12T11:44:54	1830	Space Rogue	unsure		20261012-111027-st-104-gemdrive-1830-space-rogue	unsure
+2026-10-13T11:12:33	10	Color Beyond Time	ok		20261011-210816-st-104-gemdrive-10-color-beyond-time	as it is
+2026-10-13T11:12:38	82	Empire Strikes Back PD	ok		20261012-120550-st-104-gemdrive-82-empire-strikes-back-pd	unsure
+2026-10-13T11:12:52	1484	Resolution 101	ok		20261012-094135-st-104-gemdrive-1484-resolution-101	as it is
+2026-10-13T11:12:56	1579	Police Quest II	ok		20261012-101506-st-104-gemdrive-1579-police-quest-ii	as it is
+2026-10-13T11:13:24	1649	Wolfenstein 3D	ok		20261012-130336-st-104-gemdrive-1649-wolfenstein-3d	as it is
+2026-10-13T11:13:39	1767	Spitting Images	broken		20261012-105347-st-104-gemdrive-1767-spitting-images	unsure

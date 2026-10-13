@@ -1,0 +1,4 @@
+row	name	verdict	reason
+1112	Great Giana Sisters STE	fix	GIAACSI.TOS finds GS.RAW's sectors for its DMA audio (ACSI/IDE registers, PUN info) and prints "Error in getting file location" on a GEMDOS drive (run on STE TOS 1.62); the page's HAGA downloads (GIANAA.ZIP, GIANAS.ZIP) read through GEMDOS
+41	Rody and Mastico 2	fix	PP's archive has no RUNME.TOS (its HAGE module, floppy image and T14AG.FIC are there); with Rody and Mastico 4's RUNME.TOS (RODYM4.ZIP, the same layout) it reaches its title and chapter menu from the GEMDOS drive (tools/dev/builds/survey/trials/rodym2/)
+716	Ice and Fire	unsure	no hard-disk version: three floppy images for a virtual floppy driver (PP's page: not made into a hard-disk version, its disk change detection being unusual); settled by a run with a virtual floppy driver from the GEMDOS drive

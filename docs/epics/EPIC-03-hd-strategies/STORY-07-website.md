@@ -30,6 +30,9 @@ solutions proposed. Designed with the frontend-design skill. Asked by Diego, 202
 - [ ] Publication prepared, not done (D-15): the list of what has to leave the repository and its
       history before it goes public (`LEMMINGS/`, `_archive/`'s binaries, anything else found), a
       script that checks a clone against it, and the GitHub Pages settings the site needs.
+- [ ] Every game's page or row shows its snapshot from STORY-05 (`run_all.py` copies each run's
+      last screen, taken just before Hatari quits, to `tools/dev/builds/survey/snapshots/`), with
+      the run's verdict. Asked by Diego, 2026-10-11.
 
 ## Acceptance
 
@@ -38,3 +41,8 @@ and every game reachable, nothing of PP's or Atari's in it but links and credits
 removal list of D-15 ready.
 
 ## Notes
+
+The snapshots are this project's own captures, but they show the games' screens: whether they are
+published with the site is part of the D-15 review before going public (Diego's call); until then
+they are git-ignored, under `tools/dev/builds/survey/snapshots/`.
+

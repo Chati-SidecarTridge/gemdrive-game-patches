@@ -6,7 +6,8 @@ a list of expected steps (EPIC-00 STORY-05).
 Usage: hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver
                          [--expect FILE] [--parse FILE] [--memsize MB] [--no-auto]
                          [--step-time S] [--name NAME] [--trace FLAGS] [--key-hold S]
-                         [--monitor mono|rgb|vga|tv]
+                         [--monitor mono|rgb|vga|tv] [--tos-res low|med|high] [--drive FOLDER] [--image FILE]
+                         [--log-root FOLDER]
 
 Hatari is used as released (C-02). Each run gets a folder under tools/dev/logs/:
 
@@ -211,6 +212,11 @@ def stage_debugger_script(script: Path, run_dir: Path) -> str:
     return str(staged)
 
 
+def shown(path: Path) -> Path:
+    """A path as printed: relative to the repository when inside it."""
+    return path.relative_to(REPO) if path.is_relative_to(REPO) else path
+
+
 def evidence_ok() -> tuple[bool, str]:
     """Whether every file listed in LEMMINGS.sha256 still has its hash (C-01)."""
     bad = []
@@ -235,6 +241,10 @@ def main() -> int:
     ap.add_argument("--name", default="", help="suffix for the run folder")
     ap.add_argument("--trace", default="", help=f"Hatari trace flags to add to {TRACE}")
     ap.add_argument("--key-hold", type=float, default=0.1, help="seconds a key stays down")
+    ap.add_argument("--drive", type=Path, help="the GEMDOS drive's C: (default builds/disks/gemdrive)")
+    ap.add_argument("--image", type=Path, help="the PPDRIVER image (default builds/disks/ppdriver.img)")
+    ap.add_argument("--log-root", type=Path, default=HERE / "logs", help="where run folders go")
+    ap.add_argument("--tos-res", choices=("low", "med", "high"), help="the desktop's resolution at boot")
     ap.add_argument("--monitor", choices=("mono", "rgb", "vga", "tv"),
                     help="Hatari's monitor (default: Hatari's, colour); mono for monochrome games")
     args = ap.parse_args()
@@ -248,12 +258,20 @@ def main() -> int:
         if not Path(p).is_file():
             sys.exit(f"error: not found: {p} (tools/dev/dev.cfg)")
     disks = HERE / "builds" / "disks"
-    if not (disks / "gemdrive" / "LEMMINGS").is_dir() or not (disks / "ppdriver.img").is_file():
+    if args.drive and args.disk != "gemdrive":
+        sys.exit("error: --drive is for --disk gemdrive")
+    if args.drive and not args.drive.is_dir():
+        sys.exit(f"error: no folder {args.drive}")
+    if args.image and args.disk != "ppdriver":
+        sys.exit("error: --image is for --disk ppdriver")
+    if args.image and not args.image.is_file():
+        sys.exit(f"error: no image {args.image}")
+    if not args.drive and not args.image and (not (disks / "gemdrive" / "LEMMINGS").is_dir() or not (disks / "ppdriver.img").is_file()):
         sys.exit("error: no disk setups: run tools/dev/make_disks.sh first")
 
     stamp = time.strftime("%Y%m%d-%H%M%S")
     label = f"{args.setup}-{args.disk}" + (f"-{args.name}" if args.name else "")
-    run_dir = HERE / "logs" / f"{stamp}-{label}"
+    run_dir = args.log_root / f"{stamp}-{label}"
     (run_dir / "shots").mkdir(parents=True)
     (run_dir / "home").mkdir()
 
@@ -264,17 +282,22 @@ def main() -> int:
            "--trace", TRACE + (f",{args.trace}" if args.trace else "")]
     if args.monitor:
         cmd += ["--monitor", args.monitor]
+    if args.tos_res:
+        cmd += ["--tos-res", args.tos_res]
     if args.disk == "gemdrive":
-        shutil.copytree(disks / "gemdrive", run_dir / "drive", copy_function=shutil.copy2)
+        shutil.copytree(args.drive or disks / "gemdrive", run_dir / "drive", copy_function=shutil.copy2)
         cmd += ["--harddrive", str(run_dir / "drive")]
     else:
-        subprocess.run(["cp", "-c", str(disks / "ppdriver.img"), str(run_dir)], check=True)
+        subprocess.run(["cp", "-c", str(args.image or disks / "ppdriver.img"), str(run_dir / "ppdriver.img")], check=True)
         cmd += ["--acsi", f"0={run_dir / 'ppdriver.img'}"]
     if not args.no_auto:
         cmd += ["--auto", args.start]
     if args.parse:
         cmd += ["--parse", stage_debugger_script(args.parse, run_dir)]
-    shutil.copy(disks / "SOURCE.txt", run_dir / "SOURCE.txt")
+    if args.image and (args.image.parent / "SOURCE.txt").is_file():
+        shutil.copy(args.image.parent / "SOURCE.txt", run_dir / "SOURCE.txt")
+    elif not args.drive and not args.image:
+        shutil.copy(disks / "SOURCE.txt", run_dir / "SOURCE.txt")
 
     # macOS caps a Unix socket path at 104 bytes; the run folder's can be longer.
     sock_dir = tempfile.mkdtemp(prefix="hh", dir="/tmp")
@@ -295,7 +318,7 @@ def main() -> int:
                             stdout=slave, stderr=slave)
     os.close(slave)
     out = Output(master, run_dir / "hatari.out")
-    print(f"{label}: run folder {run_dir.relative_to(REPO)}", flush=True)
+    print(f"{label}: run folder {shown(run_dir)}", flush=True)
 
     reached: list[str] = []
     failure = None
@@ -375,7 +398,7 @@ def main() -> int:
                 say(f"mouse {x},{y}")
             elif kind == "shot":
                 path = shot(step[1])
-                say(f"screenshot {path.relative_to(REPO) if path else '(none)'}")
+                say(f"screenshot {shown(path) if path else '(none)'}")
             elif kind == "sleep":
                 time.sleep(float(step[1]))
     except (OSError, socket.timeout) as err:
@@ -386,7 +409,7 @@ def main() -> int:
                 if failure:
                     path = shot("fail")
                     if path:
-                        failure += f"; screenshot {path.relative_to(REPO)}"
+                        failure += f"; screenshot {shown(path)}"
                 shot("end")
                 out.cursor = len(out.lines)
                 command("hatari-debug r")  # the registers, the PC among them
@@ -425,7 +448,7 @@ def main() -> int:
     print(summary)
     if failure:
         print(f"  {failure}")
-    print(f"  {run_dir.relative_to(REPO)}")
+    print(f"  {shown(run_dir)}")
     return 1 if failure else 0
 
 

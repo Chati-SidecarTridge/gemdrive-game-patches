@@ -153,6 +153,8 @@ def downloads_of(raw: str, page: str) -> list[tuple[str, str, str, str]]:
     label, up to the line's end, names them."""
     out = []
     for href, after in re.findall(r'href="([^"]*?\.(?:zip|7z|rar|lzh))"[^>]*>(.*?)(?=href="|$)', raw, re.S | re.I):
+        if not text(after.split("</a>", 1)[0]) and not re.search(r"<img", after.split("</a>", 1)[0], re.I):
+            continue  # a link with nothing to click: a leftover in PP's page (COLBEQ.ZIP on ten pages)
         if "dwnld.php?get=" in href:
             name = href.split("dwnld.php?get=", 1)[1]
         else:
