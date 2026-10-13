@@ -2,7 +2,7 @@
 id: STORY-07
 epic: EPIC-03
 title: The website: the documentation and the catalogue, for the internet
-status: in-progress
+status: done
 ---
 
 ## Goal
@@ -25,7 +25,7 @@ solutions proposed. Designed with the frontend-design skill. Asked by Diego, 202
 - [x] What goes on the site is the project's own work: PP credited and linked on every page that
       uses his material, his files and pages never copied (D-11), no TOS code (D-13), no game
       files. Images are this project's own Hatari screenshots, or none; which ones is Diego's call.
-- [ ] Checks: every internal link resolves, every game of `migration.csv` has its row, the site
+- [x] Checks: every internal link resolves, every game of `migration.csv` has its row, the site
       builds from a fresh clone; `tools/dev/all_harness.sh` builds it.
 - [x] Publication prepared, not done (D-15): the list of what has to leave the repository and its
       history before it goes public (`LEMMINGS/`, `_archive/`'s binaries, anything else found), a
@@ -88,9 +88,10 @@ Mac, and `--no-snapshots` leaves them out: which, for publication, is Diego's ca
 **Checks** (`--check`): 11 pages, 7,614 links and anchors, every one resolved; 1,831 of 1,831
 games with their row; nothing loaded from another site. From a fresh clone with this story's files
 (no snapshots: git-ignored): 3,986 links, 0 problems. `all_harness.sh` builds it from the working
-tree and from a fresh clone of the last commit: on 2026-10-13 every check passed (220 s) but the
-clone's, which waits for this story's commit (the clone has no `tools/site/` yet); the task is
-checked once it passes.
+tree and from a fresh clone of the last commit: after this story's commit (`4106b06`) the clone
+builds with 3,986 links, 0 problems; `all_harness.sh`: 0 failures (222 s). `check_public.py`'s
+own clone, in a macOS temporary folder (`/var` is a link to `/private/var`), found the builder
+naming itself by an unresolved path; it resolves it now.
 
 **Publication, prepared** (`docs/publication/`): `remove.txt` (must: `LEMMINGS/`, the first
 pass's patched `START.TOS`, its unpacked stages and D15R's disassembly; review, Diego's call: the

@@ -472,7 +472,7 @@ PP's site, where its download is.{" The picture is the last screen of its run, o
 def tools_page() -> str:
     doc = Doc((REPO / "tools" / "dev" / "README.md").read_text())
     rows = []
-    for f in sorted((REPO / "tools" / "survey").glob("*.py")) + sorted((REPO / "tools").glob("*.py")) + [Path(__file__)]:
+    for f in sorted((REPO / "tools" / "survey").glob("*.py")) + sorted((REPO / "tools").glob("*.py")) + [Path(__file__).resolve()]:
         m = re.search(r'^"""(.*?)"""', f.read_text(), re.S | re.M)
         if not m:
             continue
