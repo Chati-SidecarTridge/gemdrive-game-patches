@@ -76,7 +76,10 @@ drive at this repository's root.
   cause is `gemdrive-failure.md`, every game's verdict and the solutions `hd-strategies.md`) and
   the debugger probes of each epic (`src/probes/`).
 - `tools/`: the project's own unpackers and packers (standard-library Python); `tools/survey/`,
-  EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`.
+  EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`; `tools/site/`,
+  the website's builder, style and script, and the check of a clone before going public.
+- `docs/publication/`: what leaves the repository and its history before it goes public (D-15),
+  and the GitHub Pages workflow, prepared, not in use.
 - `tools/dev/`: the development environment from EPIC-00: pinned toolchain scripts, the
   round-trip check, the Hatari disk setups and harness. `builds/`, `logs/` and `dev.cfg` are
   git-ignored.
@@ -89,7 +92,7 @@ machine: Docker running with `logronoide/atarist-toolkit-docker-x86_64:1.4.0`, a
 `cp tools/dev/dev.cfg.example tools/dev/dev.cfg` (paths to Hatari, the TOS images, `../atari-hd`).
 
 ```
-tools/dev/all_harness.sh                       # check everything: disks, round trip, 6 Hatari runs (~2 min)
+tools/dev/all_harness.sh                       # check everything: disks, round trip, 6 Hatari runs, the site (~2 min)
 tools/dev/make_disks.sh [<game folder>]        # builds/disks/: gemdrive/ and ppdriver.img from LEMMINGS/ or a patched tree
 python3 tools/dev/hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver \
     [--expect tools/dev/expect/launcher-start.exp] [--parse <debugger script>] [--no-auto] [--trace <flags>]
@@ -116,6 +119,8 @@ python3 tools/survey/run_other.py [--jobs 5] [--only <ZIP> ...]  # the GOS games
 python3 tools/survey/verdicts.py               # runs, Diego's answers, findings.tsv and solutions.tsv into migration.csv
 python3 tools/survey/screens.py <png> ...      # is this screenshot the TOS desktop (its menu bar, any colours)
 python3 tools/survey/sheet.py [--all]          # a contact sheet of the runs not shown yet
+python3 tools/site/build_site.py [--check] [--no-snapshots]  # the website into tools/dev/builds/site/ (open index.html)
+python3 tools/site/check_public.py [<clone>]   # is a clone ready to go public: docs/publication/remove.txt (D-15)
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```
 

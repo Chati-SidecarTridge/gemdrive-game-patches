@@ -19,6 +19,8 @@
 #      unpacks to PP's bytes, and it boots the PPDRIVER reference to the level load on ST TOS
 #      1.04 (expect/reference-first-level.exp); the disks are rebuilt from LEMMINGS/ after
 #   6. LEMMINGS/ against LEMMINGS.sha256, and no Hatari left running
+#   7. the website (EPIC-03 STORY-07): tools/site/build_site.py --check from the working tree,
+#      and from a fresh clone of the last commit without the snapshots
 #
 # Prints one line per check and exits 0 only when every check gave what it
 # must. Each harness run keeps its folder under tools/dev/logs/.
@@ -138,6 +140,23 @@ if pgrep -x hatari > /dev/null; then
   row "no Hatari left" FAIL "$(pgrep -x hatari | wc -l | tr -d ' ') still running" 0
 else
   row "no Hatari left" PASS "" 0
+fi
+
+# 7. The website, from the working tree and from a fresh clone.
+site_detail() { sed -nE 's/^check: ([0-9]+ pages), [0-9]+ links, ([0-9]+ of [0-9]+ games), 0 problem.*/\1, \2/p' "$1"; }
+t=$SECONDS
+if python3 -I tools/site/build_site.py --check > "$work/site.txt" 2>&1; then
+  row "site" PASS "$(site_detail "$work/site.txt")" $((SECONDS - t))
+else
+  row "site" FAIL "see $work/site.txt" $((SECONDS - t))
+fi
+t=$SECONDS
+if git clone -q --no-local "$repo" "$work/clone" > "$work/clone-site.txt" 2>&1 \
+   && python3 -I "$work/clone/tools/site/build_site.py" --out "$work/clone-site" --no-snapshots --check \
+        >> "$work/clone-site.txt" 2>&1; then
+  row "site from a fresh clone" PASS "$(site_detail "$work/clone-site.txt"), last commit" $((SECONDS - t))
+else
+  row "site from a fresh clone" FAIL "see $work/clone-site.txt" $((SECONDS - t))
 fi
 
 printf '%s\n' "${rows[@]}"
