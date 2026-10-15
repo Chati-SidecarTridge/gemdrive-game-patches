@@ -18,6 +18,10 @@
 #   5. the launcher built from src/ (tools/build_launcher.sh, EPIC-02 STORY-06): every stage
 #      unpacks to PP's bytes, and it boots the PPDRIVER reference to the level load on ST TOS
 #      1.04 (expect/reference-first-level.exp); the disks are rebuilt from LEMMINGS/ after
+#   5b. the launcher for the GEMDOS drive (tools/build_gemdrive.sh, EPIC-04 STORY-01): GOS's file
+#      requests reach Hatari's GEMDOS drive by name, cut to 8.3, from the title to the first level
+#      and its files, past the IKBD race (EPIC-04 STORY-02), on ST TOS 1.04
+#      (expect/gemdrive-first-level.exp)
 #   6. LEMMINGS/ against LEMMINGS.sha256, and no Hatari left running
 #   7. the website (EPIC-03 STORY-07): tools/site/build_site.py --check from the working tree,
 #      and from a fresh clone of the last commit without the snapshots
@@ -127,6 +131,21 @@ if "$repo/tools/build_launcher.sh" > "$out" 2>&1 && [[ $(grep -c "the same bytes
   row "launcher built from src/" "${result:-FAIL}" "4 stages as PP's; st-104: ${detail:-see $work/built-run.txt}" $((SECONDS - t))
 else
   row "launcher built from src/" FAIL "see $out" $((SECONDS - t))
+fi
+
+# 5b. The launcher changed for the GEMDOS drive.
+t=$SECONDS
+out="$work/build-gemdrive.txt"
+if "$repo/tools/build_gemdrive.sh" "$work/gemdrive" > "$out" 2>&1 \
+   && "$here/make_disks.sh" "$work/gemdrive/build/LEMMINGS" > /dev/null 2>&1; then
+  python3 -I "$here/hatari_harness.py" --setup st-104 --disk gemdrive --name gemdrive-gos \
+    --expect "$here/expect/gemdrive-first-level.exp" > "$work/gemdrive-run.txt" 2>&1
+  summary="$(grep -E '^(PASS|FAIL) ' "$work/gemdrive-run.txt" | tail -1)"
+  result="${summary%% *}"
+  detail="$(sed -E 's/^(PASS|FAIL) [^:]*: //; s/, [0-9.]+ s$//' <<< "$summary")"
+  row "launcher for GEMDOS drive" "${result:-FAIL}" "st-104: ${detail:-see $work/gemdrive-run.txt}" $((SECONDS - t))
+else
+  row "launcher for GEMDOS drive" FAIL "see $out" $((SECONDS - t))
 fi
 "$here/make_disks.sh" > /dev/null 2>&1 || row "disks back from LEMMINGS/" FAIL "make_disks.sh" 0
 

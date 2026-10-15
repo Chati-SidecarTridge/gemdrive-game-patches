@@ -110,7 +110,8 @@ python3 tools/dev/mksource.py src/<stage>/<stage>.map src/<stage>/<stage>.s   # 
 python3 tools/dev/shiftcheck.py [--tos] <src.s> <origin>                     # still right with a nop inserted?
 python3 tools/unpack.py start|fic|text|relocate ...   # PP's formats unpacked; tools/pack.py packs them
 python3 src/probes/epic02/chain_probe.py <setup>      # a dump of every launcher stage at its entry
-tools/build_launcher.sh [<src folder>]                # the launcher built from src/ into tools/dev/builds/launcher/
+tools/build_launcher.sh [--allow-longer] [<src folder>] [<out>]  # the launcher built from src/ into tools/dev/builds/launcher/
+tools/build_gemdrive.sh [<out>]                # the launcher changed for a GEMDOS drive (EPIC-04, S1): builds/gemdrive/build/LEMMINGS
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
 python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
 python3 tools/survey/unpack_games.py           # every archive in the mirror into tools/dev/builds/survey/games/
