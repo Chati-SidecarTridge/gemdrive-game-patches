@@ -82,7 +82,7 @@ def unpack_start(data: bytes) -> bytes:
     payload = data[28 + tlen:28 + tlen + dlen]
     packed = fic_header(payload)[0]
     pad = payload[HEADER + packed:]
-    if len(pad) > 1 or any(pad):  # the data section is padded to an even length
+    if len(pad) > 3 or any(pad):  # zeros up to an even length (Lemmings) or a multiple of 4
         sys.exit(f"error: {len(pad)} unexpected bytes after the packed program")
     return unpack_fic(payload[:HEADER + packed])
 

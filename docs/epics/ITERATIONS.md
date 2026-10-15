@@ -7,8 +7,8 @@ refute (D-01).
 
 | Iteration | Theme | Status |
 | --- | --- | --- |
-| 1 | **Understand and classify**: why Lemmings fails from Hatari's GEMDOS drive, PP's launcher as sources that rebuild it, and every PP adaptation classified with a verdict (D-14) | in progress |
-| 2 | **Solutions**: the solutions EPIC-03 proposes, one epic each, chosen and ordered by Diego at EPIC-03's checkpoint; Hatari unchanged | planned |
+| 1 | **Understand and classify**: why Lemmings fails from Hatari's GEMDOS drive, PP's launcher as sources that rebuild it, and every PP adaptation classified with a verdict (D-14) | done (2026-10-15) |
+| 2 | **Solutions**: the games that do not run from a GEMDOS drive, ported by the test card's groups, in the order Diego chose at EPIC-03's checkpoint (D-16); Hatari unchanged | in progress |
 
 ---
 
@@ -77,15 +77,40 @@ Epic numbers are the execution order. One epic at a time, each on its own `epic-
 | EPIC-02 | The PPera launcher reverse engineered and recompilable, tested with our own build | The groundwork for every solution: a launcher we can change and test, the tools to read PP's other launchers (`tools/unpack.py`, `tools/pack.py`, `tools/dev/mksource.py`, the profile probes, the build), the signatures EPIC-03 classifies with, and the disk layer of the GOS strategy (D15R, TOS 1.04 in RAM) understood. |
 | EPIC-03 | The ways PP's adaptations run from a hard disk, classified | Asked by Diego, 2026-10-11 (D-10, D-14). After EPIC-02, whose tools and signatures it uses; it decides iteration 2: the verdict for every game and the solutions to build. |
 
+**Outcome** (2026-10-15):
+- Lemmings fails from a GEMDOS drive because its launcher needs PP's resident driver and its loader
+  reads the disk by sectors (EPIC-01; H-07 confirmed, restated).
+- PP's launcher is now sources that rebuild it byte for byte and boot the reference (EPIC-02).
+- Of PP's 1,831 adaptations:
+  - 1,608 run from a Hatari GEMDOS drive as they are;
+  - 212 need a fix, with four solutions proposed;
+  - 1 is not feasible;
+  - 10 are unsure.
+  The verdicts are published as a website, ready for when the repository goes public (EPIC-03).
+- Diego tested the verdicts on his machines with the SidecarTridge Multidevice's GEMDRIVE, from a
+  test card holding every game. Every game he tried behaved as its folder says (EPIC-03 STORY-08).
+
 ## Iteration 2: solutions
 
-**Goal:** every game whose verdict is "fix" runs from a Hatari GEMDOS drive, one solution at a
-time, with Hatari unchanged (C-02). Its epics are not written yet: EPIC-03 proposes the
-solutions, Diego chooses them at its checkpoint (D-14), and each becomes an epic from EPIC-04
-on, with a first test game, its build, its runs on the three setups, the instructions for a user,
-and Diego's checkpoint.
+**Goal:** the games that do not run from a GEMDOS drive are ported, group by group, with Hatari
+unchanged (C-02). The groups are the test card's folders (`tools/survey/sdcard.py`). Each epic has:
+- a first test game;
+- the build of its fix, as tools or instructions that change a user's own copy (D-11);
+- its runs on Hatari's three setups;
+- Diego's checkpoint, which also covers his Multidevice, from a card (D-16).
 
-What is known already, as input for those epics:
+### Implementation path
+
+Order set by Diego, 2026-10-15 (D-16).
+
+| # | Epic | Why at this point |
+| --- | --- | --- |
+| EPIC-04 | The GOS5 games from a GEMDOS drive (`FIXGOS5`, 87 games, S1) | Lemmings' own strategy, and the project's aim. Its launcher and GOS are EPIC-02's sources, so S1 is built and tested there first. The reference's first-level error, a candidate until now, is its STORY-02. |
+| EPIC-05 | The GOS4 games from a GEMDOS drive (`FIXGOS4`, 117 games, S1) | The largest group. It reuses EPIC-04's patchers and adds S1's largest risk: the GEMDOS calls GOS4 games make during play. |
+| EPIC-06 | The small fixes (`FIXPLAIN`, `FIXHOLE`, `FIXHAGE`: 8 games, S2 to S4) | Each fix is already shown by a trial (EPIC-03 STORY-06). One epic turns the three into tools a user can apply. |
+| EPIC-07 | The unsure games settled (`UNSURE`, 10 games) | Last: each needs its cause found first, and their fixes may reuse the earlier epics' work. |
+
+What was known before these epics were written, as their input:
 
 - **The GOS strategy** (Lemmings' own: a Gamex launcher, PP's resident driver required, D15R, TOS
   1.04 in RAM, reading the game's files by sectors; `src/notes/disk-layer.md`). Its epic would
@@ -99,18 +124,45 @@ What is known already, as input for those epics:
   first test game; which games share the strategy is EPIC-03's answer.
 - **The SidecarTridge's GEMDRIVE** (`../atarist-sidecart-gemdrive`). "GEMDRIVE only for Hatari.
   We will work later on the sidecartridge GEMDRIVE." EPIC-03 notes where it would differ from
-  Hatari's; each solution epic says whether its solution would carry over.
+  Hatari's; each solution epic says whether its solution would carry over. Since D-16
+  (2026-10-15), Diego's Multidevice is also a test bench at each of iteration 2's checkpoints, from
+  a card.
+
+### The solutions EPIC-03 proposes
+
+From EPIC-03 STORY-06 (`src/notes/hd-strategies.md` §4; each "fix" row of
+`src/survey/migration.csv` names its solution). 212 games to fix of 1,831; each solution would be
+an epic of its own, for Diego to choose and order at EPIC-03's checkpoint (STORY-08).
+
+| | solution | games | first test game | what the epic would build | shown so far |
+| --- | --- | --- | --- | --- | --- |
+| S1 | GOS reads through the GEMDOS drive | 204 (GOS4 117, GOS5 87) | Lemmings | a patch of each launcher's driver checks and of GOS's GEMDOS entry (13 ST/STE builds of D15R), as tools that change a user's copy; the 204 games run | a proposal: Hatari's hook needs none of TOS's RAM (its source); PP's HAGA reads the same way |
+| S2 | a BPB for the GEMDOS drive | 4 (Silmarils: Crystals of Arborea, Targhan, Robinsons Requiem, Storm Master) | Crystals of Arborea | a resident program from `C:\AUTO\` that answers `Getbpb` for the GEMDOS drive | trials: all four play or reach their title |
+| S3 | the fastload bit | 3 (Spy vs Spy 2, Strike Force Harrier, Aquanaut) | Spy vs Spy 2 | the bit set in the started program's header | trials: all three |
+| S4 | Rody and Mastico 4's `RUNME.TOS` | 1 (Rody and Mastico 2) | itself | instructions only | a trial |
+
+43 of S1's games already run from the GEMDOS drive through another download of PP's (Lemmings'
+`LEMMSRD.ZIP`, 2 MB, among them; `hd-strategies.md` §5). One game is not feasible (Great Giana
+Sisters STE: it streams its music by sectors itself) and 10 are unsure (§3.6 of the note).
 
 ### Candidates, not yet epics
 
 Found on the way. Each waits for Diego to choose it into an epic.
 
-- **The reference does not reach the first level in Hatari.** Found in EPIC-01 STORY-01,
+- **The reference does not reach the first level in Hatari** (now EPIC-04 STORY-02). Found in EPIC-01 STORY-01,
   2026-10-11: on the PPDRIVER image, a click on "1 PLAYER" loads `LEVEL020` (bytes verified
   equal to the file; `LEVELDAT` is read earlier, at the title, EPIC-02 STORY-01) and the game then
   raises an address error at `$2B10` (`move.l (a0)+,(a1)+`, `a0 = $3E409` from `($36,a3)`), on ST
   TOS 1.04 with 1 or 4 MB and on STE TOS 2.06 alike. The game's own code (perhaps with PP's
   patches to it, EPIC-02 STORY-04), or its interaction with Hatari; not the launcher. Needed
   before the GOS solution's play session with Lemmings, where it would block.
+- **The 10 unsure games** (now EPIC-07). Found in EPIC-03 STORY-05/06: six fail from PPDRIVER too (Lords of
+  Doom, Substation, Roger, Zero-5, Spitting Images, Utopos), three only from the GEMDOS drive by
+  Diego's look (Super Breakout mono, 9 Lives, Little Puff in Dragonland), and Ice and Fire has
+  only floppy images (`hd-strategies.md` §3.6). Each needs its traces read, as S2 and S3's were.
+- **Hatari's `Pexec` and the caller's stack.** Found in EPIC-03 STORY-06: Hatari's GEMDOS drive
+  clears a started program's free memory before it rewrites the caller's saved `Pexec` call, so a
+  caller whose stack lies there ends instead (S3). Not a change here (C-02); a report to Hatari's
+  maintainers would leave this Mac, so it waits for Diego (D-15).
 
 **Outcome:** _pending._

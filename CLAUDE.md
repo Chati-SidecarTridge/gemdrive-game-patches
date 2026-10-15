@@ -22,9 +22,14 @@ Two iterations (D-14): first understand and classify, then the solutions.
    documentation, as a website published with the repository (designed with the frontend-design
    skill; the repository goes public only after it is cleaned, D-15). EPIC-03. The site was mirrored first (D-12): work
    from the mirror (`MIRROR` in `tools/dev/dev.cfg`), not the site.
-4. **The solutions** (iteration 2): one epic per solution, chosen and ordered by Diego at EPIC-03's
-   checkpoint; Lemmings' strategy (GOS) among them, with Lemmings as its first test game. The
-   SidecarTridge's GEMDRIVE comes later (`ITERATIONS.md`).
+4. **The solutions** (iteration 2): the games that do not run, ported by the test card's groups
+   (D-16), in this order:
+   - EPIC-04, GOS5, with Lemmings first;
+   - EPIC-05, GOS4;
+   - EPIC-06, the small fixes;
+   - EPIC-07, the unsure games.
+   Each is checked in Hatari, and each checkpoint also on Diego's SidecarTridge Multidevice from a
+   card.
 
 **Hatari's code is never modified** (C-02): every fix lives on the Atari side.
 
@@ -73,9 +78,13 @@ drive at this repository's root.
 - `docs/epics/`: the backlog (committed, D-03).
 - `src/`: what this project produces: unpacked stages, reconstructed sources (vasm Motorola
   syntax, D-05) that reassemble byte for byte to the original, notes (`src/notes/`; the GEMDRIVE
-  cause is `gemdrive-failure.md`) and the debugger probes of each epic (`src/probes/`).
+  cause is `gemdrive-failure.md`, every game's verdict and the solutions `hd-strategies.md`) and
+  the debugger probes of each epic (`src/probes/`).
 - `tools/`: the project's own unpackers and packers (standard-library Python); `tools/survey/`,
-  EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`.
+  EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`; `tools/site/`,
+  the website's builder, style and script, and the check of a clone before going public.
+- `docs/publication/`: what leaves the repository and its history before it goes public (D-15),
+  and the GitHub Pages workflow, prepared, not in use.
 - `tools/dev/`: the development environment from EPIC-00: pinned toolchain scripts, the
   round-trip check, the Hatari disk setups and harness. `builds/`, `logs/` and `dev.cfg` are
   git-ignored.
@@ -88,7 +97,7 @@ machine: Docker running with `logronoide/atarist-toolkit-docker-x86_64:1.4.0`, a
 `cp tools/dev/dev.cfg.example tools/dev/dev.cfg` (paths to Hatari, the TOS images, `../atari-hd`).
 
 ```
-tools/dev/all_harness.sh                       # check everything: disks, round trip, 6 Hatari runs (~2 min)
+tools/dev/all_harness.sh                       # check everything: disks, round trip, 6 Hatari runs, the site (~2 min)
 tools/dev/make_disks.sh [<game folder>]        # builds/disks/: gemdrive/ and ppdriver.img from LEMMINGS/ or a patched tree
 python3 tools/dev/hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver \
     [--expect tools/dev/expect/launcher-start.exp] [--parse <debugger script>] [--no-auto] [--trace <flags>]
@@ -103,6 +112,21 @@ python3 tools/unpack.py start|fic|text|relocate ...   # PP's formats unpacked; t
 python3 src/probes/epic02/chain_probe.py <setup>      # a dump of every launcher stage at its entry
 tools/build_launcher.sh [<src folder>]                # the launcher built from src/ into tools/dev/builds/launcher/
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
+python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
+python3 tools/survey/unpack_games.py           # every archive in the mirror into tools/dev/builds/survey/games/
+python3 tools/survey/inventory.py              # src/survey/files.csv: every file of every adaptation
+python3 tools/survey/classify.py               # src/survey/migration.csv: every game's strategy, from its files
+python3 src/probes/epic03/mode_probe.py <ZIP> [--disk gemdrive|ppdriver] [--start <prg>]  # one game from the mirror, as it is
+python3 tools/survey/run_all.py [--jobs 5] [--only <name> ...] [--disk ppdriver] [--setup ste-162] [--redo|--retry|--reanalyse]
+                                               # every game run in Hatari: builds/survey/runs.tsv, snapshots/
+python3 tools/survey/review.py [--host 0.0.0.0]  # Diego's OK/Broken/Not sure per run, into src/survey/review.tsv
+python3 tools/survey/run_other.py [--jobs 5] [--only <ZIP> ...]  # the GOS games' other downloads: builds/survey/runs-other.tsv
+python3 tools/survey/verdicts.py               # runs, Diego's answers, findings.tsv and solutions.tsv into migration.csv
+python3 tools/survey/screens.py <png> ...      # is this screenshot the TOS desktop (its menu bar, any colours)
+python3 tools/survey/sheet.py [--all]          # a contact sheet of the runs not shown yet
+python3 tools/survey/sdcard.py                 # every game for the Multidevice's GEMDRIVE: builds/sdcard/, copied to a microSD
+python3 tools/site/build_site.py [--check] [--no-snapshots]  # the website into tools/dev/builds/site/ (open index.html)
+python3 tools/site/check_public.py [<clone>]   # is a clone ready to go public: docs/publication/remove.txt (D-15)
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```
 
@@ -131,7 +155,8 @@ and Hatari as the test machine (ST and STE, TOS up to 2.06; GEMDRIVE mode, and a
 booted by PP's driver, PPDRIVER, as the working reference); EPIC-01, why the game fails in
 GEMDRIVE mode; EPIC-02, the launcher recompilable and tested with our own build, the groundwork
 for the solutions; EPIC-03, PP's modes and every adaptation classified with a verdict. Iteration
-2 is **solutions**: its epics are written at EPIC-03's checkpoint (D-14).
+2 is **solutions**: EPIC-04 to EPIC-07, one per group of the test card, chosen and ordered at
+EPIC-03's checkpoint (D-16).
 
 ## Conventions and gotchas
 
