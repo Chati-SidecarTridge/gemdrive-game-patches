@@ -22,9 +22,14 @@ Two iterations (D-14): first understand and classify, then the solutions.
    documentation, as a website published with the repository (designed with the frontend-design
    skill; the repository goes public only after it is cleaned, D-15). EPIC-03. The site was mirrored first (D-12): work
    from the mirror (`MIRROR` in `tools/dev/dev.cfg`), not the site.
-4. **The solutions** (iteration 2): one epic per solution, chosen and ordered by Diego at EPIC-03's
-   checkpoint; Lemmings' strategy (GOS) among them, with Lemmings as its first test game. The
-   SidecarTridge's GEMDRIVE comes later (`ITERATIONS.md`).
+4. **The solutions** (iteration 2): the games that do not run, ported by the test card's groups
+   (D-16), in this order:
+   - EPIC-04, GOS5, with Lemmings first;
+   - EPIC-05, GOS4;
+   - EPIC-06, the small fixes;
+   - EPIC-07, the unsure games.
+   Each is checked in Hatari, and each checkpoint also on Diego's SidecarTridge Multidevice from a
+   card.
 
 **Hatari's code is never modified** (C-02): every fix lives on the Atari side.
 
@@ -150,7 +155,8 @@ and Hatari as the test machine (ST and STE, TOS up to 2.06; GEMDRIVE mode, and a
 booted by PP's driver, PPDRIVER, as the working reference); EPIC-01, why the game fails in
 GEMDRIVE mode; EPIC-02, the launcher recompilable and tested with our own build, the groundwork
 for the solutions; EPIC-03, PP's modes and every adaptation classified with a verdict. Iteration
-2 is **solutions**: its epics are written at EPIC-03's checkpoint (D-14).
+2 is **solutions**: EPIC-04 to EPIC-07, one per group of the test card, chosen and ordered at
+EPIC-03's checkpoint (D-16).
 
 ## Conventions and gotchas
 

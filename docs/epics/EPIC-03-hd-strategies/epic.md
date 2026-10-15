@@ -2,7 +2,7 @@
 id: EPIC-03
 iteration: 1
 title: The ways PP's adaptations run from a hard disk, classified
-status: todo
+status: done
 ---
 
 ## Goal
