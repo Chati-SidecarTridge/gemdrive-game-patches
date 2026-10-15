@@ -119,6 +119,7 @@ python3 tools/survey/run_other.py [--jobs 5] [--only <ZIP> ...]  # the GOS games
 python3 tools/survey/verdicts.py               # runs, Diego's answers, findings.tsv and solutions.tsv into migration.csv
 python3 tools/survey/screens.py <png> ...      # is this screenshot the TOS desktop (its menu bar, any colours)
 python3 tools/survey/sheet.py [--all]          # a contact sheet of the runs not shown yet
+python3 tools/survey/sdcard.py                 # every game for the Multidevice's GEMDRIVE: builds/sdcard/, copied to a microSD
 python3 tools/site/build_site.py [--check] [--no-snapshots]  # the website into tools/dev/builds/site/ (open index.html)
 python3 tools/site/check_public.py [<clone>]   # is a clone ready to go public: docs/publication/remove.txt (D-15)
 ./docs/epics/cockpit.sh                        # after editing any epic or story
