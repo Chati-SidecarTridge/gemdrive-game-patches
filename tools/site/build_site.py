@@ -20,7 +20,7 @@ The site speaks to its readers, never to the backlog (D-20): --check fails on a 
 docs/epics/ or what is in it (an epic, a story, a decision, ITERATIONS.md). Nor does it name the
 adaptations' author (D-21): --check fails on PP, PPera or Putnik in a page's prose (code, as a quoted
 string or a driver's name, may), and on a link to the 8bitchip.info website's home page rather than a
-game's page or a technical one.
+game's page or a technical one, or on such a link without rel=nofollow.
 
 --check, after the build: every internal link and anchor resolves, every game of migration.csv
 has its row, and no page loads anything from another site. Standard library only.
@@ -90,13 +90,19 @@ BACKLOG = re.compile(r"\b(?:EPIC|STORY)-\d+\b|\b[DCH]-\d\d\b|(?:ITERATIONS|DECIS
 AUTHOR = re.compile(r"\bPP\b|PPera|Putnik", re.I)
 
 
+def link(url: str, text: str) -> str:
+    """A link; one to the 8bitchip.info website is rel=nofollow (Diego, 2026-10-16)."""
+    rel = ' rel="nofollow"' if urllib.parse.urlsplit(url).netloc.endswith("8bitchip.info") else ""
+    return f'<a href="{url}"{rel}>{text}</a>'
+
+
 def code_span(text: str) -> str:
     """Inline code; a note's file name links to its page, a page of the 8bitchip.info website's to it."""
     c = f"<code>{esc(text)}</code>"
     if text.endswith(".md") and text[:-3] in NOTES:
         return f'<a href="{text[:-3]}.html">{c}</a>'
     if re.fullmatch(r"[A-Za-z0-9_]+\.(html|php)", text):
-        return f'<a href="{PP}{text}">{c}</a>'
+        return link(PP + text, c)
     return c
 
 
@@ -113,8 +119,8 @@ def inline(text: str) -> str:
 
     text = re.sub(r"`([^`]*)`", keep, text)
     text = esc(re.sub(r"\\([\\|*_`\[\]()#])", lambda m: keep_char(m.group(1)), text))
-    text = re.sub(r"&lt;(https?://[^&\s]+)&gt;", lambda m: f'<a href="{m.group(1)}">{m.group(1)}</a>', text)
-    text = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2">\1</a>', text)
+    text = re.sub(r"&lt;(https?://[^&\s]+)&gt;", lambda m: link(m.group(1), m.group(1)), text)
+    text = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", lambda m: link(m.group(2), m.group(1)), text)
     text = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"(?<![\w*])\*(?=[^\s*])(.+?)(?<=[^\s*])\*(?![\w*])", r"<em>\1</em>", text)
     return re.sub(r"\x00(\d+)\x00", lambda m: codes[int(m.group(1))], text)
@@ -429,7 +435,7 @@ def catalogue(games: list[dict], records: dict, shots: dict) -> str:
             f'<tr id="{rid}" data-v="{esc(g["verdict"])}" data-s="{esc(g["strategy"])}" data-c="{esc(g["code_category"])}" '
             f'data-r="{ram_of(g)}" data-m="{esc("|".join(machines))}" data-n="{esc(g["name"].lower())}">'
             f'<td class="pic">{img}</td>'
-            f'<td class="game"><a href="{esc(g["url"])}">{esc(g["name"])}</a><p>{" ".join(notes)}</p></td>'
+            f'<td class="game">{link(esc(g["url"]), esc(g["name"]))}<p>{" ".join(notes)}</p></td>'
             f'<td>{esc(g["strategy"])}</td>'
             f'<td><span title="{esc(CATEGORIES.get(g["code_category"], ""))}">{esc(g["cat_code"] or "none")}</span>'
             f'<br><small>{esc(g["code_category"] and "cat. " + g["code_category"])}</small></td>'
@@ -448,7 +454,7 @@ def catalogue(games: list[dict], records: dict, shots: dict) -> str:
     main = f"""
 <h1>The catalogue</h1>
 <p class="lead">Every game of the 8bitchip.info website's list of hard-disk adaptations
-(<a href="{PP}fromhd3.php">fromhd3.php</a>, read on 2026-10-11), with the way its adaptation
+({link(PP + "fromhd3.php", "fromhd3.php")}, read on 2026-10-11), with the way its adaptation
 reaches its files and its verdict from Hatari's GEMDOS drive. The name opens the game's page on
 the 8bitchip.info website, where its download is; how the original used the floppy and the
 machines it runs on are the ones that page gives.{" The picture is the last screen of its run, on an ST with TOS 1.04 (STE games: TOS 1.62); for a game built for the GEMDOS drive, of its build's run." if shots else ""}</p>
@@ -595,9 +601,11 @@ def check(out: Path) -> int:
             if re.match(r"https?:", ref):
                 if attr != "href" or tag != "a":
                     bad.append(f"{name}: loads {ref} from another site")
-                elif urllib.parse.urlsplit(ref).netloc.endswith("8bitchip.info") and \
-                        urllib.parse.urlsplit(ref).path in ("", "/"):
-                    bad.append(f"{name}: links to the 8bitchip.info website's home page, not a game or a technical page")
+                elif urllib.parse.urlsplit(ref).netloc.endswith("8bitchip.info"):
+                    if urllib.parse.urlsplit(ref).path in ("", "/"):
+                        bad.append(f"{name}: links to the 8bitchip.info website's home page, not a game or a technical page")
+                    if "nofollow" not in (rel or "").split():
+                        bad.append(f"{name}: {ref}: a link to the 8bitchip.info website without rel=nofollow")
                 continue
             target, _, frag = ref.partition("#")
             target = target or name

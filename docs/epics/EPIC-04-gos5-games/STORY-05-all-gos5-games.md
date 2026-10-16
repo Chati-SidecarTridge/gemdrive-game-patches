@@ -2,7 +2,7 @@
 id: STORY-05
 epic: EPIC-04
 title: The 87 GOS5 games from the GEMDOS drive
-status: in-progress
+status: done
 ---
 
 ## Goal
@@ -16,11 +16,11 @@ Every game of the `FIXGOS5` group, patched by STORY-04's tool, is run from the G
       TOS 1.04, and on STE TOS 1.62 for the STE games, each at the RAM of its STORY-05 run.
       (batch-1311, at the card's RAM; none of the 87 is an STE game: "STE" is only inside
       Jupiter's Masterdrive's and Grand Monster Slam's names.)
-- [ ] Each run looked at, as in EPIC-03 STORY-05. A game that does not run is traced, and its
+- [x] Each run looked at, as in EPIC-03 STORY-05. A game that does not run is traced, and its
       cause is listed.
-- [ ] `migration.csv`: a game that runs patched gets its new verdict, with the tool as its
+- [x] `migration.csv`: a game that runs patched gets its new verdict, with the tool as its
       solution, through `verdicts.py` (findings with the evidence).
-- [ ] The games that remain, each with what would take it further.
+- [x] The games that remain, each with what would take it further.
 
 ## Acceptance
 
@@ -28,6 +28,38 @@ Every game of the 87 has a run of its patched copy and a verdict, and the counts
 here.
 
 ## Notes
+
+### Done (2026-10-16)
+
+The 87 built by `tools/build_gos5.py` and run from the GEMDOS drive in Hatari (ST TOS 1.04 at the
+card's RAM; Magic Boy and Muzzy also on STE TOS 1.62, 4 MB), every run's screenshots looked at on
+contact sheets, and the card played by Diego on his STE (TOS 1.62, 4 MB, the Multidevice's
+GEMDRIVE), power-cycled between games. `src/survey/ports.tsv` holds each one's options, added files,
+result and picture.
+
+| | games |
+|---|--:|
+| Run from the GEMDOS drive with their build, in Hatari and on Diego's STE (Diego: "confirmed the 85") | 85 |
+| of them, with a floppy disk in drive A (`--floppy`): Pit Fighter, Chaos Engine, Fire and Forget II, Venus the Flytrap, Jetsons | 5 |
+| of them, with two GOS files copied from another download (D-19): Forgotten Worlds | 1 |
+| of them, with 2 MB or more: Magic Boy; on an STE only: Muzzy | 2 |
+| Still not working, in `STILLNOT`: Awesome, Prison | 2 |
+
+`migration.csv` (`verdicts.py`): the 87 stay `fix`, each with its reason from the runs and S1 "built
+by tools/build_gos5.py" as its solution, plus what the row needs; the totals are unchanged, 1,608 as
+it is, 212 fix, 1 not feasible, 10 unsure.
+
+What would take the rest further, each a change to a game file or to PP's launcher that the build
+does not make (the patcher's choice, EPIC-09, D-17):
+- Awesome: `AWE` `$141E` and `$1CD0`, the cartridge check's two `beq` made `nop` (Hatari: its menu).
+- Prison: `PR1` `$11890` and `$118A4`, the same (Hatari: plays, ST 1 MB and STE 4 MB).
+- The five floppy games without a disk: the motor wait made `nop` (`P1A`, `VF1`, `FF2.FIC`, shown in
+  Hatari); Chaos Engine's wait (seen on the STE only) and Jetsons' halt with drive A empty not yet
+  found in their files.
+- Magic Boy below 2 MB: one long of its launcher (the operand at text `+$628`).
+- Muzzy on an ST: its ST branch's unpacker, not traced further (it fails with PPDRIVER too).
+- Cadaver (dying in the swamp) and Popeye 2 (a key while it loads): as with PPDRIVER, the
+  adaptation's own.
 
 ### Diego's STE, TOS 1.62, Multidevice GEMDRIVE (2026-10-15)
 

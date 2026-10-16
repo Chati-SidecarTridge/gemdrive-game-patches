@@ -2,7 +2,7 @@
 id: EPIC-04
 iteration: 2
 title: The GOS5 games from a GEMDOS drive (FIXGOS5, Lemmings first)
-status: in-progress
+status: done
 ---
 
 ## Goal
@@ -59,6 +59,13 @@ on a user's copy is EPIC-09 (D-17, D-18). Chosen by Diego, 2026-10-15 (D-16).
 - STORY-07: Verification (Diego's checkpoint)
 
 ## Notes
+
+- **Done 2026-10-16** (STORY-07, Diego's agreement). 85 of the 87 GOS5 games run from a GEMDOS
+  drive with their start program built by `tools/build_gos5.py`, in Hatari and on Diego's STE with
+  the Multidevice's GEMDRIVE; five need a floppy disk in drive A, Forgotten Worlds two GOS files
+  from another download, Magic Boy 2 MB and Muzzy an STE. Awesome and Prison, in `STILLNOT`, stop
+  on their own cartridge check; their two-byte fixes, like the other game-file changes STORY-05
+  lists, wait for the patcher (EPIC-09). The instructions are `src/notes/gos5-gemdrive.md`.
 
 - **S1 needs only the launcher** (STORY-01, 2026-10-15). The launcher writes GOS's image of the
   system variables at run time anyway, so it points the image's `TRAP #1` at a 58-byte forwarder

@@ -2,7 +2,7 @@
 id: STORY-06
 epic: EPIC-04
 title: The instructions, the card and the site
-status: in-progress
+status: done
 ---
 
 ## Goal
