@@ -96,3 +96,120 @@ row	name	verdict	reason
 1595	Magic Boy	fix	runs from the GEMDOS drive with its START.TOS built for it with 2 MB or more (Hatari: ST and STE; an STE with 4 MB and the SidecarTridge Multidevice's GEMDRIVE); below 2 MB the launcher unpacks MAGICC.FIC from $20 bytes too far (the operand at its text +$628 left at $42020) and crashes, with PPDRIVER too; one long of the launcher fixes it
 1679	Muzzy	fix	runs from the GEMDOS drive with its START.TOS built for it on an STE with TOS 1.62 (Hatari, 1 to 4 MB; an STE with 4 MB and the SidecarTridge Multidevice's GEMDRIVE); on an ST with TOS 1.04 it takes another part of MUZIMG, whose unpacker writes over its own code and halts the CPU, with PPDRIVER too
 1483	Prison	fix	its build starts it, but when play starts the game wipes its own memory while a cartridge is in the port (it compares $FA0000 with $ABCDEF42 and $FA52235F, the constants XOR-masked in PR1, as the Multidevice's ROM and Hatari's own cartridge start); with two bytes of PR1 turned off it plays, on an ST with 1 MB and an STE with 4 MB in Hatari
+287	Strider 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+288	Axels Magic Hammer	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+292	Street Fighter	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+304	Alien Syndrome	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+305	Strider	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1195	Operation Stealth	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04, and on an STE with TOS 1.62 and 2.06
+1464	Mystical	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1474	Outrun	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1475	Spindizzy Worlds	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1478	Jet	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1480	Marble Madness	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1481	Minigolf	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1485	Masterblazer	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1487	Silent Service	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1488	Hoog	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1490	Magic Fly	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1492	Legend	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1494	Gemstone Legend	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1497	Battle Probe	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1498	Fireblaster	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1499	Silicon Dreams	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1500	Kult	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1501	Kid Gloves	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1503	Emmanuelle	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1504	Karate King	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1505	Crossbow	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1506	Deathbringer	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1507	Technocop	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1508	Tintin on the Moon	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1510	Enterprise	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1511	Frost Byte	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1512	Galactic Conqueror	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1513	Titus the Fox	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1515	Total Eclipse	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1517	Trantor	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1518	Herman	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1520	Amazing Spiderman	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1523	Apache Flight	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1524	Artura	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1525	Battletech	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1526	Crossland	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1528	Fusion	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1529	Interchange	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1531	Phoenix	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1534	Time Runner	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1537	International Soccer Challenge	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1538	Castle Warrior	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1539	Chariots of Wrath	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1544	Slightly Magic	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1545	Space Racer	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1551	Starblaze	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1552	Sleeping Gods Lie	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1556	California Games II	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1559	Lode Runner	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1560	Flood	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1563	Lombard Rally	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1565	Captain Blood	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1573	Flight Simulator 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1574	Starglider	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1576	Time	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1582	Impossible Mission 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1584	Corruption	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1586	Fish	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1587	Guild of Thieves	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04; a game saved to the GEMDOS drive and restored
+1588	Starblade	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1589	Windsurf Willy	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1590	First Person Pinball	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1598	Drakkhen	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1599	Dragonlord	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1601	Robocop	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1603	Astate	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1604	Grandad	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1605	Grandad 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1611	Golden Path	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1612	Ninja Mission	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1615	ST Karate	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1616	Bobo	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1619	GBA Basketball	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1622	Kings Quest	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1623	Kings Quest III	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1624	Man Hunter	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1625	Man Hunter 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1626	Space Quest	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1627	Space Quest II	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1631	Maniac Mansion	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1632	Renegade (Taito)	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1634	Noddys Playtime	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1637	Secret of Monkey Island	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1641	The Games Summer Edition	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1644	Winter Games	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04; it asks for disk 2 in drive B and reads drive A, as with PPDRIVER
+1647	Zany Golf	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1648	Gem X	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1651	Zero Gravity	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1652	Asterix Operation Getafix	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04; it also reads drive A, as with PPDRIVER
+1653	Enduro Racer	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1657	Chrono Quest II	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1659	Erik	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1661	Bad Cat	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1664	Spherical	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1665	Mata Hari	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1666	Magnetik Tank	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1670	Ranx	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1676	Locomotion -Byte Back	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1678	Exolon	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1681	Logical	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1682	Legends of Valour	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1683	Liberator	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1686	Gravity	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1687	A.G.E	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1688	Elite	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1689	Tai-Pan	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1690	Dive Bomber	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1692	Reach for the Skies	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1693	Dan Dare 3	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1736	Defender 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1809	Internatianal Karate	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04
+1824	F16 Falcon	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos4.py), in Hatari on an ST with TOS 1.04 with 2 MB: its launcher puts GOS at $1C0100

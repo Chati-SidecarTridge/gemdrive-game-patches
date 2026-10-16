@@ -91,3 +91,20 @@ not made: it needs the pointer moved, which Hatari's control socket cannot do in
 Operation Stealth from the GEMDOS drive on the three setups as from PPDRIVER; the forwarder's file
 calls, its loader and a game's save shown.
 
+### Changed after STORY-03's first batch (2026-10-16)
+
+- **`Pexec` 0 is handed to GOS as the caller's own call.** Called from the forwarder, GOS's
+  `Pexec(6)` came from supervisor mode, so GEMDOS kept the parent's context on the supervisor stack,
+  which the program then used and overwrote: Erik's `INTRO.PRG` ended and GOS returned through
+  garbage (`rts` at `$B418` to `$ADD90000`; `…-184705-…-erik-pterm`, the CPU history at GOS's
+  `Pterm`). Now the forwarder loads the program, rewrites the caller's call into
+  `Pexec(6, 0, basepage, 0)` and passes it to GOS with the caller's frame: GOS keeps the context on
+  the caller's stack, as for its own `Pexec(0)`. Erik, and six other games that halted (Amazing
+  Spiderman, Bobo, Death Bringer, Gravity, Phoenix, Time), run.
+- **The driver GOS takes**: drives A and B go to GOS's own floppy routines, which four of the five
+  builds list at text `+$38` behind a `bra` (`$600C` at `+$36`; Defender 2's build has none) and PP's
+  path also takes; drive C has a BPB (FAT16, 512-byte records), is never changed, and its sectors
+  fail; `Dfree` goes to the machine. Starblade and Windsurf Willy, Silmarils games, asked
+  `Getbpb(2)` forever (the S2 case of `hd-strategies.md` §3.2) and now read their files by name;
+  Gravity's `Mediach(0)` loop and Chariots of Wrath's fault are gone (`rerun2-1857`).
+

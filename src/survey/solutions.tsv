@@ -1,5 +1,5 @@
 match	solution
-Gamex + GOS4	S1: GOS reads through the GEMDOS drive
+Gamex + GOS4	S1: GOS reads through the GEMDOS drive (built by tools/build_gos4.py)
 Gamex + GOS5	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py)
 1698	S2: a BPB for the GEMDOS drive
 1699	S2: a BPB for the GEMDOS drive

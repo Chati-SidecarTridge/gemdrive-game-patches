@@ -60,7 +60,7 @@ def main() -> int:
     ap.add_argument("--disk", default="gemdrive", choices=("gemdrive", "ppdriver"))
     ap.add_argument("--memsize", type=int, help="RAM in MB, instead of the game's run's")
     a = ap.parse_args()
-    work = REPO / "tools" / "dev" / "builds" / "gos5" / time.strftime(f"{a.game}-%Y%m%d-%H%M%S")
+    work = REPO / "tools" / "dev" / "builds" / "gos5" / time.strftime(f"{a.game}-{a.setup}-{a.disk}-%Y%m%d-%H%M%S")
     game = work / a.game
     start, memsize = original(a.game, game)
     memsize = a.memsize or memsize

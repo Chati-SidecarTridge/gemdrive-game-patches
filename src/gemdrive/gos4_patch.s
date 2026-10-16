@@ -99,13 +99,20 @@ gd_copy:
 	move.l	($28,a2),(gd_mach_run-gd_forward,a1)	; Hatari takes the current process
 	movea.l	p_gos(pc),a2
 	move.l	($28,a2),(gd_gos_run-gd_forward,a1)	; GOS's ($5622, TOS 1.04's)
+	cmpi.w	#$600c,($36,a2)			; GOS's floppy routines, past its first branch (in four
+	bne.s	gd_no_floppy			; builds of five; not in Defender 2's), which PP's path
+	move.l	($38,a2),(gd_flop-gd_forward,a1)	; also takes for drives A and B: hdv_bpb,
+	move.l	($3c,a2),(gd_flop+4-gd_forward,a1)	; hdv_rw, hdv_mediach
+	move.l	($40,a2),(gd_flop+8-gd_forward,a1)
+gd_no_floppy:
 	movea.l	p_table(pc),a2			; the table GOS takes the driver from, as PP's path
 	movea.l	p_table_ptr(pc),a3		; writes it: hdv_bpb, hdv_rw, hdv_mediach, _drvbits,
-	move.l	a2,(a3)				; two lists of buffers; no driver, every call fails
-	lea	(gd_no_bpb-gd_forward,a1),a3
+	move.l	a2,(a3)				; two lists of buffers; drives A and B GOS's floppy,
+	lea	(gd_bpb-gd_forward,a1),a3	; drive C a BPB and nothing more
 	move.l	a3,(a2)+
-	lea	(gd_no_disk-gd_forward,a1),a3
+	lea	(gd_rw-gd_forward,a1),a3
 	move.l	a3,(a2)+
+	lea	(gd_mediach-gd_forward,a1),a3
 	move.l	a3,(a2)+
 	move.l	(_drvbits).w,(a2)+		; the machine's drives, for GOS's Dsetdrv
 	lea	(gd_bcbs-gd_forward,a1),a3
@@ -210,7 +217,7 @@ md_words_end:
 ; supervisor stack past the exception frame (6 bytes on the 68000), or the user stack. Every
 ; register but d0 is given back, as GEMDOS does.
 ;   - Pexec 0 and 3: gd_exec, the program loaded through the machine into GOS's memory.
-;   - The file functions: to the machine's TRAP #1, as a copy of the call on this stack, changed
+;   - The file functions and Dfree: to the machine's TRAP #1, as a copy of the call on this stack, changed
 ;     there (the caller's own stays as it was): a name (Dsetpath, Fcreate, Fopen, Fdelete, Fattrib,
 ;     Fsfirst) in gd_name, each part cut to 8.3 as GEMDOS reads it, without a dot it ends with; a
 ;     handle (Fclose, Fread, Fwrite, Fseek, Fdatime) the machine's for ours.
@@ -248,6 +255,8 @@ gd_next:
 	movem.l	d1-d2/a0,-(sp)
 	movea.l	sp,a2
 	moveq	#2,d1				; the handle's place
+	cmpi.b	#$36,d0
+	beq.s	gd_call				; Dfree: the drive's free space, as it is
 	cmpi.b	#$3e,d0
 	bcs.s	gd_named			; Dsetpath, Fcreate, Fopen
 	cmpi.b	#$41,d0
@@ -280,6 +289,7 @@ gd_to_gos:
 gd_named:
 	movea.l	(2,a1),a0
 	bsr.w	gd_cut
+	bcs.w	gd_bad_name
 	lea	gd_name(pc),a0
 	move.l	a0,(2,a2)
 gd_call:
@@ -345,14 +355,31 @@ gd_end:
 	lea	(20,sp),sp
 	movem.l	(sp)+,d1-d2/a0-a2
 	rte
+gd_bad_name:
+	moveq	#-33,d0				; EFILNF: an empty name, or one with no end, as GOS answers
+	cmpi.w	#$3b,(a2)			; Dsetpath(""): the path as it is, and 0, as GOS
+	bne.s	gd_end				; (Slightly Magic sets it before each file)
+	moveq	#0,d0
+	bra.s	gd_end
 
-; The name at a0, cut to 8.3 into gd_name.
+; The name at a0, cut to 8.3 into gd_name; carry set when it is empty or has no end within 255
+; bytes: Hatari passes a call with an empty name to the GEMDOS it chains to, here the ROM's (Battle
+; Probe opens ""), and an endless one would run past gd_name.
 gd_cut:
+	tst.b	(a0)
+	bne.s	gd_cut_go
+	ori	#1,ccr
+	rts
+gd_cut_go:
+	move.l	a3,-(sp)
+	lea	(255,a0),a3
 	lea	gd_name(pc),a1
 gd_part:
 	move.l	a1,d2				; the part's first character
 	moveq	#8,d1				; a part's name: 8 characters
 gd_char:
+	cmpa.l	a3,a0
+	bcc.s	gd_too_long
 	move.b	(a0)+,d0
 	beq.s	gd_trim
 	cmpi.b	#$5c,d0				; backslash
@@ -382,15 +409,20 @@ gd_trim:					; a part ends: a dot it ends with goes, as GEMDOS reads
 gd_put:
 	move.b	d0,(a1)+
 	bne.s	gd_part				; a backslash: the next part
-	move.w	(a2),d0				; the function again
+	movea.l	(sp)+,a3
+	move.w	(a2),d0				; the function again; carry clear
+	rts
+gd_too_long:
+	movea.l	(sp)+,a3
+	ori	#1,ccr
 	rts
 
 ; Pexec 0 (load and go) and 3 (load): GOS's Pexec would read the program through its own file
 ; code, by sectors. So: Fopen and Fread through the machine, GOS's Pexec 5 for the basepage and
 ; its TPA, the text and data read into it, relocated, the BSS cleared (and the rest of the TPA,
 ; unless the program's fastload bit is set, as TOS 1.04 does), the basepage filled in. Pexec 3
-; returns the basepage; Pexec 0 has GOS run it with Pexec 6, which gives the memory to the program
-; as TOS 1.04's Pexec 0 does, and returns what it ends with. Other modes: GOS's.
+; returns the basepage; for Pexec 0 the caller's call is made Pexec 6 (the memory given to the
+; program, as TOS 1.04's Pexec 0 does) and handed to GOS. Other modes: GOS's.
 gd_pexec:
 	move.w	(2,a1),d0
 	beq.s	gd_exec
@@ -531,14 +563,13 @@ gd_clear_byte_next:
 	move.l	a6,d0
 	tst.w	(2,a5)
 	bne.s	gd_exec_end			; Pexec 3: the basepage
-	clr.l	-(sp)				; Pexec(6, 0, basepage, 0): GOS runs it
-	move.l	a6,-(sp)
-	clr.l	-(sp)
-	move.w	#6,-(sp)
-	move.w	#$4b,-(sp)
-	trap	#1
-	lea	(16,sp),sp
-	bra.s	gd_exec_end
+	move.w	#6,(2,a5)			; Pexec 0: the caller's own call becomes Pexec(6, 0,
+	clr.l	(4,a5)				; basepage, 0), and goes to GOS as the caller made it,
+	move.l	a6,(8,a5)			; its frame on the caller's stack: GOS keeps the
+	clr.l	(12,a5)				; caller's context there while the program runs, as
+	lea	(28,sp),sp			; for its own Pexec 0 (a call from here kept it on the
+	movem.l	(sp)+,d3-d7/a3-a6		; supervisor stack, which the program then overwrote:
+	bra.w	gd_to_gos			; Erik's intro returned through garbage)
 gd_exec_free:
 	move.l	(44,a6),-(sp)			; Mfree its environment and basepage
 	move.w	#$49,-(sp)
@@ -560,12 +591,48 @@ gd_exec_end:
 	movem.l	(sp)+,d1-d2/a0-a2
 	rte
 
-gd_no_bpb:
-	moveq	#0,d0				; no BPB
+; The driver GOS takes: drives A and B go to GOS's own floppy routines, as PP's path has them;
+; drive C has a BPB, so that a game that asks for it before its files (Getbpb(2): Starblade,
+; Windsurf Willy, as the Silmarils games of hd-strategies.md 3.2) goes on to read them by name;
+; it is never changed, and its sectors fail.
+gd_bpb:
+	cmpi.w	#2,(4,sp)
+	bcc.s	gd_bpb_c
+	move.l	gd_flop(pc),-(sp)
+	bne.s	gd_chain
+	addq.l	#4,sp
+	moveq	#0,d0				; no floppy routine: no BPB
 	rts
-gd_no_disk:
-	moveq	#-1,d0				; hdv_rw, hdv_mediach: an error
+gd_bpb_c:
+	lea	gd_bpb_data(pc),a0
+	move.l	a0,d0
 	rts
+gd_rw:
+	cmpi.w	#2,(14,sp)			; rwflag, buffer, count, record, drive
+	bcc.s	gd_fail
+	move.l	gd_flop+4(pc),-(sp)
+	bne.s	gd_chain
+	addq.l	#4,sp
+gd_fail:
+	moveq	#-1,d0
+	rts
+gd_mediach:
+	cmpi.w	#2,(4,sp)
+	bcc.s	gd_not_changed
+	move.l	gd_flop+8(pc),-(sp)
+	bne.s	gd_chain
+	addq.l	#4,sp
+	moveq	#-1,d0
+	rts
+gd_not_changed:
+	moveq	#0,d0
+	rts
+gd_chain:
+	rts					; to the routine pushed
+gd_flop:
+	dc.l	0,0,0				; GOS's hdv_bpb, hdv_rw, hdv_mediach for drives A and B
+gd_bpb_data:					; FAT16, 512-byte records, 1 KB clusters
+	dc.w	512,2,1024,32,128,129,289,32000,1
 gd_machine:
 	dc.l	0
 gd_gos:
@@ -574,10 +641,10 @@ gd_mach_run:
 	dc.l	0				; the machine's p_run
 gd_gos_run:
 	dc.l	0				; GOS's
-; Dsetpath, Fcreate, Fopen, Fclose, Fread, Fwrite, Fdelete, Fseek, Fattrib, Dgetpath, Fsfirst,
-; Fsnext, Fdatime
+; Dfree, Dsetpath, Fcreate, Fopen, Fclose, Fread, Fwrite, Fdelete, Fseek, Fattrib, Dgetpath,
+; Fsfirst, Fsnext, Fdatime
 gd_functions:
-	dc.b	$3b,$3c,$3d,$3e,$3f,$40,$41,$42,$43,$47,$4e,$4f,$57,0
+	dc.b	$36,$3b,$3c,$3d,$3e,$3f,$40,$41,$42,$43,$47,$4e,$4f,$57,0
 	even
 gd_handles:
 	dcb.w	GD_HANDLES,-1			; the machine's handle of each of ours, -1 when free
