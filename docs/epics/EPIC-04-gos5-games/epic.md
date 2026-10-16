@@ -2,7 +2,7 @@
 id: EPIC-04
 iteration: 2
 title: The GOS5 games from a GEMDOS drive (FIXGOS5, Lemmings first)
-status: todo
+status: done
 ---
 
 ## Goal
@@ -11,23 +11,23 @@ The 87 games of the card's `FIXGOS5` folder, Gamex launchers with GOS5, run from
 drive, with Hatari unchanged (C-02). They use solution S1 (`src/notes/hd-strategies.md` §4), in
 two parts:
 - the launcher's driver checks are changed so that GOS starts without PP's driver;
-- GOS's GEMDOS entry hands the file functions to the `TRAP #1` handler the machine had before the
-  launcher. On Hatari's GEMDOS drive that handler is Hatari's own hook.
+- GOS's file requests go to the `TRAP #1` handler the machine had before the launcher. On
+  Hatari's GEMDOS drive that handler is Hatari's own hook. Since STORY-01, the launcher does this
+  through GOS's image of the system variables, so GOS's code stays as PP's.
 
 Lemmings is the first test game: its launcher and GOS are EPIC-02's sources. Its first-level
-problem on the reference has to be solved before its play session. The result is a tool that
-patches a user's own copy of a game, since PP's files are never published (D-11). Chosen by
-Diego, 2026-10-15 (D-16).
+problem on the reference has to be solved before its play session. The result is each game's
+start file built for a GEMDOS drive, with its original's signature; the program that installs them
+on a user's copy is EPIC-09 (D-17, D-18). Chosen by Diego, 2026-10-15 (D-16).
 
 ## Scope
 
 - In scope:
-  - Lemmings' launcher (`src/lemld2/`) and GOS5 (`src/d15r/`) changed in the sources, then
-    rebuilt and run.
+  - Lemmings' launcher (`src/lemld2/`) changed in the sources, then rebuilt and run.
   - The address error that keeps the PPDRIVER reference from Lemmings' first level in Hatari
     (`ITERATIONS.md`, a candidate until now).
-  - The two patches as patchers by signature, for PP's packed `START.TOS` and for the ST/STE
-    builds of GOS5's D15R (`D15R_5H` in 56 games, `D15R_H5` in 31, `D15R_H15` in 3;
+  - The change made by signature on each game's packed `START.TOS`, checked against every
+    ST/STE build of GOS5's D15R (`D15R_5H` in 56 games, `D15R_H5` in 31, `D15R_H15` in 3;
     `hd-strategies.md` §3.1).
   - The 87 games, patched and run with `run_all.py`'s rules, with their verdicts updated.
   - The instructions for a user, and the card and the site updated.
@@ -53,12 +53,24 @@ Diego, 2026-10-15 (D-16).
 - STORY-01: Lemmings' launcher and GOS through the GEMDOS drive, from the sources
 - STORY-02: The reference's first level: the address error at `$2B10`
 - STORY-03: Lemmings plays from the GEMDOS drive
-- STORY-04: The patchers, by signature, for a user's copy
+- STORY-04: The builds by signature: each GOS5 game's start file for a GEMDOS drive
 - STORY-05: The 87 GOS5 games from the GEMDOS drive
 - STORY-06: The instructions, the card and the site
 - STORY-07: Verification (Diego's checkpoint)
 
 ## Notes
+
+- **Done 2026-10-16** (STORY-07, Diego's agreement). 85 of the 87 GOS5 games run from a GEMDOS
+  drive with their start program built by `tools/build_gos5.py`, in Hatari and on Diego's STE with
+  the Multidevice's GEMDRIVE; five need a floppy disk in drive A, Forgotten Worlds two GOS files
+  from another download, Magic Boy 2 MB and Muzzy an STE. Awesome and Prison, in `STILLNOT`, stop
+  on their own cartridge check; their two-byte fixes, like the other game-file changes STORY-05
+  lists, wait for the patcher (EPIC-09). The instructions are `src/notes/gos5-gemdrive.md`.
+
+- **S1 needs only the launcher** (STORY-01, 2026-10-15). The launcher writes GOS's image of the
+  system variables at run time anyway, so it points the image's `TRAP #1` at a 58-byte forwarder
+  (`src/gemdrive/lemld2_gemdrive.s`). GOS's code stays as PP's. Lemmings reaches its title and
+  loads its first level from Hatari's GEMDOS drive on the three setups.
 
 - The S1 risks for GOS5, from `hd-strategies.md` §4:
   - `Fsfirst`/`Fsnext` find the DTA through TOS's current process.
@@ -68,3 +80,5 @@ Diego, 2026-10-15 (D-16).
 - GOS5's `file_io` asks for whole files by name (`disk-layer.md` §2): `Fopen`, `Fseek`, `Fread`
   or `Fwrite`, `Fclose`. That is the same request PP's HAGA file service makes, and 1,361 HAGA
   games run that way as they are.
+- **Our builds only** (D-17): the launcher's changes, the keyboard wait (STORY-02's `gd_quiet`)
+  among them, apply on the GEMDOS drive's path; PP's path, with his driver, stays as he made it.

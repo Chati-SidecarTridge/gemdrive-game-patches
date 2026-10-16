@@ -15,7 +15,7 @@ signatures (src/notes/strategies.md defines them):
   Gamex + GOS (iTOS)            D15RI.FIC: PP's own TOS
   FWRD RAM disk                 an FWRD file: every game file in one, read into RAM
   Gamex                         GXUTnnn.PRG and PP's START stub, no GOS
-  PP launcher                   PP's START stub without GXUT
+  launcher without Gamex        PP's START stub without GXUT
   plain                         the game's own program(s); "+ HOLE" or "AUTO" when those are there
   floppy image                  only floppy images (for the Image Runner, or a floppy)
   original disk image           only STX images: PP's copies of the original disks (ASTGA/)
@@ -114,7 +114,7 @@ def strategy(files: list[dict], folder: Path) -> tuple[str, str]:
     if any(f["family"] == "GXUT" for f in files) and stub:
         return "Gamex", f"GXUT, PP stub; {evidence}".strip("; ")
     if stub:
-        return "PP launcher", f"PP stub; {evidence}".strip("; ")
+        return "launcher without Gamex", f"PP stub; {evidence}".strip("; ")
     if starts:
         extra = " + HOLE" if any(f["family"] == "HOLE" for f in files) else ""
         name = "AUTO" if any(f["family"] == "AUTO" for f in starts) else "plain" + extra

@@ -2,7 +2,7 @@
 #
 # tools/build_launcher.sh: Lemmings' launcher built from the sources in src/ (EPIC-02 STORY-06).
 #
-# Usage: tools/build_launcher.sh [<src folder>] [<out folder>]
+# Usage: tools/build_launcher.sh [--allow-longer] [<src folder>] [<out folder>]
 #
 # Assembles every stage (tools/dev/asm.sh): src/start/start.s (the stub), src/lemld2/lemld2.s
 # (a GEMDOS program), src/ls2dd/ls2dd.s, src/d15r/d15r_h5.s and d15r_f5.s; packs them
@@ -14,8 +14,15 @@
 #
 # <src folder> defaults to src/ (another one lets a changed copy be built); <out folder> to
 # tools/dev/builds/launcher/. Prints every product with its size and SHA-256, and whether each
-# stage unpacks to the same bytes as PP's.
+# stage unpacks to the same bytes as PP's. With --allow-longer, a packed file longer than PP's
+# (a changed stage, EPIC-04) keeps its own length instead of stopping the build.
 set -euo pipefail
+longer=
+[[ "${1:-}" == --allow-longer ]] && { longer=1; shift; }
+pack() {  # pack.py's arguments, without --pad
+  python3 -I tools/pack.py "$@" --pad > /dev/null 2>&1 || { [[ -n "$longer" ]] && python3 -I tools/pack.py "$@" > /dev/null; } \
+    || python3 -I tools/pack.py "$@" --pad > /dev/null
+}
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 src="$(cd "${1:-$repo/src}" && pwd)"
 out="${2:-$repo/tools/dev/builds/launcher}"
@@ -33,10 +40,9 @@ tools/dev/asm.sh "$src/ls2dd/ls2dd.s" "$obj/LS2DD.bin"
 tools/dev/asm.sh "$src/d15r/d15r_h5.s" "$obj/D15R_H5.bin"
 tools/dev/asm.sh "$src/d15r/d15r_f5.s" "$obj/D15R_F5.bin"
 
-python3 -I tools/pack.py start "$obj/LEMLD2.TOS" "$tree/START.TOS" LEMMINGS/START.TOS \
-  --stub "$obj/START.text" --pad > /dev/null
+pack start "$obj/LEMLD2.TOS" "$tree/START.TOS" LEMMINGS/START.TOS --stub "$obj/START.text"
 for f in LS2DD D15R_H5 D15R_F5; do
-  python3 -I tools/pack.py fic "$obj/$f.bin" "$tree/$f.FIC" "LEMMINGS/$f.FIC" --pad > /dev/null
+  pack fic "$obj/$f.bin" "$tree/$f.FIC" "LEMMINGS/$f.FIC"
 done
 rsync -a --exclude START.TOS --exclude '*.FIC' --exclude .DS_Store LEMMINGS/ "$tree/"
 

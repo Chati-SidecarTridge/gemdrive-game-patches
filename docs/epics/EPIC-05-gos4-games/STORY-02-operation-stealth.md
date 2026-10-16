@@ -7,7 +7,7 @@ status: todo
 
 ## Goal
 
-EPIC-04's patchers, extended to GOS4's D15R build, make Operation Stealth run from the GEMDOS
+EPIC-04's builds by signature, extended to GOS4's D15R build, make Operation Stealth run from the GEMDOS
 drive on the three setups.
 
 ## Tasks

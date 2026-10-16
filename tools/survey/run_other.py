@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-06: PP's other downloads of the games to fix, run from Hatari's GEMDOS drive.
+"""EPIC-03 STORY-06: the other downloads of the games to fix, run from Hatari's GEMDOS drive.
 
 Usage: run_other.py [--jobs N] [--disk gemdrive|ppdriver] [--only ZIP ...] [--list]
 
 For every GOS4/GOS5 game of src/survey/migration.csv, and Great Giana Sisters STE, each of its
 other downloads (other_downloads) whose strategy runs from a GEMDOS drive (HAGA, HAGE, HAG2, plain,
-Gamex, PP launcher, FWRD RAM disk…) is run as run_all.py runs a game's main download: the same
+Gamex, launcher without Gamex, FWRD RAM disk…) is run as run_all.py runs a game's main download: the same
 program choice, RAM, monitor, analysis and escalation, on ST TOS 1.04 (Giana on STE TOS 1.62). A
 download whose README fixes its folder gets that name too (COMP.ZIP: C:\\COMP). Lines go to
 tools/dev/builds/survey/runs-other.tsv (run_all's columns, the download and the main download's
@@ -29,7 +29,7 @@ import run_all  # noqa: E402
 REPO = run_all.REPO
 TSV = run_all.SURVEY / "runs-other.tsv"
 FIELDS = run_all.FIELDS + ["download", "main_strategy"]
-KEEP = {"HAGA", "HAG2", "HAGE", "plain", "plain + HOLE", "Gamex", "Gamex + GOS 1.00", "PP launcher", "FWRD RAM disk"}
+KEEP = {"HAGA", "HAG2", "HAGE", "plain", "plain + HOLE", "Gamex", "Gamex + GOS 1.00", "launcher without Gamex", "FWRD RAM disk"}
 GIANA = "1112"
 FOLDERS = {"COMP.ZIP": ("COMP",)}  # its README and .RDF files name C:\COMP
 LOCK = threading.Lock()

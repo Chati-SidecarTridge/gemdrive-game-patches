@@ -30,7 +30,7 @@ files. This is the vocabulary the rest of the epic classifies with. Asked by Die
       not say.
 - [x] The glossary of the list's Note column and the game pages' text ("Gamex", "HAGA", "filed",
       "singleparted", "filewise ramdisked", "deprotected", "Tr." …), each term mapped to a mode.
-- [x] `src/notes/pp-modes.md`: one section per mode: what it is, how a game in that mode runs from
+- [x] `src/notes/modes.md`: one section per mode: what it is, how a game in that mode runs from
       a hard disk (files or sectors, which driver, which TOS, fixed RAM), the files and byte
       patterns that mark it (`src/notes/launcher-signatures.md` extended), PP's sources, and a
       first guess at its verdict from a GEMDOS drive (as it is, fix, not feasible), to be checked
@@ -38,7 +38,7 @@ files. This is the vocabulary the rest of the epic classifies with. Asked by Die
 
 ## Acceptance
 
-From `src/notes/pp-modes.md` alone, a reader can tell which mode an adaptation uses from its
+From `src/notes/modes.md` alone, a reader can tell which mode an adaptation uses from its
 files and PP's page, and what that mode asks of the disk and the system; every statement points
 at PP's text, one of his sources, or a run.
 
@@ -47,7 +47,7 @@ at PP's text, one of his sources, or a run.
 D-01 applies: PP's documents are hypotheses until a run shows them. Lemmings is the only mode
 seen in runs so far (EPIC-01, EPIC-02).
 
-**Done 2026-10-11.** `src/notes/pp-modes.md`; signatures in `src/notes/launcher-signatures.md`
+**Done 2026-10-11.** `src/notes/modes.md`; signatures in `src/notes/launcher-signatures.md`
 ("Other modes"); runs with `src/probes/epic03/mode_probe.py <ZIP> [--disk …]`.
 
 - PP sorts games two ways: by how the original reached the floppy (`agcat.html`'s six

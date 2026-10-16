@@ -1,7 +1,7 @@
 # The launcher's file formats
 
-EPIC-02 STORY-02, 2026-10-11. Every format below is unpacked by `tools/unpack.py`, and the result
-was compared with what Hatari holds when that stage starts (EPIC-02 STORY-01's dumps, runs
+2026-10-11. Every format below is unpacked by `tools/unpack.py`, and the result was compared
+with what Hatari holds when that stage starts (memory dumps at each stage's entry, runs
 `tools/dev/logs/*-ppdriver-chain`). `text+` offsets are LEMLD2's.
 
 ## The packer
@@ -56,18 +56,18 @@ STE TOS 2.06 (`$1D2E4`).
 ## `LS2DD.FIC`
 
 7,168 bytes, run at `$70000`, entered at `$7005A`. Equal to Hatari's memory at its entry except
-for the 9 bytes the block at `$80100` patches before starting it (STORY-01):
+for the 9 bytes the block at `$80100` patches before starting it (`launch-chain.md`):
 
 | address | LS2DD's own | at its entry | |
 | --- | --- | --- | --- |
 | `$70A8E` | `$00000400` | `$0008014C` | the long of LS2DD's jump to the game at `$400`, sent to the block's code that patches MAIN first |
-| `$70E38` | `48E7 3FFE 4BFA` (`movem.l d2-d7/a0-a6,-(sp)`, `lea …`) | `4EF9 0008 5000` (`jmp $85000`) | LS2DD's own floppy loader, replaced by PP's loader |
+| `$70E38` | `48E7 3FFE 4BFA` (`movem.l d2-d7/a0-a6,-(sp)`, `lea …`) | `4EF9 0008 5000` (`jmp $85000`) | LS2DD's own floppy loader, replaced by the launcher's loader |
 
 ## `D15R_H5.FIC` and `D15R_F5.FIC`
 
 91,460 and 91,512 bytes, run at `$C0100`. The two builds differ from byte `$6E9` on (`F5` is the
-Falcon build, STORY-01). `D15R_H5` equals Hatari's memory at D15R's first instruction (`$C02BC`)
-except for 32 bytes in 8 runs, all written before it by LEMLD2 or by GEMDOS for it:
+Falcon build, `launch-chain.md`). `D15R_H5` equals Hatari's memory at D15R's first instruction
+(`$C02BC`) except for 32 bytes in 8 runs, all written before it by LEMLD2 or by GEMDOS for it:
 
 | address | written | by |
 | --- | --- | --- |
@@ -85,7 +85,7 @@ D15R starts with a table of five word offsets (`$10`, `$34`, `$70`, `$1BC`, `$1C
 Not packed. Read by LEMLD2 (text+`$20E4`) as a 6-byte header, `$0140 $00C8` (320 × 200) and two
 flag bytes (`$FD $FF`; LEMLD2 shows a second frame when the first is not 0), then two frames of a
 32,000-byte screen and 19,232 bytes (601 × 32, colour data: presumably the "Photochrome" cover
-pictures of PP's site; not decoded). It is the picture LEMLD2 shows while it loads the rest.
+pictures on the 8bitchip.info website; not decoded). It is the picture LEMLD2 shows while it loads the rest.
 Total 6 + 2 × (32,000 + 19,232) = 102,470 bytes, the file's size.
 
 ## SHA-256 of the unpacked files

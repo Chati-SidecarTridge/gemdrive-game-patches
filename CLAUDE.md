@@ -27,7 +27,11 @@ Two iterations (D-14): first understand and classify, then the solutions.
    - EPIC-04, GOS5, with Lemmings first;
    - EPIC-05, GOS4;
    - EPIC-06, the small fixes;
-   - EPIC-07, the unsure games.
+   - EPIC-07, the unsure games;
+   - EPIC-08, the ports checked on acsi2stm's GemDrive, the other GEMDRIVE: an STM32 on the ACSI
+     port, its driver in the ST's RAM (D-18);
+   - EPIC-09, last, the patcher: a program that checks a user's original start files by signature
+     and replaces them with our builds (D-17).
    Each is checked in Hatari, and each checkpoint also on Diego's SidecarTridge Multidevice from a
    card.
 
@@ -110,7 +114,10 @@ python3 tools/dev/mksource.py src/<stage>/<stage>.map src/<stage>/<stage>.s   # 
 python3 tools/dev/shiftcheck.py [--tos] <src.s> <origin>                     # still right with a nop inserted?
 python3 tools/unpack.py start|fic|text|relocate ...   # PP's formats unpacked; tools/pack.py packs them
 python3 src/probes/epic02/chain_probe.py <setup>      # a dump of every launcher stage at its entry
-tools/build_launcher.sh [<src folder>]                # the launcher built from src/ into tools/dev/builds/launcher/
+tools/build_launcher.sh [--allow-longer] [<src folder>] [<out>]  # the launcher built from src/ into tools/dev/builds/launcher/
+tools/build_gemdrive.sh [<out>]                # the launcher changed for a GEMDOS drive (EPIC-04, S1): builds/gemdrive/build/LEMMINGS
+python3 tools/build_gos5.py <START.TOS> <out> [--info] [--floppy]   # a GOS5 game's start program built for a GEMDOS drive (EPIC-04)
+python3 src/probes/epic04/gos5_run.py <ZIP> [--setup <s>] [--disk <d>]  # one GOS5 game built (src/survey/ports.tsv) and run
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
 python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
 python3 tools/survey/unpack_games.py           # every archive in the mirror into tools/dev/builds/survey/games/
@@ -156,7 +163,8 @@ booted by PP's driver, PPDRIVER, as the working reference); EPIC-01, why the gam
 GEMDRIVE mode; EPIC-02, the launcher recompilable and tested with our own build, the groundwork
 for the solutions; EPIC-03, PP's modes and every adaptation classified with a verdict. Iteration
 2 is **solutions**: EPIC-04 to EPIC-07, one per group of the test card, chosen and ordered at
-EPIC-03's checkpoint (D-16).
+EPIC-03's checkpoint (D-16), then EPIC-08, the ports on acsi2stm's GemDrive (D-18), and EPIC-09,
+the patcher that installs them (D-17).
 
 ## Conventions and gotchas
 
@@ -191,6 +199,23 @@ EPIC-03's checkpoint (D-16).
 - **Nothing leaves this Mac yet** (D-15): no remote, no push. Before the repository goes public,
   `LEMMINGS/` and `_archive/`'s binaries are removed from it and its history.
 - `.DS_Store` files are macOS noise; ignore them.
+- **The website speaks to its readers, never to the backlog** (Diego, 2026-10-16, D-20). Nothing the
+  site publishes refers to `docs/epics/` or what is in it: no iterations, epics, stories or tasks
+  (`EPIC-04 STORY-05`), no `D-NN`, `C-NN` or `H-NN`, no `ITERATIONS.md`, `DECISIONS.md` or
+  `STATUS.md`. That covers `src/notes/*.md`, `tools/dev/README.md` (the Tools page), the
+  catalogue's reasons and solutions (`src/survey/findings.tsv`, `solutions.tsv`, so
+  `migration.csv`) and `tools/site/build_site.py`'s own text. Write what a reader follows: what was
+  found, when, on which machine, and which page or tool shows it. The backlog may cite the notes;
+  the notes never cite the backlog. `build_site.py --check` fails on such a reference.
+- **The website does not name the adaptations' author** (Diego, 2026-10-16, D-21): PP, PPera or
+  Peter Putnik means nothing to a reader. Where the games, their list and their documentation are is
+  "the 8bitchip.info website"; what the adaptations are made of is "the Gamex launcher", "GOS",
+  "the original files". Technical names stay: the `PPHD` signature, the `PPDRIVER` driver, a message
+  quoted in code (`This prg. requires PP, AHDI or Hddriver`). The site links to the 8bitchip.info
+  website only for a game's page or a technical page (`GAMEXdoc.html`, `agcat.html`, `fromhd3.php`),
+  never to its home page. Same scope as the rule above, the survey's strategy names too (`launcher
+  without Gamex`); `build_site.py --check` fails on PP, PPera or Putnik outside code and on a link
+  to the home page.
 
 ---
 

@@ -47,7 +47,7 @@ mkdir -p "$out/gemdrive"
 # GEMDRIVE: the folder, as it is on a disk.
 rsync -a --exclude .DS_Store "$src/" "$out/gemdrive/LEMMINGS/"
 cp "$here/DESKTOP.INF" "$out/gemdrive/DESKTOP.INF"
-(cd "$out/gemdrive" && find LEMMINGS -type f | LC_ALL=C sort | xargs shasum -a 256) > "$out/SOURCE.sha256"
+(cd "$out/gemdrive" && find LEMMINGS -type f -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256) > "$out/SOURCE.sha256"
 {
   echo "source: $src"
   echo "built:  $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
@@ -71,8 +71,8 @@ mcopy -s -m -i "$img" "$out/gemdrive/LEMMINGS" "$out/gemdrive/DESKTOP.INF" ::/
 check="$out/check"
 mkdir -p "$check"
 mcopy -s -n -i "$img" ::/LEMMINGS "$check/"
-if ! diff <(cd "$out/gemdrive" && find LEMMINGS -type f | LC_ALL=C sort | xargs shasum -a 256) \
-          <(cd "$check" && find LEMMINGS -type f | LC_ALL=C sort | xargs shasum -a 256); then
+if ! diff <(cd "$out/gemdrive" && find LEMMINGS -type f -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256) \
+          <(cd "$check" && find LEMMINGS -type f -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256); then
   echo "error: the image does not hold the same files as gemdrive/LEMMINGS" >&2
   exit 1
 fi

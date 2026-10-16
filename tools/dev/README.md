@@ -1,9 +1,9 @@
 # tools/dev: the development environment
 
-The tools every story of this repository runs (EPIC-00): a pinned 68000 toolchain, the round-trip
+The tools all the work of this repository runs on: a pinned 68000 toolchain, the round-trip
 check for reconstructed sources, the two disk setups, and Hatari driven from the host with PASS or
 FAIL at the end. Standard-library Python and bash; Docker for the toolchain; Hatari 2.6.1 as
-released (C-02).
+released, never changed.
 
 ## Setup
 
@@ -12,7 +12,7 @@ released (C-02).
 2. Hatari 2.6.1 (`/usr/local/bin/hatari`), mtools (`mcopy`), `rsync`, Python 3.
 3. `cp tools/dev/dev.cfg.example tools/dev/dev.cfg` and adjust the paths: Hatari, one TOS image
    per test machine, and a checkout of `sidecartridge/atari-hd`. Relative paths are relative to
-   the repository. `dev.cfg` is git-ignored; TOS images and drivers are never copied here (C-03).
+   the repository. `dev.cfg` is git-ignored; TOS images and drivers are never copied here.
 
 ## Check everything
 
@@ -20,8 +20,8 @@ released (C-02).
 tools/dev/all_harness.sh
 ```
 
-Builds the disks, round-trips the `START.TOS` text and every source of the launcher (EPIC-02:
-reassembled to the original bytes, and checked with a `nop` inserted), runs the launcher on all
+Builds the disks, round-trips the `START.TOS` text and every source of the launcher
+(reassembled to the original bytes, and checked with a `nop` inserted), runs the launcher on all
 six setups, checks
 that the harness reports a failure, checks `LEMMINGS/` against `LEMMINGS.sha256` and that no
 Hatari is left. One line per check; exit 0 only if all pass. About two minutes.
@@ -35,12 +35,15 @@ Hatari is left. One line per check; exit 0 only if all pass. About two minutes.
 | `asm.sh [--tos] <src.s> <out.bin> [<listing>]` | vasm, Motorola syntax, 68000, `-Fbin` (or with `--tos` a GEMDOS program, `-Ftos -nosym`), `-no-opt`, every error reported; includes from the source's folder and the repository |
 | `listing2vasm.py [--verbose] <listing> <bin> <out.s>` | a listing turned into a vasm source that reassembles to `<bin>`; lines that will not are kept as `dc.w` with their disassembly |
 | `roundtrip.sh [--tos] <src.s> <ref.bin>` | assemble and compare: PASS, or FAIL with the first differing offset |
-| `m68k.py` | imported: 68000 instruction lengths, branch and call targets, absolute and PC-relative operands (EPIC-02) |
-| `mksource.py [--report] <stage.map> <out.s>` | a labelled source for a launcher stage from its map (entries, data, names, comments, pointer tables, run addresses, executed addresses) and its bytes; reassembles to them (EPIC-02 STORY-04) |
+| `m68k.py` | imported: 68000 instruction lengths, branch and call targets, absolute and PC-relative operands |
+| `mksource.py [--report] <stage.map> <out.s>` | a labelled source for a launcher stage from its map (entries, data, names, comments, pointer tables, run addresses, executed addresses) and its bytes; reassembles to them |
 | `shiftcheck.py [--tos] <src.s> <origin>` | inserts a `nop` mid-source, reassembles, and checks every reference moved with its target |
-| `make_disks.sh [<game folder> [<out folder>]]` | `builds/disks/` (or `<out folder>`): `gemdrive/` (drive C: for GEMDRIVE mode) and `ppdriver.img` (the PPDRIVER reference, D-09), from a copy of `LEMMINGS/` or of the folder given |
+| `make_disks.sh [<game folder> [<out folder>]]` | `builds/disks/` (or `<out folder>`): `gemdrive/` (drive C: for GEMDRIVE mode) and `ppdriver.img` (the PPDRIVER reference: an ACSI image booted by PPDRIVER), from a copy of `LEMMINGS/` or of the folder given |
 | `hatari_harness.py --setup <s> --disk <d> [...]` | one Hatari run, headless, with a run folder in `logs/`; `--start <path>` runs another program than `START.TOS` |
-| `../build_launcher.sh [<src>] [<out>]` | Lemmings' launcher built from `src/` into `builds/launcher/LEMMINGS/` (EPIC-02 STORY-06); then `make_disks.sh builds/launcher/LEMMINGS` |
+| `../build_launcher.sh [<src>] [<out>]` | Lemmings' launcher built from `src/` into `builds/launcher/LEMMINGS/`; then `make_disks.sh builds/launcher/LEMMINGS` |
+| `../build_gemdrive.sh [<out>]` | Lemmings' launcher changed for a GEMDOS drive, from its sources (`src/gemdrive/lemld2_gemdrive.s`) into `builds/gemdrive/build/LEMMINGS` |
+| `../build_gos5.py <START.TOS> <out> [--info] [--floppy]` | any GOS5 game's start program built for a GEMDOS drive from its original, found by signature: `src/gemdrive/gos5_patch.s` in front of the launcher's text (`gos5-gemdrive.md`); `--floppy` adds the info screen's "Insert any floppy disk in drive A" |
+| `../../src/probes/epic04/gos5_run.py <ZIP> [--setup <s>] [--disk <d>]` | one GOS5 game from its unpacked download, built with `src/survey/ports.tsv`'s options and files, run from the GEMDOS drive with `src/probes/epic03/mode_probe.py`'s generic expectation (the start, screenshots at 10 s and 30 s, the space bar, one 15 s later) |
 | `all_harness.sh` | all of the above, once |
 
 Examples:
@@ -75,10 +78,10 @@ Each run gets `tools/dev/logs/<date>-<setup>-<disk>[-name]/` (git-ignored):
 - `drive/` or `ppdriver.img`: the run's own copy of the disk, with whatever the program wrote
 - `result.txt`: PASS or FAIL, the steps reached, the PC at the end
 
-Options added in EPIC-01: `--trace <flags>` adds Hatari trace flags to the default
+Further options: `--trace <flags>` adds Hatari trace flags to the default
 `gemdos,bios,xbios,scsi_cmd` (`ikbd_cmds` shows the game's IKBD commands; `cpu_exception` logs
 every interrupt too and defeats `quiet`); `--key-hold <s>` is how long a key stays down.
-Added in EPIC-03: `--monitor mono` (or `rgb`, `vga`, `tv`) for games that need a monochrome
+`--monitor mono` (or `rgb`, `vga`, `tv`) for games that need a monochrome
 monitor; without it Hatari's default, colour. `--drive <folder>` gives a GEMDOS-drive run its own
 C: instead of `builds/disks/gemdrive` (parallel runs of different games), `--image <file>` gives a
 PPDRIVER run its own image instead of `builds/disks/ppdriver.img` (`make_disks.sh <game folder>

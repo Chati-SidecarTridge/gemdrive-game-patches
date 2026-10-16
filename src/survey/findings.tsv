@@ -1,6 +1,6 @@
 row	name	verdict	reason
-41	Rody and Mastico 2	fix	PP's archive has no RUNME.TOS (its HAGE module, floppy image and T14AG.FIC are there); with Rody and Mastico 4's RUNME.TOS (RODYM4.ZIP, the same layout) it reaches its title and chapter menu from the GEMDOS drive (tools/dev/builds/survey/trials/rodym2/)
-716	Ice and Fire	unsure	no hard-disk version: three floppy images for a virtual floppy driver (PP's page: not made into a hard-disk version, its disk change detection being unusual); settled by a run with a virtual floppy driver from the GEMDOS drive
+41	Rody and Mastico 2	fix	its download has no RUNME.TOS (its HAGE module, floppy image and T14AG.FIC are there); with Rody and Mastico 4's RUNME.TOS (RODYM4.ZIP, the same layout) it reaches its title and chapter menu from the GEMDOS drive (tools/dev/builds/survey/trials/rodym2/)
+716	Ice and Fire	unsure	no hard-disk version: three floppy images for a virtual floppy driver (its page on the 8bitchip.info website: not made into a hard-disk version, its disk change detection being unusual); settled by a run with a virtual floppy driver from the GEMDOS drive
 1112	Great Giana Sisters STE	not feasible	"its music streams from GS.RAW's sectors during play: GIAACSI.TOS finds them through the driver's PUN info and reads them with the ACSI/IDE registers, and prints ""Error in getting file location"" on a GEMDOS drive (STE TOS 1.62); the page's HAGA downloads GIANAA.ZIP and GIANAS.ZIP do the same (runs-other.tsv: the same error from the GEMDOS drive, the intro from PPDRIVER); running it needs a new music streamer that reads through GEMDOS"
 1698	Crystals of Arborea	fix	START.PRG asks BIOS Getbpb for C: before every file and waits until it gets a BPB; a GEMDOS drive has none (TOS answers 0); with Getbpb(2) answered by a routine put in by the debugger it loads its 39 files and plays (trials/20261013-112306-st-104-gemdrive-1698-crystals-bpb-2)
 1699	Targhan	fix	the same START.PRG as Crystals of Arborea (ARBOTARG.ZIP); with Getbpb(2) answered it loads 52 files and plays (trials/20261013-112427-st-104-gemdrive-1699-targhan-bpb)
@@ -9,3 +9,90 @@ row	name	verdict	reason
 1808	Storm Master	fix	Getbpb on C: before every file, as Crystals of Arborea; with Getbpb(2) answered it reaches its title, as from PPDRIVER (trials/20261013-112427-st-104-gemdrive-1808-storm-bpb)
 1813	Strike Force Harrier	fix	the same as Spy vs Spy 2: START.TOS's Pexec of HARRIER.TOS ends it from the GEMDOS drive; with HARRIER.TOS's fastload bit set it reaches its simulation menu (trials/sfh/runs/20261013-112833-st-104-gemdrive-sfh-fastload)
 1826	Aquanaut	fix	the same as Spy vs Spy 2: its Pexec of AQUANAUT.EXE ends it from the GEMDOS drive; with AQUANAUT.EXE's fastload bit set it reaches its title (trials/aquanaut/runs/20261013-113519-st-104-gemdrive-aquanaut-fastload)
+197	Alien Storm	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1546	Alien World	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+198	All Points Bulletin	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1569	Armour-Geddon	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1477	Awesome	fix	its build starts it, but the game stops on its title while a cartridge is in the port (it compares $FA0000 with $ABCDEF42, as the Multidevice's ROM and Hatari's own cartridge start); with two bytes of AWE turned off it goes on to its menu
+1543	Bad Company	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1564	B.A.T. II	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+202	Big Run	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+110	Bubble Dizzy	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+182	Cadaver	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE; dying in the swamp's water halts it, as with PPDRIVER
+168	Captive	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1496	Captain Planet	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+203	Chaos Engine	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE; it waits for the floppy drive's motor to stop, which an empty drive never lets it do: it needs a disk in drive A, any (its opening screen says so)
+200	Chase H.Q.	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+183	Cisco Heat	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1650	Clever and Smart	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1581	Creatures	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1509	Deliverance	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1572	Dragon Breed	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1571	Exile	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1553	Microprose F1 GP	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1558	Fire and Forget II	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE; it waits for the floppy drive's motor to stop, which an empty drive never lets it do: it needs a disk in drive A, any (its opening screen says so)
+184	Flimbos Quest	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+104	Forgotten Worlds	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py) once D15R_5H.FIC and D15R_5F.FIC are copied from another GOS5 game's download (all 56 alike): its own are an older GOS under other names; the user copies the two
+185	Frenetic	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+171	Gemini Wing	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1639	G.Nius	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+208	Gods	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1540	Gold of the Aztecs, The	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1548	Grand Monster Slam	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1495	Heavy Metal Heroes	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1577	Heimdall	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE; its black screen asks whether to skip the intro (y or n)
+1562	Hook	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1638	Hunter	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+111	Indigo	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1684	Jetsons	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE; it waits for the floppy drive's motor to stop, which an empty drive never lets it do: it needs a disk in drive A, any (its opening screen says so)
+112	Jim Power	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1530	Jupiters Masterdrive	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+172	Kid Gloves 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1646	Killing Cloud	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+173	Knightmare	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1566	Kristal, The	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1479	Last Ninja 3	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+695	Lemmings	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1541	Mad Professor Mariarti	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+209	Magic Pockets	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+113	Magicland Dizzy	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1680	Matrix Marauders	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+174	Mega Twins	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1486	Motörhead	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1643	Night Hunter	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1482	Ninja Remix	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1578	No Second Prize	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+114	Outrun Europa	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1640	Outzone	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1491	Pegasus	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1613	Pit Fighter	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE; it waits for the floppy drive's motor to stop, which an empty drive never lets it do: it needs a disk in drive A, any (its opening screen says so)
+1516	Popeye 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE; a key pressed while it loads crashes it, as with PPDRIVER
+105	Prince of the YolkFolk	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1547	Pro Tennis Tour	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+283	Rick Dangerous 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+115	Risky Woods	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1602	Robocop 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1580	Robocop 3	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+291	Saint Dragon	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1555	Shadow of the Beast	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1660	Shadow Warriors	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+106	Shinobi	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+107	Spellbound Dizzy	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+108	Street Fighter II	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1636	Striker	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1654	Super Monaco G.P.	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1476	Thunderhawk AH-73M	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+88	Teenage Mutant Hero Turtles	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+89	Teenage Mutant Hero Turtles 2	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+109	Torvak the Warrior	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1554	Trex Warrior	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1519	Tusker	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1514	Venus the Flytrap	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE; it waits for the floppy drive's motor to stop, which an empty drive never lets it do: it needs a disk in drive A, any (its opening screen says so)
+175	Video Kid	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1535	Warp	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1536	Wrath of the Demon	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1600	Xybots	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1489	Z-Out	fix	runs from the GEMDOS drive with its START.TOS built for it (tools/build_gos5.py), in Hatari and on an STE with the SidecarTridge Multidevice's GEMDRIVE
+1595	Magic Boy	fix	runs from the GEMDOS drive with its START.TOS built for it with 2 MB or more (Hatari: ST and STE; an STE with 4 MB and the SidecarTridge Multidevice's GEMDRIVE); below 2 MB the launcher unpacks MAGICC.FIC from $20 bytes too far (the operand at its text +$628 left at $42020) and crashes, with PPDRIVER too; one long of the launcher fixes it
+1679	Muzzy	fix	runs from the GEMDOS drive with its START.TOS built for it on an STE with TOS 1.62 (Hatari, 1 to 4 MB; an STE with 4 MB and the SidecarTridge Multidevice's GEMDRIVE); on an ST with TOS 1.04 it takes another part of MUZIMG, whose unpacker writes over its own code and halts the CPU, with PPDRIVER too
+1483	Prison	fix	its build starts it, but when play starts the game wipes its own memory while a cartridge is in the port (it compares $FA0000 with $ABCDEF42 and $FA52235F, the constants XOR-masked in PR1, as the Multidevice's ROM and Hatari's own cartridge start); with two bytes of PR1 turned off it plays, on an ST with 1 MB and an STE with 4 MB in Hatari

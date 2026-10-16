@@ -1,31 +1,34 @@
-# How PP's adaptations run from a GEMDOS drive, and what would fix the rest
+# How the hard-disk adaptations run from a GEMDOS drive, and what would fix the rest
 
-EPIC-03 STORY-06, 2026-10-13. The answers to Diego's questions (EPIC-03), from
-`src/survey/migration.csv` (one row per game of PP's list: its strategy, verdict, run, reason
-and solution), the strategies of STORY-04 (`strategies.md`), the runs of STORY-05 and the
-trials of this story. Run folders are under `tools/dev/builds/survey/`: `runs/` (STORY-05's,
-one line each in `runs.tsv`), `trials/` (this story's), and the other downloads' runs in
-`runs-other.tsv`. Every verdict was reached on Hatari 2.6.1, ST TOS 1.04 (STE TOS 1.62 for the STE
-games), from its GEMDOS drive, against the PPDRIVER image as the working reference (D-09).
+2026-10-13. The answers to Diego's questions about the hard-disk adaptations, from
+`src/survey/migration.csv` (one row per game of the 8bitchip.info website's list: its strategy,
+verdict, run, reason and solution), the strategies read from the files (`strategies.md`), a run of
+every game and trials of the fixes. Run folders are under `tools/dev/builds/survey/`: `runs/`
+(every game's run, one line each in `runs.tsv`), `trials/` (the trials), and the other downloads'
+runs in `runs-other.tsv`. Every verdict was reached on Hatari 2.6.1, ST TOS 1.04 (STE TOS 1.62 for
+the STE games), from its GEMDOS drive, against an ACSI image booted by the PPDRIVER hard-disk
+driver as the working reference.
 
 ## 1. In short
 
 - **How many ways**: twelve strategies (§2), which reach the disk in two ways: by name through
-  the machine's GEMDOS (ten strategies, 1,627 games), or by sectors through PP's driver (Gamex
+  the machine's GEMDOS (ten strategies, 1,627 games), or by sectors through PPDRIVER (Gamex
   with GOS4 or GOS5: 204 games, Lemmings among them).
-- **The verdicts** (D-14): **1,608 as it is, 212 fix, 1 not feasible, 10 unsure**.
+- **The verdicts**: **1,608 as it is, 212 fix, 1 not feasible, 10 unsure**.
 - **What the 212 need**: four solutions (§4). S1, GOS reading through the GEMDOS drive, covers
   the 204 GOS4/GOS5 games; S2, a BPB for the GEMDOS drive, four Silmarils games; S3, the fastload
   bit, three games whose start program Hatari ends when it starts the next one; S4 one game
-  missing a file. S2, S3 and S4 were shown in trials (§3); S1 is a proposal.
-- **Already there**: 43 of the 204 GOS games have another download of PP's that runs as it is
-  from the GEMDOS drive (§5), Lemmings' own 2 MB RAM-disk version among them.
+  missing a file. S2, S3 and S4 were shown in trials (§3). S1 is built for the 87 GOS5 games
+  (2026-10-16): 85 run from the GEMDOS drive, in Hatari and on an STE with the Multidevice, and
+  Awesome and Prison do not yet (`gos5-gemdrive.md`); GOS4 is next.
+- **Already there**: 43 of the 204 GOS games have another download on the 8bitchip.info website
+  that runs as it is from the GEMDOS drive (§5), Lemmings' own 2 MB RAM-disk version among them.
 
 ## 2. The strategies and their verdicts
 
-The strategies are STORY-04's (`strategies.md` §1, where each one's files and launcher are
-described). "Evidence" is one game per strategy that ran from the GEMDOS drive and from PPDRIVER
-on the ST, and on the STE with TOS 1.62 and 2.06 (`runs.tsv`, the game's rows; the ST GEMDOS-drive
+The strategies are the ones read from the files (`strategies.md` §1, where each one's files and
+launcher are described). "Evidence" is one game per strategy that ran from the GEMDOS drive and
+from PPDRIVER on the ST, and on the STE with TOS 1.62 and 2.06 (`runs.tsv`, the game's rows; the ST GEMDOS-drive
 folder is named).
 
 | strategy | games | reaches its files | needs | as it is | fix | not feasible | unsure | evidence |
@@ -34,10 +37,10 @@ folder is named).
 | HAGE | 207 | by name: a floppy image read by HAGE, TOS 1.04 with GEM in RAM | GEMDOS | 206 | 1 | 0 | 0 | ACC-TRIS, `runs/20261011-210725-st-104-gemdrive-2-acc-tris` |
 | HAG2 | 134 | the same, TOS 1.04 without GEM | GEMDOS | 134 | 0 | 0 | 0 | Algebra compil, `runs/20261011-210725-st-104-gemdrive-1-algebra-compil` |
 | plain | 123 | by name: the game's own program | GEMDOS | 113 | 6 | 1 | 3 | Air Warrior, `runs/20261012-121252-st-104-gemdrive-322-air-warrior` |
-| Gamex + GOS4 | 117 | by sectors: GOS's GEMDOS through PP's driver | PP's, AHDI or HDDriver, resident; sectors | 0 | 117 | 0 | 0 | Operation Stealth, `runs/20261012-012833-st-104-gemdrive-1195-operation-stealth` |
-| Gamex | 110 | by name: PP's stub, Gamex | GEMDOS | 108 | 0 | 0 | 2 | Jupiter Probe, `runs/20261012-100019-st-104-gemdrive-1493-jupiter-probe` |
+| Gamex + GOS4 | 117 | by sectors: GOS's GEMDOS through PPDRIVER | PPDRIVER, AHDI or HDDriver, resident; sectors | 0 | 117 | 0 | 0 | Operation Stealth, `runs/20261012-012833-st-104-gemdrive-1195-operation-stealth` |
+| Gamex | 110 | by name: the `START` stub, Gamex | GEMDOS | 108 | 0 | 0 | 2 | Jupiter Probe, `runs/20261012-100019-st-104-gemdrive-1493-jupiter-probe` |
 | Gamex + GOS5 | 87 | by sectors: the same, GOS5 | the same | 0 | 87 | 0 | 0 | Thunderhawk AH-73M, `runs/20261012-094035-st-104-gemdrive-1476-thunderhawk-ah-73m` |
-| PP launcher | 18 | by name: PP's stub | GEMDOS | 18 | 0 | 0 | 0 | Tetris Abersoft, `runs/20261012-121328-st-104-gemdrive-325-tetris-abersoft` |
+| launcher without Gamex | 18 | by name: the `START` stub | GEMDOS | 18 | 0 | 0 | 0 | Tetris Abersoft, `runs/20261012-121328-st-104-gemdrive-325-tetris-abersoft` |
 | Gamex + GOS 1.00 | 5 | by name, then GOS 1.00 | GEMDOS | 5 | 0 | 0 | 0 | Rana Rama, `runs/20261012-120628-st-104-gemdrive-95-rana-rama` |
 | plain + HOLE | 3 | by name, low RAM kept free by HOLE | GEMDOS, HOLE's boot | 2 | 1 | 0 | 0 | Altair, `runs/20261012-110726-st-104-gemdrive-1825-altair` |
 | floppy image | 1 | a floppy image only | a floppy-image driver | 0 | 0 | 0 | 1 | Ice and Fire: nothing to start (§3.6) |
@@ -46,9 +49,9 @@ folder is named).
 
 - The "by name" strategies run from the GEMDOS drive: their 1,627 games give 1,608 as it is, 8
   fix (each an issue of its own game, §3.2–3.4), 1 not feasible and 10 unsure. The STE runs end
-  as the ST runs do, strategy by strategy (STORY-05).
+  as the ST runs do, strategy by strategy (`runs.tsv`).
 - Every GOS4 and GOS5 game is "fix": from the GEMDOS drive its launcher quits to the desktop, or
-  prints "This prg. requires PP, AHDI or Hddriver", on the ST; the representatives do the same on
+  prints `"This prg. requires PP, AHDI or Hddriver"`, on the ST; the representatives do the same on
   the STE with TOS 1.62 and 2.06, and play from PPDRIVER on all three.
 - 241 verdicts are Diego's answers on the review page (`review.tsv`), 90 come from a game's
   PPDRIVER run, 10 from a trace or a trial looked into (`findings.tsv`), the other 1,490 from the
@@ -58,10 +61,10 @@ folder is named).
 
 ### 3.1 GOS4 and GOS5: the driver, then sectors (204 games)
 
-EPIC-01 and EPIC-02 found it in Lemmings (`gemdrive-failure.md`, `disk-layer.md`), and every
+It was found first in Lemmings (`gemdrive-failure.md`, `disk-layer.md`), and every
 GOS4/GOS5 launcher has the same checks (`launcher-signatures.md`, "Other modes"):
 
-1. The launcher wants PP's resident driver (`PPHD` before `hdv_bpb`), copies 7,204 bytes of it to
+1. The launcher wants a resident PPDRIVER (`PPHD` before `hdv_bpb`), copies 7,204 bytes of it to
    `$B7180` and patches them; without it, it reads sector 0 itself (ACSI registers on TOS 1,
    `DMAread` on `pun_ptr`'s device on TOS 2, IDE on a Falcon) and gives up.
 2. GOS (D15R, TOS 1.04 in RAM) then serves the game's file requests with its own GEMDOS, which
@@ -125,7 +128,7 @@ No other GEMDOS-drive run shows a program loaded and the caller ended at once.
 
 ### 3.4 Rody and Mastico 2 (1 game)
 
-PP's archive has no `RUNME.TOS` for it (its HAGE module, floppy image and `T14AG.FIC` are there).
+Its download has no `RUNME.TOS` (its HAGE module, floppy image and `T14AG.FIC` are there).
 With Rody and Mastico 4's (`RODYM4.ZIP`, the same layout) it reaches its title and chapter menu
 from the GEMDOS drive (`trials/rodym2/`).
 
@@ -133,12 +136,13 @@ from the GEMDOS drive (`trials/rodym2/`).
 
 It streams its music from `GS.RAW` during play by sectors: `GIAACSI.TOS` finds the file's
 sectors through the driver's `PUN_INFO` and reads them with the ACSI or IDE registers itself
-(PP's README asks for a driver "which supports PUN info" and defragmented audio files). From the
+(its README asks for a driver "which supports PUN info" and defragmented audio files). From the
 GEMDOS drive it prints "Error in getting file location" and quits
 (`runs/20261012-132330-ste-162-gemdrive-1112-great-giana-sisters-ste`). The page's two HAGA
 downloads do the same (`GIANAA.ZIP`, `GIANAS.ZIP`: the error from the GEMDOS drive, the intro
 from PPDRIVER; `runs-other.tsv`). Running it would take a new music streamer that reads
-through GEMDOS: a change to the game, not to its launcher (D-14's "major modification").
+through GEMDOS: a change to the game, not to its launcher, the "major modification" that makes a
+game not feasible.
 
 ### 3.6 Unsure (10 games)
 
@@ -147,15 +151,15 @@ PPDRIVER run beside them; the tenth has no hard-disk version.
 
 | game | strategy | from PPDRIVER | what would settle it |
 | --- | --- | --- | --- |
-| Lords of Doom, Substation, Roger, Zero-5, Spitting Images | HAGA, Gamex, plain, Gamex, plain | the program quits to the desktop too | why it quits from both disks: Hatari or PP's files, not the drive |
+| Lords of Doom, Substation, Roger, Zero-5, Spitting Images | HAGA, Gamex, plain, Gamex, plain | the program quits to the desktop too | why it quits from both disks: Hatari or the adaptation's files, not the drive |
 | Utopos | plain | a desktop too | the same |
 | Super Breakout mono, 9 Lives, Little Puff in Dragonland | HAGA | runs, or waits at a title | what the GEMDOS drive changes: a trace of both runs |
 | Ice and Fire | floppy image | none | a run with a virtual floppy driver from the GEMDOS drive |
 
 ## 4. The solutions proposed
 
-All four keep Hatari unchanged (C-02): each changes what runs on the Atari, and none needs a
-file of PP's to be published (D-11): a tool changes the user's own copy. The SidecarTridge's
+All four keep Hatari unchanged: each changes what runs on the Atari, and none needs an original
+file to be published: a tool changes the user's own copy. The SidecarTridge's
 GEMDRIVE (`../atarist-sidecart-gemdrive`, version 1.0.1) is noted where it would differ, from its
 sources; nothing was run on it.
 
@@ -169,8 +173,9 @@ sources; nothing was run on it.
 ### S1. GOS reads through the GEMDOS drive (204 games)
 
 GOS keeps everything but its disk. Its file requests go to the `TRAP #1` handler the machine had
-before the launcher, as PP's own HAGA file service has done since 2012 (`pp-modes.md` §3.1: a
-name, an offset, a length, a buffer and a mode; the machine's GEMDOS; then the game's state back),
+before the launcher, as the HAGA adaptations' own file service has done since 2012 (`modes.md`
+§3.1: a name, an offset, a length, a buffer and a mode; the machine's GEMDOS; then the game's state
+back),
 and 1,361 of the 1,366 HAGA-family games run as they are. GOS5's `file_io` takes the same
 parameters. In Hatari that handler is the cartridge hook at `$FA002A`, which serves the drive from
 the host folder: it takes its parameters from the stack (`gemdos.c:4028-4038`) and copies
@@ -178,49 +183,60 @@ the host folder: it takes its parameters from the stack (`gemdos.c:4028-4038`) a
 
 Two changes, both on the Atari side:
 
-1. **The launcher's driver checks.** In each GOS launcher (`START.TOS`, PP-packed), the `PPHD`
+1. **The launcher's driver checks.** In each GOS launcher (`START.TOS`, packed), the `PPHD`
    check (`2278 0472 0CA9 5050 4844 FFF8`, in all 204; 203 have the `DMAread` fallback too) made
    to go on without a driver: no driver copy, no sector-0 read, GOS started as on the primary
-   path. Unpacked and packed again with
-   `tools/unpack.py` and `tools/pack.py` (a packed file the launcher accepts, EPIC-02 STORY-03).
-   EPIC-02's sources show where in Lemmings' (`src/lemld2/lemld2.s`: `check_pp_driver`,
+   path. Unpacked and packed again with `tools/unpack.py` and `tools/pack.py` (a packed file the
+   launcher accepts, `launcher-formats.md`). The launcher's sources, which reassemble to the
+   original bytes, show where in Lemmings' (`src/lemld2/lemld2.s`: `check_pp_driver`,
    `reuse_pp_driver`, `start_d15r`).
-2. **GOS's GEMDOS entry.** In each D15R build, `trap1` (PP's entry, `302F 0006 B07C 000B …`)
+2. **GOS's GEMDOS entry.** In each D15R build, `trap1` (D15R's own entry, `302F 0006 B07C 000B …`)
    passes the file functions (`Fopen`, `Fclose`, `Fread`, `Fwrite`, `Fseek`, `Fcreate`, `Fdelete`,
    `Fsfirst`/`Fsnext`, `Dsetdrv`, `Dsetpath`, `Dgetpath`) to the handler saved before the launcher
-   ran. 13 ST/STE builds (§3.1); PP's own code at their start (1,852 bytes in `D15R_H5`) is where it
-   goes in.
+   ran. 13 ST/STE builds (§3.1); D15R's own code at their start (1,852 bytes in `D15R_H5`) is where
+   it goes in.
 
 - **Work**: the two patchers (by signature, as `classify.py` finds them), a script that applies
   them to a copy of a game, then the 204 games run with `run_all.py`. Lemmings first: its
-  launcher and GOS are EPIC-02's sources, with their round trips and tests. The Falcon builds take
-  the same patch, untested (Falcon is out of scope).
+  launcher and GOS are rebuilt from sources that reassemble to the original bytes, with their round
+  trips and tests. The Falcon builds take the same patch, untested (Falcon is out of scope).
 - **Memory**: none beyond GOS's own. The driver copy at `$B7180` and its buffers go unused.
 - **Risk**:
   - GOS4 games call GOS's GEMDOS themselves during play, and which functions they use is not known
-    yet: Hatari traces only the calls that reach its hook, and GOS's do not. The first task of
-    the epic.
+    yet: Hatari traces only the calls that reach its hook, and GOS's do not. They are the first
+    thing to find.
   - `Fsfirst`/`Fsnext` find the DTA through TOS's current process (`gemdos.c:3043-3049`), which a
     game that owns low RAM may have overwritten.
   - Gamex's state saves (`file_io` with `"Wr"`) are untested.
-  - On the reference, Lemmings does not reach its first level in Hatari (`ITERATIONS.md`, a
-    candidate). That blocks S1's play session with Lemmings, not its first runs.
+  - On the reference, Lemmings does not reach its first level in Hatari (an address error, its
+    cause still a candidate). That blocks S1's play session with Lemmings, not its first runs.
 - **SidecarTridge**: its GEMDRIVE also hooks `TRAP #1` from cartridge ROM, but it reads
   `_longframe` (`$59E`), runs a wait loop in RAM at `_dskbufp` (`$4C6`, or on the stack), and calls
   `TRAP #1` again through `$84` for paths without a drive letter and for `Fsfirst`/`Fsnext`
   (`gemdrive.s:244-266`, `811-815`, `1100-1111`, `1344-1349`). With GOS's image of TOS's RAM in
   place, those must hold usable values, and the requests should carry full paths (`C:\…`).
 
+**Built for GOS5** (2026-10-16; `gos5-gemdrive.md`). One change, in the launcher only:
+`tools/build_gos5.py` puts a block of code (`src/gemdrive/gos5_patch.s`) in front of each
+launcher's text, found by signature in all 87, and turns the `PPHD` check into a branch to it.
+GOS's code stays unchanged: the block points the `TRAP #1` of GOS's image of the system variables at
+a forwarder that hands the file functions to the machine's handler, names cut to 8.3, and the rest
+to GOS. On the Multidevice it also moves GEMDRIVE's stack out of the game's memory, and before each
+load it lets a keyboard message under way finish. 85 games run; five need a disk in drive A (their
+own wait for the floppy motor), Forgotten Worlds two GOS files from another download, Magic Boy 2 MB
+and Muzzy an STE. Awesome and Prison still fail: each refuses the cartridge in the port, and two bytes
+of one of its files turn its check off.
+
 **Not proposed, for the same 204 games:**
-- **A driver that serves records**: a resident driver shaped like PP's (the `PPHD` mark, laid
+- **A driver that serves records**: a resident driver shaped like PPDRIVER (the `PPHD` mark, laid
   out at the offsets the launcher patches, `gemdrive-failure.md` §5) that answers `Rwabs` from a
-  disk-image file on the GEMDOS drive. PP's files would stay unchanged, but the games would live in
-  an image, which Hatari's ACSI image already gives. Its code must also fit the 7,204 bytes the
-  launcher copies.
+  disk-image file on the GEMDOS drive. The original files would stay unchanged, but the games would
+  live in an image, which Hatari's ACSI image already gives. Its code must also fit the 7,204 bytes
+  the launcher copies.
 - **A driver that makes a FAT volume out of the folder**: the same, with directory and FAT
   sectors built from `Fsfirst`/`Fsnext`, so files stay loose. The most work, under the same
   7,204-byte limit.
-- **PP's other downloads**: no work, but only for the 43 games that have one (§5).
+- **The games' other downloads**: no work, but only for the 43 games that have one (§5).
 
 ### S2. A BPB for the GEMDOS drive (4 games)
 
@@ -240,10 +256,10 @@ Set bit 0 of byte 25 of the header in `SPY2.BOY`, `HARRIER.TOS` and `AQUANAUT.EX
 leaves their free memory, where the caller's stack lies, as it is.
 
 - **Work**: one byte per game; the other way is to move the start programs' stack into the memory
-  they keep (PP's sources are in the downloads: `SPY22.S`, `START1.S`).
+  they keep (their sources are in the downloads: `SPY22.S`, `START1.S`).
 - **Risk**: a program that counts on zeroed memory; none of the three showed it.
 - **Hatari**: the cause is Hatari's (`GemDOS_PexecBpCreated` relies on the caller's stack after
-  clearing the free memory). A report upstream, not a change here (C-02).
+  clearing the free memory). A report upstream, not a change here: Hatari stays as it is.
 - **SidecarTridge**: its GEMDRIVE runs `Pexec` modes 0 and 3 itself (`gemdrive.s:1412-1415`);
   whether it clears memory the same way is not checked.
 
@@ -251,7 +267,7 @@ leaves their free memory, where the caller's stack lies, as it is.
 
 Copied from `RODYM4.ZIP` into Rody and Mastico 2's folder (§3.4). Already shown.
 
-## 5. PP's other downloads of the GOS games
+## 5. The GOS games' other downloads
 
 43 of the 204 GOS games have another download whose strategy runs by name (`other_downloads`);
 `tools/survey/run_other.py` ran each from the GEMDOS drive with `run_all.py`'s rules, and all 43
@@ -270,17 +286,17 @@ a menu, the attract mode or play):
 
 ## 6. Corrections made on the way
 
-- **Weird Dreams**: STORY-05's "418 sector reads on C:" were its own RAM disk, drive M:
+- **Weird Dreams**: its first run's "418 sector reads on C:" were its own RAM disk, drive M:
   (device 12), on both disks; the two runs end on the same title. As it is. `run_all.py` now
   counts sector reads and `Getbpb` on C: only (Robotron 2084's two reads of drive H: go too), and
   both games' access is "files" again.
-- **Maddog Williams**: PP's ZIP keeps `PABISYS.FIL` beside the game's folder, and the game opens
+- **Maddog Williams**: its ZIP keeps `PABISYS.FIL` beside the game's folder, and the game opens
   `C:\PABISYS.FIL`. The survey mounted the folder only, and the game quit from both disks.
   `run_all.py` now puts what a download keeps beside the game's folder in the drive's root: it
   reaches its difficulty menu (`runs.tsv`), and further, with keys, the game's first screen
   (`trials/20261013-114212-st-104-gemdrive-1672-maddog-root-1n`). As it is. Diego's Broken was on
   the run without the file, so it is listed in `stale.txt`.
-- **Great Giana Sisters STE**: STORY-05's finding said its HAGA downloads read through GEMDOS.
+- **Great Giana Sisters STE**: an earlier finding said its HAGA downloads read through GEMDOS.
   They do not (§3.5): not feasible.
 - **Aquanaut**: S3's cause (§3.3), so fix rather than unsure.
 

@@ -1,0 +1,25 @@
+# EPIC-04 STORY-01: the launcher of tools/build_gemdrive.sh from the GEMDOS drive. GOS's file
+# requests (file_io: Dsetpath, Fopen, Fseek, Fread, Fclose) go to Hatari's GEMDOS drive by name,
+# through gd_forward, where PP's driver would have read sectors (reference-first-level.exp). The
+# names are the game's, in its own case, each part cut to 8.3 by gd_forward: LS2DD asks for
+# "dmalogo.imgg", which GEMDOS cuts and the Multidevice's GEMDRIVE does not. Then the title, and a
+# click on "1 PLAYER" as in the reference, and the level's own files, which the game loads only if
+# it survives level020's load (gd_quiet; EPIC-04 STORY-02).
+expect start-tos Pexec\(0, "C:\\LEMMINGS\\START\.TOS"
+expect pch Fopen\("LEMMINGS\.PCH"
+expect ls2dd Fopen\("LS2DD\.FIC"
+expect files-dir Dsetpath\("FILES"\)
+expect psyglogo (?i)Fopen\("psyglogo
+expect dmalogo (?i)Fopen\("dmalogo\.img"
+expect intropar (?i)Fopen\("intropar
+expect code-file (?i)Fopen\("code"
+expect leveldat (?i)Fopen\("leveldat
+quiet title 4
+shot title
+mouse 70 150
+sleep 0.5
+event doubleclick
+expect level-020 (?i)Fopen\("level020
+expect level-files (?i)Fopen\("ground1"
+sleep 3
+shot preview
