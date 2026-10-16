@@ -207,6 +207,15 @@ the patcher that installs them (D-17).
   `migration.csv`) and `tools/site/build_site.py`'s own text. Write what a reader follows: what was
   found, when, on which machine, and which page or tool shows it. The backlog may cite the notes;
   the notes never cite the backlog. `build_site.py --check` fails on such a reference.
+- **The website does not name the adaptations' author** (Diego, 2026-10-16, D-21): PP, PPera or
+  Peter Putnik means nothing to a reader. Where the games, their list and their documentation are is
+  "the 8bitchip.info website"; what the adaptations are made of is "the Gamex launcher", "GOS",
+  "the original files". Technical names stay: the `PPHD` signature, the `PPDRIVER` driver, a message
+  quoted in code (`This prg. requires PP, AHDI or Hddriver`). The site links to the 8bitchip.info
+  website only for a game's page or a technical page (`GAMEXdoc.html`, `agcat.html`, `fromhd3.php`),
+  never to its home page. Same scope as the rule above, the survey's strategy names too (`launcher
+  without Gamex`); `build_site.py --check` fails on PP, PPera or Putnik outside code and on a link
+  to the home page.
 
 ---
 

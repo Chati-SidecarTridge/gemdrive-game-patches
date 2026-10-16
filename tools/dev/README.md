@@ -38,7 +38,7 @@ Hatari is left. One line per check; exit 0 only if all pass. About two minutes.
 | `m68k.py` | imported: 68000 instruction lengths, branch and call targets, absolute and PC-relative operands |
 | `mksource.py [--report] <stage.map> <out.s>` | a labelled source for a launcher stage from its map (entries, data, names, comments, pointer tables, run addresses, executed addresses) and its bytes; reassembles to them |
 | `shiftcheck.py [--tos] <src.s> <origin>` | inserts a `nop` mid-source, reassembles, and checks every reference moved with its target |
-| `make_disks.sh [<game folder> [<out folder>]]` | `builds/disks/` (or `<out folder>`): `gemdrive/` (drive C: for GEMDRIVE mode) and `ppdriver.img` (the PPDRIVER reference: an ACSI image booted by PP's driver), from a copy of `LEMMINGS/` or of the folder given |
+| `make_disks.sh [<game folder> [<out folder>]]` | `builds/disks/` (or `<out folder>`): `gemdrive/` (drive C: for GEMDRIVE mode) and `ppdriver.img` (the PPDRIVER reference: an ACSI image booted by PPDRIVER), from a copy of `LEMMINGS/` or of the folder given |
 | `hatari_harness.py --setup <s> --disk <d> [...]` | one Hatari run, headless, with a run folder in `logs/`; `--start <path>` runs another program than `START.TOS` |
 | `../build_launcher.sh [<src>] [<out>]` | Lemmings' launcher built from `src/` into `builds/launcher/LEMMINGS/`; then `make_disks.sh builds/launcher/LEMMINGS` |
 | `../build_gemdrive.sh [<out>]` | Lemmings' launcher changed for a GEMDOS drive, from its sources (`src/gemdrive/lemld2_gemdrive.s`) into `builds/gemdrive/build/LEMMINGS` |

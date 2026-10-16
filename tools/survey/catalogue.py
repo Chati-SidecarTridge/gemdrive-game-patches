@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-02: PP's list of hard-disk adaptations as a table.
+"""EPIC-03 STORY-02: the 8bitchip.info website's list of hard-disk adaptations as a table.
 
 Usage: catalogue.py [<out.csv>]        (default src/survey/catalogue.csv)
 
@@ -9,7 +9,7 @@ Reads the mirror (MIRROR in tools/dev/dev.cfg, D-12), never the site: the list
 
 PP's text stays in the mirror (D-11): a row keeps the list's own cells, the
 download names, and what is read from the page with STORY-01's glossary
-(src/notes/pp-modes.md): the category code and its parts, the TOS dependence,
+(src/notes/modes.md): the category code and its parts, the TOS dependence,
 the source PP started from, the adaptation terms, and the mode the page names.
 Every row carries its page's URL.
 

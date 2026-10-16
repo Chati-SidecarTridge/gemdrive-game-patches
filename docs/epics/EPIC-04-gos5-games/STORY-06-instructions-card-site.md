@@ -73,3 +73,12 @@ drive. The card and the site show the new verdicts.
   SHA-256), and `INDEX.TXT` replaced. Read back: `STILLNOT` 18 files, `FIXGOS5` 1,340, all as
   `sdcard-1635`. The instructions list both under "Still not working", the site counts 85 built
   and running.
+- **The site no longer names the adaptations' author** (D-21, Diego, 2026-10-16): the nine notes,
+  the Tools page, the catalogue's reasons and labels ("Floppy use", "Runs on") and the builder's text
+  say "the 8bitchip.info website", "the Gamex launcher", "PPDRIVER", "the original files"; `PPHD`,
+  `PPDRIVER` and the launcher's quoted message stay. `pp-modes.md` is now `modes.md` ("The modes"),
+  its quote marker **doc**; the strategy `PP launcher` is now `launcher without Gamex` (`classify.py`
+  checked against `migration.csv`: the same strategy for all 1,831). The footer's home-page link is
+  gone: the site links to the 8bitchip.info website for the 1,831 game pages and 13 technical pages
+  only. `build_site.py --check` fails on PP, PPera or Putnik outside code and on a home-page link:
+  0 problems, 7,675 links.

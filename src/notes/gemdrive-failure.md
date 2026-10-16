@@ -11,8 +11,8 @@ The cause is worked around for the GOS5 games, Lemmings among them, since 2026-1
 
 ## The cause, in one paragraph
 
-PP's launcher does not read the game's files through GEMDOS. It demands a **resident PP
-hard-disk driver**, recognised by the XBRA header `"XBRA" "PPHD"` twelve bytes before the
+The Gamex launcher does not read the game's files through GEMDOS. It demands a **resident
+hard-disk driver, PPDRIVER**, recognised by the XBRA header `"XBRA" "PPHD"` twelve bytes before the
 routine `hdv_bpb` (`$472`) points to; it copies that driver (7,204 bytes) to `$B7180`,
 relocates it, rewires its internals, and installs its own loader, D15R (`D15R_H5.FIC`, at
 `$C0100`), which then reads the **FAT volume by sectors** through BIOS `Getbpb`, `Mediach` and
@@ -21,12 +21,13 @@ relocates it, rewires its internals, and installs its own loader, D15R (`D15R_H5
 GEMDOS-level emulation: it serves `Fopen`/`Fread` from a host folder through a cartridge hook on
 `TRAP #1` and has **no driver, no `BPB` and no sectors**. So the launcher's driver check fails,
 its fallback (a raw sector-0 read through the ACSI DMA registers on TOS 1.x, through XBIOS
-`DMAread` on TOS 2.x) fails too, and it prints "This prg. requires PP, AHDI or Hddriver hard disk
-driver …" and exits. Answering each step by hand from the debugger only exposes the next one:
-sector 0, then `Getbpb(2)` (TOS returns 0), then `Rwabs` (TOS returns -15, EUNDEV), then D15R's
-error path, which the fallback never initialised. Diego's guess, that the PP driver embedded in
-the launcher is the cause, holds in substance: it is the driver, with the correction that the launcher does not embed it but requires PP's own,
-resident, and that its loader needs a block device behind it.
+`DMAread` on TOS 2.x) fails too, and it prints
+`This prg. requires PP, AHDI or Hddriver hard disk driver …` and exits. Answering each step by
+hand from the debugger only exposes the next one: sector 0, then `Getbpb(2)` (TOS returns 0), then
+`Rwabs` (TOS returns -15, EUNDEV), then D15R's error path, which the fallback never initialised.
+Diego's guess, that the copy of PPDRIVER embedded in the launcher is the cause, holds in
+substance: it is the driver, with the correction that the launcher does not embed it but requires
+PPDRIVER, resident, and that its loader needs a block device behind it.
 
 ## 1. The two setups
 
@@ -99,7 +100,7 @@ text+`$324`:
 ```
 movea.l $472.w,a1              ; hdv_bpb
 cmpi.l  #$50504844,-8(a1)      ; "PPHD"
-bne.w   text+$482              ; no PP driver: the fallback
+bne.w   text+$482              ; no PPDRIVER: the fallback
 ```
 
 Observed at the `cmpi` and the `bne` (`src/probes/epic01/gate_probe.py`, runs `…-gate`):
@@ -163,8 +164,8 @@ driver" is settled by provenance, not by bytes.
 
 ## 4. The embedded driver
 
-Restated and confirmed: the launcher carries no driver of its own. It **requires** PP's resident
-driver (the XBRA `PPHD` check), reuses it (copied, relocated, patched at fixed offsets, so a
+Restated and confirmed: the launcher carries no driver of its own. It **requires** PPDRIVER,
+resident (the XBRA `PPHD` check), reuses it (copied, relocated, patched at fixed offsets, so a
 replacement would have to match PPDRIVER's layout at those offsets), and carries its own
 **loader**, D15R, which reads the FAT volume by sectors through that driver. Hatari's GEMDRIVE
 has neither: no driver signature, no `BPB`, no sectors.
@@ -175,7 +176,7 @@ pristine files, the debugger answering the disk by hand):
 | answered by hand | what happened next | run |
 | --- | --- | --- |
 | nothing | error message after the fallback's reads fail | `…-st-104-gemdrive-gate` |
-| sector 0 = the image's real PP boot sector (word sum `$1234`) | the launcher goes on (`Kbshift`, 29 `Vsync`), D15R: `Drvmap`, `Getbpb(2)` → TOS returns **0**, address error, `Pterm(-1)` | `…-gemdrive-fallback` (real sector) |
+| sector 0 = the image's real PPDRIVER boot sector (word sum `$1234`) | the launcher goes on (`Kbshift`, 29 `Vsync`), D15R: `Drvmap`, `Getbpb(2)` → TOS returns **0**, address error, `Pterm(-1)` | `…-gemdrive-fallback` (real sector) |
 | + `Getbpb(2)` = PPDRIVER's BPB | `Rwabs(0,$D5DB8,1,65,2)` → TOS returns **-15** (EUNDEV), twice; LS2DD address error at `$5FFED` with that -15 in `d0` | `…-gemdrive-fallback` (`--bpb`) |
 | + `Mediach(2)` = 0, + `Rwabs` 65 and 81 = the image's sectors | D15R re-reads 81, then runs its error restore at `$C8486` (`movea.l (a0)+,sp` from a context never saved, sp = 0) → bus error on the next push, Hatari halts | `…-gemdrive-serve-02` |
 
@@ -196,7 +197,7 @@ In the order the launcher needs them:
 1. **A resident driver with the XBRA `PPHD` header before `hdv_bpb`**, PPDRIVER-shaped: the
    launcher copies 7,204 bytes from the header and patches offsets `+$9`, `+$3F`, `+$43B`,
    `+$495..+$49D`, `+$771..+$78B` of the copy.
-2. Failing that, **a raw-readable PP boot sector**: ACSI DMA registers and MFP GPIP 5 (TOS 1.x),
+2. Failing that, **a raw-readable boot sector 0**: ACSI DMA registers and MFP GPIP 5 (TOS 1.x),
    XBIOS `DMAread` plus a `PUN_INFO` at `$516` (TOS 2.x), word sum `$1234`. And this path still
    does not initialise D15R (above).
 3. **BIOS `Getbpb(2)`** returning PPDRIVER's BPB (1,024-byte sectors, the layout above).
@@ -222,11 +223,11 @@ without regard to case anyway.
 
 | the guess | what became of it | where |
 | --- | --- | --- |
-| The loader looks for a resident PP driver (`PPHD` before the routine at `$472`); without one it reads sector 0 itself: raw ACSI on TOS 1.x, XBIOS `DMAread` on TOS 2.x, then the Falcon's IDE | confirmed, with corrections: `$472` is `hdv_bpb`; on TOS 2.x the device comes from `pun_ptr`; after a good sector 0 the launcher continues into D15R | §3, §4 |
+| The loader looks for a resident PPDRIVER (`PPHD` before the routine at `$472`); without one it reads sector 0 itself: raw ACSI on TOS 1.x, XBIOS `DMAread` on TOS 2.x, then the Falcon's IDE | confirmed, with corrections: `$472` is `hdv_bpb`; on TOS 2.x the device comes from `pun_ptr`; after a good sector 0 the launcher continues into D15R | §3, §4 |
 | With the `PPHD` check patched out, the run stalls in LS2DD's load loop on lower-case file names | refuted: the pristine launcher never reaches LS2DD's load loop on a GEMDOS drive; pushed past the gate by hand it stops on TOS's -15 from `Rwabs`, not on a name; names are matched case-insensitively | §4, §5 |
 | The loader hooks `TRAP #1` only for `Malloc` and `Mshrink` | not at the first `Rwabs`: the vector is then D15R's `$C84A0`, which does more than Malloc/Mshrink (the stub itself: `launch-chain.md`) | §3 |
 | On TOS 2.06 the loader takes the XBIOS path and works through whatever driver is installed | refuted: TOS 2.06 takes the XBIOS path, which is a raw ACSI read on the `PUN_INFO` device; no driver, no `PUN_INFO`, -1 | §3 |
-| The game fails because of the PP driver embedded in the launcher (Diego's) | confirmed in substance, restated: not embedded but required and resident; the loader needs a block device | §4 |
+| The game fails because of the copy of PPDRIVER embedded in the launcher (Diego's) | confirmed in substance, restated: not embedded but required and resident; the loader needs a block device | §4 |
 | `START.TOS` only unpacks the rest, and the `.FIC` files are packed code, not catalogues | consistent with what was seen (LS2DD unpacked to `$70000` from `$81000`, D15R at `$C0100`); the formats in full: `launcher-formats.md` | §3 |
 
 ## 7. Tools left behind

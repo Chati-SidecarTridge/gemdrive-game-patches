@@ -13,7 +13,7 @@ classifies its 91,460 bytes:
 | --- | --- | --- |
 | the ROM's own | 54,640 (59.7%) | |
 | relocated | 9,804 (10.7%) | a ROM address made a D15R one (the copy moved from `$FC0000` to around `$C0100`), or an address in TOS's RAM plus `$D0528` (D15R keeps TOS's RAM in its own image there) |
-| other | 27,016 (29.5%) | PP's code, the RAM image's contents (no ROM has them) and PP's edits |
+| other | 27,016 (29.5%) | D15R's own code, the RAM image's contents (no ROM has them) and the edits to TOS's code |
 
 Of the TOS 1.04 ROMs on this Mac, the UK one matches best (the keyboard table has the UK `#`
 key); the other languages are within 0.5%.
@@ -22,32 +22,33 @@ What D15R holds, from `$C0100` (the sources name every routine):
 
 | from | what |
 | --- | --- |
-| `$C0100` | **PP's own** (1,852 bytes, nowhere in the ROM): the entry table, `swap_low_ram`, `tos_paths`, `file_io`, `init`, `file_io_2`, `mfp_quiet`, the parameters at `$C0730`, `low_ram_save` |
+| `$C0100` | **D15R's own** (1,852 bytes, nowhere in the ROM): the entry table, `swap_low_ram`, `tos_paths`, `file_io`, `init`, `file_io_2`, `mfp_quiet`, the parameters at `$C0730`, `low_ram_save` |
 | `$C0830` | TOS's start-up (`tos_start`, also `swv_vec`'s target as in TOS), the BIOS and XBIOS traps (`bios_trap`, `xbios_trap`) and their tables, the exception handler, VBL and HBL |
 | `$C11CE` | the floppy driver: the XBIOS floppy functions, `flop_getbpb`, `flop_rw`, `flop_mediach` (byte for byte TOS's `hdv_*` at `$FC173C`, `$FC1A24`, `$FC18EC`) |
 | `$C2166` | clock chip, printer, serial port, MIDI, keyboard processor, MFP, sound chip |
 | `$C34F8` | **GEMDOS**: console, the directory tree, buffers and FAT, files and handles, processes and memory, its dispatcher (`gemdos`) and its function table (`$CF946`, every function of TOS 1.04) |
-| `$C83C6` | PP's BIOS and XBIOS call stubs for GEMDOS (`bios`, `xbios`), TRAP #2 (`vdi_aes`) |
-| `$C84A0` | **PP's GEMDOS entry** (`trap1`): functions 1-11 (the console) answer 0, `Super` is handled apart, the rest goes to `gemdos` |
+| `$C83C6` | D15R's BIOS and XBIOS call stubs for GEMDOS (`bios`, `xbios`), TRAP #2 (`vdi_aes`) |
+| `$C84A0` | **D15R's GEMDOS entry** (`trap1`): functions 1-11 (the console) answer 0, `Super` is handled apart, the rest goes to `gemdos` |
 | `$C899E` | TOS's GEMDOS dispatcher and the rest of TOS's code (timer, VT52, line-A, the VDI's entry) |
 | `$CF688` | TOS's data: keyboard tables, the 6x6 font's header, GEMDOS's messages ("OUT OF INTERNAL MEMORY") |
 | `$D0528` | **the image of TOS's RAM**: TOS's address + `$D0528`, its vectors and system variables (`$8`-`$7FF`) and TOS's own variables above them, up to the end of the file |
 
-PP's edits to TOS's code, as far as the comparison shows them: TOS's RAM variables moved into the
+D15R's edits to TOS's code, as far as the comparison shows them: TOS's RAM variables moved into the
 image (1,724 absolute references relocated by `$D0528`; where TOS sets `a5`, its base for
 its variables, to 0 with `suba.l a5,a5`, D15R has `lea $D0528,a5`: in seven places, the BIOS
 dispatcher among them, `$FC07FE` in the ROM, `$C0C1E` in D15R); some accesses rewritten with other
 addressing, which changes instruction lengths (the runs of "other" bytes in the start-up and BIOS
 code); the call to the
 hard-copy routine, which D15R does not include, turned into a branch to an odd address
-(`no_hardcopy`: Alt-Help would end in an address error); and his own `TRAP #1` entry. The image's
+(`no_hardcopy`: Alt-Help would end in an address error); and its own `TRAP #1` entry. The image's
 device tables (`xconstat`…, `$51E`-`$59D`) are empty: TOS fills them at start-up and D15R's
 `tos_start` never runs, which is why `trap1` answers the console functions with 0.
 
-**It is PP's GOS, as his `GAMEXdoc.html` describes it, and more than that page says.** Not only
-TOS 1.04's GEMDOS but its BIOS, XBIOS, floppy driver, start-up code and data, relocated to
-`$C0100`, with an image of its RAM, behind PP's entry points. The Falcon build (`D15R_F5`) is the same with `trap1` (and
-LEMLD2's `trap1_stub`) reading the function number past the 68030's format word.
+**It is GOS, as the Gamex documentation (`GAMEXdoc.html`) describes it, and more than that page
+says.** Not only TOS 1.04's GEMDOS but its BIOS, XBIOS, floppy driver, start-up code and data,
+relocated to `$C0100`, with an image of its RAM, behind entry points of its own. The Falcon build
+(`D15R_F5`) is the same with `trap1` (and LEMLD2's `trap1_stub`) reading the function number past
+the 68030's format word.
 
 ## 2. D15R's entry points and the data it shares
 
@@ -55,7 +56,7 @@ LEMLD2's `trap1_stub`) reading the function number past the 68030's format word.
 | --- | --- | --- | --- |
 | `swap_low_ram` | `$0010` | `file_io`, `file_io_2` | exchange `$8`-`$7FF` with the image: TOS's vectors and system variables in, the game's out, or back |
 | `tos_paths` | `$0034` | `file_io` (when `$C0734` is set) | a VBL tick into `_hz_200`; `Dsetdrv` and `Dsetpath` to LEMLD2's drive and path |
-| `file_io` | `$0070` | PP's loader (`$C0100` + the word at `+4`), the game's copy of it | load or save a whole file by name (below) |
+| `file_io` | `$0070` | the launcher's loader (`$C0100` + the word at `+4`), the game's copy of it | load or save a whole file by name (below) |
 | `init` | `$01BC` | LEMLD2 (`start_d15r`), with `a1 = $FFFAA` | keep the 24 bytes at `$FFFAA` |
 | `file_io_2` | `$01CA` | not seen called (§4) | the same as `file_io` for the second parameter set |
 
@@ -72,7 +73,7 @@ back); the MFP back. D15R's GEMDOS reads the volume through BIOS `Rwabs`, `Getbp
 (its `bios` stub, `TRAP #13`), which the image sends to `hdv_rw`, `hdv_bpb`, `hdv_mediach`: the
 driver copy's entries, which LEMLD2 wrote there.
 
-## 3. What the launcher asks of PP's resident driver
+## 3. What the launcher asks of the resident PPDRIVER
 
 From `reuse_pp_driver` and `set_buffers` (`src/lemld2/lemld2.s`), checked against the
 dumps of the resident and copied driver in `gemdrive-failure.md` §3:

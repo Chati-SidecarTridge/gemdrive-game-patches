@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""tools/pack.py: PP's launcher packer, rebuilt (EPIC-02 STORY-03).
+"""tools/pack.py: the Gamex launcher's packer, rebuilt (EPIC-02 STORY-03).
 
     pack.py fic <in.bin> <out.FIC> <like.FIC> [--pad]
         a .FIC with <like.FIC>'s name and +10 field

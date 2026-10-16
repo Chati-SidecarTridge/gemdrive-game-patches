@@ -10,7 +10,7 @@ digits of its SHA-256, and what it is:
   start     "yes" for the program the user runs: the shallowest RUNME*.TOS, START*.TOS or
             START*.PRG; without one, the only program (.TOS, .PRG, .APP, .TTP) at the shallowest
             level holding programs, or "choice" for each when there are several
-  family    PP's file-name families (src/notes/pp-modes.md): D15R, T14, HAGA module, GXUT, PCH,
+  family    PP's file-name families (src/notes/modes.md): D15R, T14, HAGA module, GXUT, PCH,
             state save (GSxx.TOS), floppy image, AUTO, HOLE, text
   kind      from the first bytes: program (0x601A), PP packed (the "C3" header), ICE, ATM5, FWRD
             (PP's file-wise RAM disk), zip, MSA image, STX image, ST image (by name, whole

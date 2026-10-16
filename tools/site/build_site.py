@@ -4,20 +4,23 @@
 Usage: build_site.py [--out DIR] [--no-snapshots] [--check]
 
 Builds a static site into tools/dev/builds/site/ (git-ignored), or DIR: the project and where it
-stands, the notes (src/notes/*.md) as pages, the catalogue of PP's list with every
+stands, the notes (src/notes/*.md) as pages, the catalogue of the 8bitchip.info website's list with every
 game's strategy, verdict, reason and solution (src/survey/migration.csv, catalogue.csv) and the
 tools (tools/dev/README.md and the survey scripts' docstrings). The style and the catalogue's
 filters are tools/site/site.css and site.js, copied beside the pages. Nothing is fetched: the site
 works from its folder and from GitHub Pages alike.
 
-PP's pages are linked, never copied (D-11): a note's `agcat.html` links to it on his site, and
-every game links to its page there. The snapshots, this project's own Hatari screenshots of each
+The 8bitchip.info website's pages are linked, never copied (D-11): a note's `agcat.html` links to it
+there, and every game links to its page there. The snapshots, this project's own Hatari screenshots of each
 game's run (tools/dev/builds/survey/snapshots/, STORY-05), are copied when they are there, unless
 --no-snapshots; whether they are published is Diego's call (D-15). A built game's snapshot is the
 last screen of its build's run (src/survey/ports.tsv), kept beside the others as port-<row>.png.
 
 The site speaks to its readers, never to the backlog (D-20): --check fails on a page that refers to
-docs/epics/ or what is in it (an epic, a story, a decision, ITERATIONS.md).
+docs/epics/ or what is in it (an epic, a story, a decision, ITERATIONS.md). Nor does it name the
+adaptations' author (D-21): --check fails on PP, PPera or Putnik in a page's prose (code, as a quoted
+string or a driver's name, may), and on a link to the 8bitchip.info website's home page rather than a
+game's page or a technical one.
 
 --check, after the build: every internal link and anchor resolves, every game of migration.csv
 has its row, and no page loads anything from another site. Standard library only.
@@ -42,7 +45,7 @@ OUT = REPO / "tools" / "dev" / "builds" / "site"
 SNAPSHOTS = REPO / "tools" / "dev" / "builds" / "survey" / "snapshots"
 LOGS = REPO / "tools" / "dev" / "logs"
 PP = "https://atari.8bitchip.info/"
-SITE = "PP's hard-disk adaptations, from a GEMDOS drive"
+SITE = "Atari ST hard-disk adaptations, from a GEMDOS drive"
 
 # The notes, by section, in reading order: (file stem, short title)
 SECTIONS = [
@@ -50,7 +53,7 @@ SECTIONS = [
     ("findings", "Findings", [("gemdrive-failure", "Why Lemmings fails"), ("launch-chain", "The launch chain"),
                               ("disk-layer", "The disk layer"), ("launcher-formats", "The file formats"),
                               ("launcher-signatures", "The launcher's signatures")]),
-    ("modes", "PP's modes", [("pp-modes", "PP's modes")]),
+    ("modes", "The modes", [("modes", "The modes")]),
     ("strategies", "Strategies and solutions", [("hd-strategies", "Verdicts and solutions"),
                                                 ("strategies", "The strategies, from the files"),
                                                 ("gos5-gemdrive", "The GOS5 games, built")]),
@@ -65,7 +68,7 @@ BY = {"run": "from its run", "Diego": "Diego's review", "ppdriver": "against the
       "trace": "from a trace or a trial"}
 CATEGORIES = {"1-2": "1 or 2: the regular file system", "3": "3: loaded whole, no floppy after the start",
               "4": "4: the file system, in low RAM", "5": "5: XBIOS floppy loads",
-              "6": "6: the floppy controller during play", "?": "a code his categories do not cover",
+              "6": "6: the floppy controller during play", "?": "a code the categories do not cover",
               "": "no code on its page"}
 MACHINES = [("tos104", "TOS 1.04"), ("tos206", "TOS 2.06"), ("mste16", "Mega STE"), ("falcon", "Falcon"), ("tt", "TT")]
 
@@ -84,10 +87,11 @@ NOTES = {stem for _, _, pages in SECTIONS for stem, _ in pages}
 LIST = re.compile(r"^( *)([-*]|\d+\.) +(.*)$")
 BACKLOG = re.compile(r"\b(?:EPIC|STORY)-\d+\b|\b[DCH]-\d\d\b|(?:ITERATIONS|DECISIONS|STATUS)\.md|docs/epics"
                      r"|\b[Ii]terations?\b|\b[Ee]pics?\b")
+AUTHOR = re.compile(r"\bPP\b|PPera|Putnik", re.I)
 
 
 def code_span(text: str) -> str:
-    """Inline code; a note's file name links to its page, a page of PP's to his site."""
+    """Inline code; a note's file name links to its page, a page of the 8bitchip.info website's to it."""
     c = f"<code>{esc(text)}</code>"
     if text.endswith(".md") and text[:-3] in NOTES:
         return f'<a href="{text[:-3]}.html">{c}</a>'
@@ -256,7 +260,7 @@ def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", le
 <body class="{kind}">
 <a class="skip" href="#main">Skip to the content</a>
 <header class="bar">
-<a class="mark" href="index.html">PP's hard-disk adaptations<span>, from a GEMDOS drive</span></a>
+<a class="mark" href="index.html">Atari ST hard-disk adaptations<span>, from a GEMDOS drive</span></a>
 <nav aria-label="Sections"><ul>{nav}</ul></nav>
 </header>
 <div class="frame">
@@ -266,8 +270,8 @@ def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", le
 </main>
 </div>
 <footer class="credits">
-<p>The adaptations, the list and the documentation they come from are PP's, on his site
-<a href="{PP}">atari.8bitchip.info</a>. This site links to his pages and copies none of his files.
+<p>The adaptations, their list and their documentation come from the 8bitchip.info website. This
+site links to its pages and copies none of its files.
 Every run was made in <a href="https://www.hatari-emu.org/">Hatari</a> 2.6.1. Atari, ST, STE, TT,
 Falcon and TOS are Atari's names.</p>
 </footer>
@@ -343,12 +347,12 @@ def index(games: list[dict]) -> str:
     sol_rows = "".join(f'<tr><td>{k}</td><td>{esc(names[k])}</td><td class="num">{n(solutions[k])}</td></tr>'
                        for k in sorted(names))
     gos = sum(1 for g in games if g["strategy"] in ("Gamex + GOS4", "Gamex + GOS5"))
-    lead = (f"PP has adapted {n(len(games))} Atari ST games to start from a hard disk. This project ran every one of "
-            f"them in the Hatari emulator from its GEMDOS drive: a folder of the computer it runs on, served as "
-            f"drive C: file by file, with no disk sectors behind it.")
+    lead = (f"The 8bitchip.info website lists {n(len(games))} Atari ST games adapted to start from a hard disk. "
+            f"This project ran every one of them in the Hatari emulator from its GEMDOS drive: a folder of the "
+            f"computer it runs on, served as drive C: file by file, with no disk sectors behind it.")
     main = f"""
 <section class="hero" aria-labelledby="hero-title">
-<h1 id="hero-title">Which of PP's {n(len(games))} <span class="nb">hard-disk</span> adaptations run from a GEMDOS drive</h1>
+<h1 id="hero-title">Which of {n(len(games))} Atari ST <span class="nb">hard-disk</span> adaptations run from a GEMDOS drive</h1>
 <p class="lead">{lead}</p>
 <div class="map">
 <div class="bands" role="img" aria-label="{n(count['as it is'])} games run as they are, {n(count['fix'])} need a fix ({n(len(ported))} of them built and running), {n(count['not feasible'])} not feasible, {n(count['unsure'])} unsure, by strategy">
@@ -361,9 +365,9 @@ def index(games: list[dict]) -> str:
 
 <section class="prose">
 <h2 id="why">Why some do not</h2>
-<p>Ten of the twelve ways PP's adaptations reach their files go through GEMDOS by name, and a
+<p>Ten of the twelve ways the adaptations reach their files go through GEMDOS by name, and a
 GEMDOS drive serves those. The other two, Gamex launchers with GOS4 or GOS5, bring their own
-GEMDOS, a copy of TOS 1.04's running from RAM, which reads the disk by sectors through PP's
+GEMDOS, a copy of TOS 1.04's running from RAM, which reads the disk by sectors through a
 hard-disk driver. A GEMDOS drive has neither the driver nor the sectors: those {gos} games, Lemmings
 among them, are most of the fixes. <a href="gemdrive-failure.html">Why Lemmings fails</a> shows it
 step by step; <a href="hd-strategies.html">Verdicts and solutions</a> has every strategy's count.</p>
@@ -380,10 +384,10 @@ games, built</a>). The GOS4 games are next.</p>
 <p><a href="hd-strategies.html#4-the-solutions-proposed">What each one changes, costs and risks</a>.</p>
 
 <h2 id="project">The project</h2>
-<p>It started with one game: PP's 2011 adaptation of Lemmings, whose launcher stops at once
-from a GEMDOS drive. The work has two parts. The first understood and classified: why Lemmings
-fails, the launcher rebuilt from sources that reassemble to PP's bytes, and every adaptation in
-PP's list given a verdict. The second, under way, builds the solutions one group of games at a
+<p>It started with one game: the 2011 hard-disk adaptation of Lemmings, whose launcher stops at
+once from a GEMDOS drive. The work has two parts. The first understood and classified: why
+Lemmings fails, the launcher rebuilt from sources that reassemble to the original bytes, and every
+adaptation in the 8bitchip.info website's list given a verdict. The second, under way, builds the solutions one group of games at a
 time: the GOS5 games first, {n(len(ported))} of them running now, then the GOS4 games, the
 smaller fixes and the games still unsure; then a check with acsi2stm's GemDrive, the other
 GEMDRIVE, and a program that installs the builds on a user's own copies. Each build is tested in
@@ -392,7 +396,7 @@ the same way from an SD card.</p>
 <p>The findings, in the order they were made: <a href="gemdrive-failure.html">why Lemmings fails</a>,
 <a href="launch-chain.html">the launch chain</a>, <a href="disk-layer.html">the disk layer</a>,
 <a href="launcher-formats.html">the file formats</a>, <a href="launcher-signatures.html">the
-launcher's signatures</a>, <a href="pp-modes.html">PP's modes</a>, <a href="strategies.html">the
+launcher's signatures</a>, <a href="modes.html">the modes</a>, <a href="strategies.html">the
 strategies</a> and <a href="hd-strategies.html">the verdicts and solutions</a>.</p>
 </section>
 """
@@ -443,24 +447,25 @@ def catalogue(games: list[dict], records: dict, shots: dict) -> str:
     cats = [c for c in CATEGORIES if any(g["code_category"] == c for g in games)]
     main = f"""
 <h1>The catalogue</h1>
-<p class="lead">Every game of PP's list of hard-disk adaptations
+<p class="lead">Every game of the 8bitchip.info website's list of hard-disk adaptations
 (<a href="{PP}fromhd3.php">fromhd3.php</a>, read on 2026-10-11), with the way its adaptation
 reaches its files and its verdict from Hatari's GEMDOS drive. The name opens the game's page on
-PP's site, where its download is.{" The picture is the last screen of its run, on an ST with TOS 1.04 (STE games: TOS 1.62); for a game built for the GEMDOS drive, of its build's run." if shots else ""}</p>
+the 8bitchip.info website, where its download is; how the original used the floppy and the
+machines it runs on are the ones that page gives.{" The picture is the last screen of its run, on an ST with TOS 1.04 (STE games: TOS 1.62); for a game built for the GEMDOS drive, of its build's run." if shots else ""}</p>
 <form class="filters" role="search" aria-label="Filter the games">
 <label class="search">Name <input type="search" name="q" autocomplete="off" placeholder="Lemmings"></label>
 <fieldset class="verdicts"><legend>Verdict</legend>
 <label><input type="radio" name="v" value="" checked>all <span class="count">{n(len(games))}</span></label>{verdict_radios}
 </fieldset>
 <label>Strategy <select name="s"><option value="">all</option>{options(strategies)}</select></label>
-<label>PP's category <select name="c"><option value="">all</option>{options(cats, CATEGORIES)}</select></label>
+<label>Floppy use <select name="c"><option value="">all</option>{options(cats, CATEGORIES)}</select></label>
 <label>RAM <select name="r"><option value="">all</option>{options(["512K", "1M", "2M"])}</select></label>
 <label>Runs on <select name="m"><option value="">all</option>{options([l for _, l in MACHINES])}</select></label>
 <p class="shown" aria-live="polite"><span id="shown">{n(len(games))}</span> of {n(len(games))} games shown
 <button type="reset">Show all</button></p>
 </form>
 <div class="table catalogue"><table>
-<thead><tr><th><span class="vh">Screenshot</span></th><th>Game</th><th>Strategy</th><th>PP's category</th><th>RAM</th><th>Runs on (PP)</th><th>Verdict</th></tr></thead>
+<thead><tr><th><span class="vh">Screenshot</span></th><th>Game</th><th>Strategy</th><th>Floppy use</th><th>RAM</th><th>Runs on</th><th>Verdict</th></tr></thead>
 <tbody>
 {chr(10).join(rows)}
 </tbody></table></div>
@@ -469,7 +474,7 @@ PP's site, where its download is.{" The picture is the last screen of its run, o
 <button class="close">Close</button></form><img alt=""></dialog>
 """
     return page("catalogue", "The catalogue", main, kind="wide",
-                lead=f"{n(len(games))} adaptations of PP's, each with its strategy and verdict from a GEMDOS drive.")
+                lead=f"{n(len(games))} hard-disk adaptations, each with its strategy and verdict from a GEMDOS drive.")
 
 
 # --- The tools ------------------------------------------------------------------------------------
@@ -557,12 +562,20 @@ def build(out: Path, with_snapshots: bool) -> None:
 class Links(html.parser.HTMLParser):
     def __init__(self):
         super().__init__()
-        self.ids, self.refs, self.text = set(), [], []
+        self.ids, self.refs, self.text, self.prose, self.code = set(), [], [], [], 0
 
     def handle_data(self, data):
         self.text.append(data)
+        if not self.code:
+            self.prose.append(data)
+
+    def handle_endtag(self, tag):
+        if tag in ("code", "pre"):
+            self.code -= 1
 
     def handle_starttag(self, tag, attrs):
+        if tag in ("code", "pre"):
+            self.code += 1
         a = dict(attrs)
         if "id" in a:
             self.ids.add(a["id"])
@@ -582,6 +595,9 @@ def check(out: Path) -> int:
             if re.match(r"https?:", ref):
                 if attr != "href" or tag != "a":
                     bad.append(f"{name}: loads {ref} from another site")
+                elif urllib.parse.urlsplit(ref).netloc.endswith("8bitchip.info") and \
+                        urllib.parse.urlsplit(ref).path in ("", "/"):
+                    bad.append(f"{name}: links to the 8bitchip.info website's home page, not a game or a technical page")
                 continue
             target, _, frag = ref.partition("#")
             target = target or name
@@ -592,6 +608,8 @@ def check(out: Path) -> int:
     for name, p in pages.items():  # the site speaks to its readers, never to the backlog (CLAUDE.md)
         for m in sorted(set(BACKLOG.findall(" ".join(p.text)))):
             bad.append(f"{name}: refers to the backlog: {m}")
+        for m in sorted(set(AUTHOR.findall(" ".join(p.prose)))):  # nor names the adaptations' author
+            bad.append(f"{name}: names the adaptations' author: {m}")
     games = read_csv(REPO / "src" / "survey" / "migration.csv")
     missing = [g["row"] for g in games if f"g-{int(g['row']):04d}" not in pages["catalogue.html"].ids]
     if missing:

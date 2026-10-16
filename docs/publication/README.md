@@ -18,7 +18,7 @@ needs; nothing here has been run against the repository's history, and there is 
 Other things a reader of the public repository will see, also Diego's call, not on the list
 because they are not files to remove:
 
-- The notes quote PP's pages in short passages, each cited by page (`pp-modes.md` §2, his
+- The notes quote PP's pages in short passages, each cited by page (`modes.md` §2, his
   categories, quotes most). His pages are linked, never copied (D-11).
 - `DECISIONS.md` records how the mirror was made (D-11, D-12).
 - The commits carry their author's name and e-mail address.
