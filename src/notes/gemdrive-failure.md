@@ -1,9 +1,13 @@
 # Why Lemmings fails in Hatari's GEMDRIVE mode
 
-EPIC-01, 2026-10-11. Every claim below was observed in a Hatari 2.6.1 run on this Mac
+Found on 2026-10-11. Every claim below was observed in a Hatari 2.6.1 run on this Mac
 (`tools/dev/logs/<run>`), on the pristine files (`LEMMINGS.sha256`), with the launcher's
 inner program at the text bases of `src/probes/epic01/gate_probe.py` (`text+` offsets are its).
-Hypotheses `H-NN` are those of `docs/epics/ITERATIONS.md`.
+A first look at the launcher, in April 2026, had left guesses about the cause; §6 says what
+became of each.
+
+The cause is worked around for the GOS5 games, Lemmings among them, since 2026-10-16
+(`gos5-gemdrive.md`).
 
 ## The cause, in one paragraph
 
@@ -20,13 +24,13 @@ its fallback (a raw sector-0 read through the ACSI DMA registers on TOS 1.x, thr
 `DMAread` on TOS 2.x) fails too, and it prints "This prg. requires PP, AHDI or Hddriver hard disk
 driver …" and exits. Answering each step by hand from the debugger only exposes the next one:
 sector 0, then `Getbpb(2)` (TOS returns 0), then `Rwabs` (TOS returns -15, EUNDEV), then D15R's
-error path, which the fallback never initialised. Diego's guess (H-07) holds in substance: it is
-the driver, with the correction that the launcher does not embed it but requires PP's own,
+error path, which the fallback never initialised. Diego's guess, that the PP driver embedded in
+the launcher is the cause, holds in substance: it is the driver, with the correction that the launcher does not embed it but requires PP's own,
 resident, and that its loader needs a block device behind it.
 
 ## 1. The two setups
 
-Both built by `tools/dev/make_disks.sh` from a copy of `LEMMINGS/` (EPIC-00 STORY-04):
+Both built by `tools/dev/make_disks.sh` from a copy of `LEMMINGS/`:
 
 - **GEMDRIVE**: `hatari --harddrive <folder>`; Hatari logs `GEMDOS HDD emulation, C: <-> …` and
   `Gemdos_Boot(GEMDOS_EMU_ON=1)`. Its GEMDOS drive is served by a cartridge program at
@@ -58,7 +62,7 @@ onto the image's directories and FAT (record numbers are 1,024-byte logical sect
 | 813, 814, 815 × 100 → `$A00`, 915 | `MAIN` (105,220 bytes) |
 | 415 × 80 → `$10000`, 495, 496 | `INTROPAR` (83,362 bytes) |
 | 497, 498, 499 × 76 → `$A00`, 575 | `CODE` (80,639 bytes), over `MAIN` |
-| 677 × 2, 679, 680 | `LEVELDAT`, at the title, before any click (first written here as after the click; corrected in EPIC-02 STORY-01) |
+| 677 × 2, 679, 680 | `LEVELDAT`, at the title, before any click (first written here as after the click; corrected once the launcher was read from its sources, `launch-chain.md`) |
 | 407 × 2 → `$41800`, 409 | `LEVEL020`, the first level's data |
 
 Partial first and last sectors go through the driver's bounce buffers at `$B3100`/`$B5100`; the
@@ -84,10 +88,10 @@ taken from `($36,a3)` at `$26CBC`; TOS's handler (vector 3, PC `$3FC0B0A`) ends 
 27 times and the CPU in LS2DD's fault catcher at `$700C8`. The 3,048 bytes at `$41800` equal
 `FILES/LEVEL020` byte for byte (run `…-click-exc3`), so the loader is not the cause. The same
 happens with X = 72, with 4 MB, and on STE TOS 2.06 (no `Pterm` there, same end). A click that
-misses the button (70,125) crashes nothing. Not pursued further in this epic: it is the game's
-preview code, or its interaction with Hatari, and it is listed as a candidate in `ITERATIONS.md`.
+misses the button (70,125) crashes nothing. Not pursued further here: it is the game's preview
+code, or its interaction with Hatari.
 
-## 3. Where the GEMDRIVE runs part from the reference (STORY-02)
+## 3. Where the GEMDRIVE runs part from the reference
 
 All three GEMDRIVE runs stop at the same instruction. After `Dgetpath` the launcher executes, at
 text+`$324`:
@@ -110,7 +114,7 @@ Observed at the `cmpi` and the `bne` (`src/probes/epic01/gate_probe.py`, runs `�
 | STE 2.06 PPDRIVER | `$14DC4` | `"PPHD"` | `$15450` | – | primary |
 
 The first difference is the value of `hdv_bpb`: TOS's own ROM routine with a GEMDOS drive,
-PPDRIVER's with the image. (The first pass called `$472` `_hdv_init`; it is `hdv_bpb`.)
+PPDRIVER's with the image. (The first look called `$472` `_hdv_init`; it is `hdv_bpb`.)
 
 ### The fallback, TOS 1.x (text+`$482` → `$BC6`)
 
@@ -130,7 +134,8 @@ for a key (`Cconin`) and ends. Traced instruction by instruction in run
 hard-disk driver installs; with none, `pun_ptr` is 0 and `d7` comes from address 4. Then XBIOS
 `DMAread(0, 1, text+$8864, d7)`, TOS's own raw ACSI read, returns -1 and the same error exit
 follows (run `20261011-141116-ste-206-gemdrive-gate`). So TOS 2.06 does not "work through
-whatever driver is installed" (H-06): it needs a `PUN_INFO` and an ACSI device all the same.
+whatever driver is installed", as the first look guessed: it needs a `PUN_INFO` and an ACSI device
+all the same.
 
 ### What the primary path does with the driver (run `…-st-104-ppdriver-gate`, `…-drv`)
 
@@ -147,15 +152,16 @@ data and its variables. Then it:
   to `$C1F3E` (D15R), clears `pun_ptr`;
 - by the first `Rwabs`, `TRAP #1` (`$84`) points to `$C84A0` in D15R: a handler that returns 0
   for GEMDOS functions 1 to 11, treats `Super` (`$20`) apart, and saves the context of the rest
-  (`src/…/d15r_area.lst`); LEMLD2's own Malloc/Mshrink stub (H-05) is not the vector at that
-  point. H-05 stays with EPIC-02.
+  (`src/…/d15r_area.lst`); LEMLD2's own `Malloc`/`Mshrink` stub is not the vector at that
+  point (it serves only while the launcher boots a driver from a disk's boot sector:
+  `launch-chain.md`).
 
 The resident driver is what PPDRIVER's boot sector installed (LBA 2–14 at boot). Its 5,076
 comparable bytes differ from the blob's `.PRG` text in 4,948 places, in 115 runs: the blob's
 program is not a plain copy of the resident code (packed or self-relocating), so "is it the same
 driver" is settled by provenance, not by bytes.
 
-## 4. The embedded driver (STORY-03): H-07
+## 4. The embedded driver
 
 Restated and confirmed: the launcher carries no driver of its own. It **requires** PP's resident
 driver (the XBRA `PPHD` check), reuses it (copied, relocated, patched at fixed offsets, so a
@@ -183,7 +189,7 @@ PPDRIVER's BPB for the image, as handed to the launcher's `Getbpb(2)` on the ref
 (`…-ppdriver-bpb`, at `$B7620`): recsiz 1024, clsiz 2, clsizb 2048, rdlen 16, fsiz 32, fatrec 33,
 datrec 81, numcl 16343, bflags 1.
 
-## 5. Everything GEMDRIVE lacks (STORY-04)
+## 5. Everything GEMDRIVE lacks
 
 In the order the launcher needs them:
 
@@ -206,22 +212,22 @@ In the order the launcher needs them:
    the level at `$41800`.
 7. **`TRAP #1`** goes to D15R's hook from the first `Rwabs` on; in GEMDRIVE mode Hatari's own
    cartridge hook on `TRAP #1` is what serves the GEMDOS drive. Any fix that wants GEMDOS file
-   calls from inside the game has to live with both (to be checked by the solution, iteration 2).
+   calls from inside the game has to live with both (the GOS5 builds do: `gos5-gemdrive.md`).
 
-Case of file names (H-04) plays no part: no file name is looked up on the disk after
+Case of file names plays no part: no file name is looked up on the disk after
 `Dsetpath("FILES")`; D15R walks directories itself, and Hatari matches GEMDOS-drive names
-without regard to case anyway (EPIC-00 STORY-04).
+without regard to case anyway.
 
-## 6. Hypotheses
+## 6. The first look's guesses
 
-| | verdict | where |
+| the guess | what became of it | where |
 | --- | --- | --- |
-| H-03 | confirmed, with corrections: `$472` is `hdv_bpb`; on TOS 2.x the device comes from `pun_ptr`; after a good sector 0 the launcher continues into D15R | §3, §4 |
-| H-04 | refuted: the pristine launcher never reaches LS2DD's load loop on a GEMDOS drive; pushed past the gate by hand it stops on TOS's -15 from `Rwabs`, not on a name; names are matched case-insensitively | §4, §5 |
-| H-05 | left to EPIC-02; observed: the vector at the first `Rwabs` is D15R's `$C84A0`, which does more than Malloc/Mshrink | §3 |
-| H-06 | refuted: TOS 2.06 takes the XBIOS path, which is a raw ACSI read on the `PUN_INFO` device; no driver, no `PUN_INFO`, -1 | §3 |
-| H-07 | confirmed in substance, restated: not embedded but required and resident; the loader needs a block device | §4 |
-| H-01, H-02 | EPIC-02's; consistent with what was seen (LS2DD unpacked to `$70000` from `$81000`, D15R at `$C0100`) | §3 |
+| The loader looks for a resident PP driver (`PPHD` before the routine at `$472`); without one it reads sector 0 itself: raw ACSI on TOS 1.x, XBIOS `DMAread` on TOS 2.x, then the Falcon's IDE | confirmed, with corrections: `$472` is `hdv_bpb`; on TOS 2.x the device comes from `pun_ptr`; after a good sector 0 the launcher continues into D15R | §3, §4 |
+| With the `PPHD` check patched out, the run stalls in LS2DD's load loop on lower-case file names | refuted: the pristine launcher never reaches LS2DD's load loop on a GEMDOS drive; pushed past the gate by hand it stops on TOS's -15 from `Rwabs`, not on a name; names are matched case-insensitively | §4, §5 |
+| The loader hooks `TRAP #1` only for `Malloc` and `Mshrink` | not at the first `Rwabs`: the vector is then D15R's `$C84A0`, which does more than Malloc/Mshrink (the stub itself: `launch-chain.md`) | §3 |
+| On TOS 2.06 the loader takes the XBIOS path and works through whatever driver is installed | refuted: TOS 2.06 takes the XBIOS path, which is a raw ACSI read on the `PUN_INFO` device; no driver, no `PUN_INFO`, -1 | §3 |
+| The game fails because of the PP driver embedded in the launcher (Diego's) | confirmed in substance, restated: not embedded but required and resident; the loader needs a block device | §4 |
+| `START.TOS` only unpacks the rest, and the `.FIC` files are packed code, not catalogues | consistent with what was seen (LS2DD unpacked to `$70000` from `$81000`, D15R at `$C0100`); the formats in full: `launcher-formats.md` | §3 |
 
 ## 7. Tools left behind
 

@@ -4,7 +4,7 @@
 Usage: build_site.py [--out DIR] [--no-snapshots] [--check]
 
 Builds a static site into tools/dev/builds/site/ (git-ignored), or DIR: the project and where it
-stands (docs/epics/), the notes (src/notes/*.md) as pages, the catalogue of PP's list with every
+stands, the notes (src/notes/*.md) as pages, the catalogue of PP's list with every
 game's strategy, verdict, reason and solution (src/survey/migration.csv, catalogue.csv) and the
 tools (tools/dev/README.md and the survey scripts' docstrings). The style and the catalogue's
 filters are tools/site/site.css and site.js, copied beside the pages. Nothing is fetched: the site
@@ -13,7 +13,11 @@ works from its folder and from GitHub Pages alike.
 PP's pages are linked, never copied (D-11): a note's `agcat.html` links to it on his site, and
 every game links to its page there. The snapshots, this project's own Hatari screenshots of each
 game's run (tools/dev/builds/survey/snapshots/, STORY-05), are copied when they are there, unless
---no-snapshots; whether they are published is Diego's call (D-15).
+--no-snapshots; whether they are published is Diego's call (D-15). A built game's snapshot is the
+last screen of its build's run (src/survey/ports.tsv), kept beside the others as port-<row>.png.
+
+The site speaks to its readers, never to the backlog (D-20): --check fails on a page that refers to
+docs/epics/ or what is in it (an epic, a story, a decision, ITERATIONS.md).
 
 --check, after the build: every internal link and anchor resolves, every game of migration.csv
 has its row, and no page loads anything from another site. Standard library only.
@@ -36,6 +40,7 @@ REPO = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 OUT = REPO / "tools" / "dev" / "builds" / "site"
 SNAPSHOTS = REPO / "tools" / "dev" / "builds" / "survey" / "snapshots"
+LOGS = REPO / "tools" / "dev" / "logs"
 PP = "https://atari.8bitchip.info/"
 SITE = "PP's hard-disk adaptations, from a GEMDOS drive"
 
@@ -47,7 +52,8 @@ SECTIONS = [
                               ("launcher-signatures", "The launcher's signatures")]),
     ("modes", "PP's modes", [("pp-modes", "PP's modes")]),
     ("strategies", "Strategies and solutions", [("hd-strategies", "Verdicts and solutions"),
-                                                ("strategies", "The strategies, from the files")]),
+                                                ("strategies", "The strategies, from the files"),
+                                                ("gos5-gemdrive", "The GOS5 games, built")]),
     ("catalogue", "Catalogue", []),
     ("tools", "Tools", []),
 ]
@@ -76,6 +82,8 @@ def slug(s: str) -> str:
 
 NOTES = {stem for _, _, pages in SECTIONS for stem, _ in pages}
 LIST = re.compile(r"^( *)([-*]|\d+\.) +(.*)$")
+BACKLOG = re.compile(r"\b(?:EPIC|STORY)-\d+\b|\b[DCH]-\d\d\b|(?:ITERATIONS|DECISIONS|STATUS)\.md|docs/epics"
+                     r"|\b[Ii]terations?\b|\b[Ee]pics?\b")
 
 
 def code_span(text: str) -> str:
@@ -301,18 +309,9 @@ def n(x: int) -> str:
 
 # --- The project ----------------------------------------------------------------------------------
 
-def epics() -> list[dict]:
-    """Every epic's title, status and tasks done, from docs/epics/ (as cockpit.sh counts them)."""
-    out = []
-    for d in sorted((REPO / "docs" / "epics").glob("EPIC-*")):
-        meta = dict(re.findall(r"^(\w+): *(.*)$", (d / "epic.md").read_text().split("---")[1], re.M))
-        done = total = 0
-        for s in d.glob("STORY-*.md"):
-            t = s.read_text()
-            done += len(re.findall(r"^\s*- \[[xX]\]", t, re.M))
-            total += len(re.findall(r"^\s*- \[[ xX]\]", t, re.M))
-        out.append(dict(meta, id=d.name[:7], done=done, total=total))
-    return out
+def built() -> set[str]:
+    """The rows of the games a port built and that run with their build (src/survey/ports.tsv)."""
+    return {r["row"] for r in read_csv(REPO / "src" / "survey" / "ports.tsv", "\t") if r["result"] == "runs"}
 
 
 def strategy_order(games: list[dict]) -> list[str]:
@@ -322,27 +321,28 @@ def strategy_order(games: list[dict]) -> list[str]:
 def index(games: list[dict]) -> str:
     count = collections.Counter(g["verdict"] for g in games)
     rank = {v: k for k, (v, _, _) in enumerate(VERDICTS)}
-    bands = []
+    bands, ported = [], built()
     for b, s in enumerate(strategy_order(games)):
         members = sorted((g for g in games if g["strategy"] == s), key=lambda g: (rank[g["verdict"]], int(g["row"])))
         squares = "".join(
-            f'<a class="{dict((v, c) for v, c, _ in VERDICTS)[g["verdict"]]}" href="catalogue.html#g-{int(g["row"]):04d}" '
-            f'tabindex="-1" title="{esc(g["name"])}: {g["verdict"]}"></a>' for g in members)
+            f'<a class="{dict((v, c) for v, c, _ in VERDICTS)[g["verdict"]]}{" built" if g["row"] in ported else ""}" '
+            f'href="catalogue.html#g-{int(g["row"]):04d}" tabindex="-1" '
+            f'title="{esc(g["name"])}: {g["verdict"]}{", built: runs" if g["row"] in ported else ""}"></a>' for g in members)
         bands.append(f'<div class="band" style="--b:{b}"><a class="label" href="catalogue.html#s={urllib.parse.quote(s, safe="")}">'
                      f'<span>{esc(s)}</span> <span class="count">{n(len(members))}</span></a>'
                      f'<div class="squares">{squares}</div></div>')
-    legend = "".join(f'<li><i class="{c}"></i><span class="count">{n(count[v])}</span><span><a href="catalogue.html#v='
-                     f'{urllib.parse.quote(v, safe="")}">{v}</a>: {what}</span></li>' for v, c, what in VERDICTS)
+    items = [f'<li><i class="{c}"></i><span class="count">{n(count[v])}</span><span><a href="catalogue.html#v='
+             f'{urllib.parse.quote(v, safe="")}">{v}</a>: {what}</span></li>' for v, c, what in VERDICTS]
+    items.insert(2, f'<li><i class="fix built"></i><span class="count">{n(len(ported))}</span><span>of them '
+                    f'<a href="gos5-gemdrive.html">built</a>, and running from the GEMDOS drive</span></li>')
+    legend = "".join(items)
     solutions = collections.Counter(g["solution"].split(":")[0] for g in games if g["verdict"] == "fix")
-    names = {s["solution"].split(":")[0]: s["solution"].split(": ", 1)[1]
-             for s in read_csv(REPO / "src" / "survey" / "solutions.tsv", "\t")}
+    names = {}
+    for s in read_csv(REPO / "src" / "survey" / "solutions.tsv", "\t"):
+        names.setdefault(s["solution"].split(":")[0], s["solution"].split(": ", 1)[1].split(" (")[0])
     sol_rows = "".join(f'<tr><td>{k}</td><td>{esc(names[k])}</td><td class="num">{n(solutions[k])}</td></tr>'
                        for k in sorted(names))
     gos = sum(1 for g in games if g["strategy"] in ("Gamex + GOS4", "Gamex + GOS5"))
-    eps = epics()
-    ep_rows = "".join(
-        f'<li><span class="ep">{e["id"]}</span> {esc(e["title"])}<span class="state"> '
-        f'{"done" if e["status"] == "done" else f"""{e["done"]} of {e["total"]} tasks done"""}</span></li>' for e in eps)
     lead = (f"PP has adapted {n(len(games))} Atari ST games to start from a hard disk. This project ran every one of "
             f"them in the Hatari emulator from its GEMDOS drive: a folder of the computer it runs on, served as "
             f"drive C: file by file, with no disk sectors behind it.")
@@ -351,7 +351,7 @@ def index(games: list[dict]) -> str:
 <h1 id="hero-title">Which of PP's {n(len(games))} <span class="nb">hard-disk</span> adaptations run from a GEMDOS drive</h1>
 <p class="lead">{lead}</p>
 <div class="map">
-<div class="bands" role="img" aria-label="{n(count['as it is'])} games run as they are, {n(count['fix'])} need a fix, {n(count['not feasible'])} not feasible, {n(count['unsure'])} unsure, by strategy">
+<div class="bands" role="img" aria-label="{n(count['as it is'])} games run as they are, {n(count['fix'])} need a fix ({n(len(ported))} of them built and running), {n(count['not feasible'])} not feasible, {n(count['unsure'])} unsure, by strategy">
 {''.join(bands)}
 </div>
 <ul class="legend">{legend}</ul>
@@ -368,10 +368,12 @@ hard-disk driver. A GEMDOS drive has neither the driver nor the sectors: those {
 among them, are most of the fixes. <a href="gemdrive-failure.html">Why Lemmings fails</a> shows it
 step by step; <a href="hd-strategies.html">Verdicts and solutions</a> has every strategy's count.</p>
 
-<h2 id="solutions">The solutions proposed</h2>
-<p>Four solutions would make the {n(count['fix'])} games to fix run, each on the Atari side, with
-the emulator unchanged. S2, S3 and S4 were shown in trial runs; S1 is a proposal, the first of the
-next iteration's work.</p>
+<h2 id="solutions">The solutions</h2>
+<p>Four solutions make the {n(count['fix'])} games to fix run, each on the Atari side, with the
+emulator unchanged. S2, S3 and S4 were shown in trial runs. S1 is built for the 87 GOS5 games:
+{n(len(ported))} run from the GEMDOS drive with their start program built for it, in Hatari and
+on an STE with the SidecarTridge Multidevice's GEMDRIVE (<a href="gos5-gemdrive.html">the GOS5
+games, built</a>). The GOS4 games are next.</p>
 <div class="table"><table>
 <thead><tr><th></th><th>solution</th><th class="num">games</th></tr></thead>
 <tbody>{sol_rows}</tbody></table></div>
@@ -379,12 +381,14 @@ next iteration's work.</p>
 
 <h2 id="project">The project</h2>
 <p>It started with one game: PP's 2011 adaptation of Lemmings, whose launcher stops at once
-from a GEMDOS drive. The work runs in two iterations. The first, now ending, understands and
-classifies: why Lemmings fails, the launcher rebuilt from sources that reassemble to PP's bytes,
-and every adaptation in PP's list given a verdict. The second builds the solutions, one at a
-time, in the order chosen at the first one's end. The target is Hatari's GEMDOS drive first, then
-the SidecarTridge's GEMDRIVE, which serves an ST's drive the same way from an SD card.</p>
-<ol class="epics">{ep_rows}</ol>
+from a GEMDOS drive. The work has two parts. The first understood and classified: why Lemmings
+fails, the launcher rebuilt from sources that reassemble to PP's bytes, and every adaptation in
+PP's list given a verdict. The second, under way, builds the solutions one group of games at a
+time: the GOS5 games first, {n(len(ported))} of them running now, then the GOS4 games, the
+smaller fixes and the games still unsure; then a check with acsi2stm's GemDrive, the other
+GEMDRIVE, and a program that installs the builds on a user's own copies. Each build is tested in
+Hatari's GEMDOS drive and on the SidecarTridge Multidevice's GEMDRIVE, which serves an ST's drive
+the same way from an SD card.</p>
 <p>The findings, in the order they were made: <a href="gemdrive-failure.html">why Lemmings fails</a>,
 <a href="launch-chain.html">the launch chain</a>, <a href="disk-layer.html">the disk layer</a>,
 <a href="launcher-formats.html">the file formats</a>, <a href="launcher-signatures.html">the
@@ -403,7 +407,7 @@ def ram_of(g: dict) -> str:
 
 
 def catalogue(games: list[dict], records: dict, shots: dict) -> str:
-    strategies = strategy_order(games)
+    strategies, ported = strategy_order(games), built()
     count = collections.Counter(g["verdict"] for g in games)
     rows = []
     for g in games:
@@ -427,7 +431,8 @@ def catalogue(games: list[dict], records: dict, shots: dict) -> str:
             f'<br><small>{esc(g["code_category"] and "cat. " + g["code_category"])}</small></td>'
             f'<td>{esc(g["min_ram"])}</td>'
             f'<td><small>{", ".join(machines)}</small></td>'
-            f'<td class="verdict"><i class="{cls}"></i>{esc(g["verdict"])}<br><small>{BY.get(g["by"], "")}</small></td></tr>')
+            f'<td class="verdict"><i class="{cls}{" built" if g["row"] in ported else ""}"></i>{esc(g["verdict"])}<br>'
+            f'<small>{"built: runs" if g["row"] in ported else BY.get(g["by"], "")}</small></td></tr>')
 
     def options(values, labels=None):
         return "".join(f'<option value="{esc(v)}">{esc((labels or {}).get(v, v))}</option>' for v in values)
@@ -441,7 +446,7 @@ def catalogue(games: list[dict], records: dict, shots: dict) -> str:
 <p class="lead">Every game of PP's list of hard-disk adaptations
 (<a href="{PP}fromhd3.php">fromhd3.php</a>, read on 2026-10-11), with the way its adaptation
 reaches its files and its verdict from Hatari's GEMDOS drive. The name opens the game's page on
-PP's site, where its download is.{" The picture is the last screen of its run, on an ST with TOS 1.04 (STE games: TOS 1.62)." if shots else ""}</p>
+PP's site, where its download is.{" The picture is the last screen of its run, on an ST with TOS 1.04 (STE games: TOS 1.62); for a game built for the GEMDOS drive, of its build's run." if shots else ""}</p>
 <form class="filters" role="search" aria-label="Filter the games">
 <label class="search">Name <input type="search" name="q" autocomplete="off" placeholder="Lemmings"></label>
 <fieldset class="verdicts"><legend>Verdict</legend>
@@ -477,14 +482,16 @@ def tools_page() -> str:
         if not m:
             continue
         text = m.group(1).strip().split("\n\n")
-        first = re.sub(r"^EPIC-\d+ STORY-\d+: ", "", text[0].replace("\n", " "))
+        first = re.sub(r"\s*\([^()]*\b(?:EPIC-\d+|STORY-\d+|[DCH]-\d\d)\b[^()]*\)", "",
+                       re.sub(r"^(?:EPIC-\d+(?: STORY-\d+)?(?:, STORY-\d+)*|tools/\S+): ", "", text[0].replace("\n", " ")))
         usage = next((t.replace("Usage:", "").strip() for t in text if t.startswith("Usage:")), "")
         rows.append(f'<tr><td><code>{esc(str(f.relative_to(REPO)))}</code></td><td>{inline(first)}'
                     + (f'<br><code>{esc(usage.split(chr(10))[0])}</code>' if usage else "") + "</td></tr>")
     doc.toc.append((2, "the-survey-and-the-site", "The survey and the site"))
     main = (f"<h1>The tools</h1>\n{doc.body}\n"
             f'<h2 id="the-survey-and-the-site">The survey and the site</h2>\n'
-            f"<p>EPIC-03's scripts, in <code>tools/survey/</code>, and the unpackers. Each one's first lines say "
+            f"<p>The survey's scripts, in <code>tools/survey/</code>, and the packers and builders of "
+            f"<code>tools/</code>. Each one's first lines say "
             f"what it reads and writes.</p>\n"
             f'<div class="table"><table><thead><tr><th>script</th><th>what it does</th></tr></thead>'
             f'<tbody>{"".join(rows)}</tbody></table></div>')
@@ -510,6 +517,16 @@ def snapshot_names(games: list[dict]) -> dict:
         name = r.get("snapshot") if r.get("disk") == "gemdrive" else gemdrive.get(g["row"])
         if name and (SNAPSHOTS / name).is_file():
             out[g["row"]] = name
+    # a built game: the last screen of its build's run (src/survey/ports.tsv), kept in SNAPSHOTS once its
+    # run folder is gone
+    for r in read_csv(REPO / "src" / "survey" / "ports.tsv", "\t"):
+        if not r["shot"]:
+            continue
+        src, kept = LOGS / r["run"] / "shots" / r["shot"], SNAPSHOTS / f"port-{r['row']}.png"
+        if src.is_file() and (not kept.is_file() or kept.read_bytes() != src.read_bytes()):
+            shutil.copyfile(src, kept)
+        if kept.is_file():
+            out[r["row"]] = kept.name
     return out
 
 
@@ -540,7 +557,10 @@ def build(out: Path, with_snapshots: bool) -> None:
 class Links(html.parser.HTMLParser):
     def __init__(self):
         super().__init__()
-        self.ids, self.refs = set(), []
+        self.ids, self.refs, self.text = set(), [], []
+
+    def handle_data(self, data):
+        self.text.append(data)
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -569,6 +589,9 @@ def check(out: Path) -> int:
                 bad.append(f"{name}: {ref}: no file {target}")
             elif frag and "=" not in frag and target.endswith(".html") and frag not in pages[target].ids:
                 bad.append(f"{name}: {ref}: no anchor #{frag} in {target}")
+    for name, p in pages.items():  # the site speaks to its readers, never to the backlog (CLAUDE.md)
+        for m in sorted(set(BACKLOG.findall(" ".join(p.text)))):
+            bad.append(f"{name}: refers to the backlog: {m}")
     games = read_csv(REPO / "src" / "survey" / "migration.csv")
     missing = [g["row"] for g in games if f"g-{int(g['row']):04d}" not in pages["catalogue.html"].ids]
     if missing:

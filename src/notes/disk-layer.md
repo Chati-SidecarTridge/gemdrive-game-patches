@@ -1,10 +1,10 @@
 # The disk layer: D15R and the driver it uses
 
-EPIC-02 STORY-05, 2026-10-11. What sits between the game and the disk on the PPDRIVER reference,
+Read on 2026-10-11. What sits between the game and the disk on the PPDRIVER reference,
 from the sources (`src/d15r/d15r_h5.s`, `src/lemld2/lemld2.s`) and runs on ST TOS 1.04. Names
 are the sources' labels; `launch-chain.md` tells how the launcher sets it all up.
 
-## 1. D15R is TOS 1.04 in RAM (H-08)
+## 1. D15R is TOS 1.04 in RAM
 
 `src/probes/epic02/d15r_vs_tos.py` aligns D15R_H5 with the TOS 1.04 UK ROM (`TOS_ST_104`) and
 classifies its 91,460 bytes:
@@ -44,9 +44,9 @@ hard-copy routine, which D15R does not include, turned into a branch to an odd a
 device tables (`xconstat`…, `$51E`-`$59D`) are empty: TOS fills them at start-up and D15R's
 `tos_start` never runs, which is why `trap1` answers the console functions with 0.
 
-**H-08: confirmed, and wider than stated.** D15R is PP's GOS: not only TOS 1.04's GEMDOS but its
-BIOS, XBIOS, floppy driver, start-up code and data, relocated to `$C0100`, with an image of its
-RAM, behind PP's entry points. The Falcon build (`D15R_F5`) is the same with `trap1` (and
+**It is PP's GOS, as his `GAMEXdoc.html` describes it, and more than that page says.** Not only
+TOS 1.04's GEMDOS but its BIOS, XBIOS, floppy driver, start-up code and data, relocated to
+`$C0100`, with an image of its RAM, behind PP's entry points. The Falcon build (`D15R_F5`) is the same with `trap1` (and
 LEMLD2's `trap1_stub`) reading the function number past the 68030's format word.
 
 ## 2. D15R's entry points and the data it shares
@@ -74,8 +74,8 @@ driver copy's entries, which LEMLD2 wrote there.
 
 ## 3. What the launcher asks of PP's resident driver
 
-From `reuse_pp_driver` and `set_buffers` (`src/lemld2/lemld2.s`), checked against EPIC-01's
-dumps of the resident and copied driver (`gemdrive-failure.md` §3):
+From `reuse_pp_driver` and `set_buffers` (`src/lemld2/lemld2.s`), checked against the
+dumps of the resident and copied driver in `gemdrive-failure.md` §3:
 
 1. **The XBRA id `PPHD`** in the 4 bytes 8 before the routine `hdv_bpb` points to (the XBRA
    header `"XBRA" "PPHD" <old vector>` starts 12 bytes before it).
@@ -90,12 +90,12 @@ dumps of the resident and copied driver (`gemdrive-failure.md` §3):
 5. **GEMDOS buffer headers at the same distance from `hdv_mediach` as `_bufl`'s**: LEMLD2 makes
    two buffer lists there, with four 8 KB buffers from `$AF100` (`_bufl` in the image).
 6. **`pun_ptr` and the cookie jar pointer** are saved into the image as found (`pun_ptr` is
-   cleared afterwards on the reference, EPIC-01).
+   cleared afterwards on the reference, `gemdrive-failure.md` §3).
 
 And from the game, through D15R (§4): `hdv_rw` for every read (logical 1,024-byte records on
 drive C, per the BPB it gave), `hdv_mediach` before each access (answering 0); `hdv_bpb` not
-after the hand-over (EPIC-01 saw D15R's `Getbpb(2)` before it, on the reference). A replacement driver would have to provide exactly that, laid out the
-same way; or D15R's GEMDOS could be bypassed altogether (the solution for this strategy, iteration 2).
+after the hand-over (on the reference, D15R's `Getbpb(2)` comes before it: `gemdrive-failure.md` §4). A replacement driver would have to provide exactly that, laid out the
+same way; or D15R's GEMDOS could be bypassed altogether (what the GOS5 builds do: `gos5-gemdrive.md`).
 
 ## 4. Every call the game makes, from the hand-over to the level load
 
@@ -119,10 +119,11 @@ copy's `hdv_rw`, 139 to its `hdv_mediach`, none to its `hdv_bpb`. Names arrive i
 The game asks for files **by name** and the request reaches GEMDOS as `Fopen`/`Fread` by name.
 The sectors only come in because that GEMDOS is D15R's own, behind `trap1` in TOS's image, and it
 reads the volume through the driver copy. Hatari's GEMDOS drive answers `Fopen`/`Fread` by name
-too, at the ROM's `TRAP #1` (`$FA002A`, which the game's own vectors still hold, STORY-01). Where
-the fix goes in (a driver that serves records, a `file_io` that calls the system's GEMDOS, or
-something else) is chosen with the solutions at EPIC-03's checkpoint (D-14); this is what it
-starts from.
+too, at the ROM's `TRAP #1` (`$FA002A`, which the game's own vectors still hold,
+`launch-chain.md`). Where the fix goes in (a driver that serves records, a `file_io` that calls
+the system's GEMDOS, or something else) was weighed with the other solutions in
+`hd-strategies.md` §4; the GOS5 builds send GOS's file calls to the system's GEMDOS
+(`gos5-gemdrive.md`). This is what they started from.
 
 ## Tools
 

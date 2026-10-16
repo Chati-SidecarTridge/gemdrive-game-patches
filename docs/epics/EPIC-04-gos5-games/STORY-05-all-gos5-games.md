@@ -219,3 +219,32 @@ EPIC-04)", with a disk in drive A for five, Awesome's cartridge check, Forgotten
 `verdicts.py`: the counts unchanged (1,608 as it is, 212 fix, 10 unsure, 1 not feasible), 87 rows'
 reason and solution new; `build_site.py --check` 0 problems. Muzzy, Magic Boy and Prison wait for
 their traces.
+
+**Muzzy, Magic Boy and Prison: machine-dependent, PP's path alike** (`tools/dev/builds/gos5/diag/THREE-1418/`,
+runs `tools/dev/logs/20261016-14*-diag3-*`). Our build, no key, at about 50 s:
+
+| Game | ST 1 MB | ST 2 MB | ST 4 MB | STE 1 MB | STE 2 MB | STE 4 MB | PP's path, STE 4 MB |
+|---|---|---|---|---|---|---|---|
+| Magic Boy | crash | title | title | crash | title | play | title |
+| Muzzy | halt | halt | halt | title | title | title | title |
+| Prison | crash loop | title, crash loop | crash loop | game screen | game screen | game screen | game screen |
+
+Every ST 1 MB failure is the same, step for step, on PP's path (Hatari's exception trace,
+`…-diag3-*-exc`).
+- Magic Boy: PP's launcher reads the RAM size at text `+$5C` (512 KB units); from 2 MB it loads
+  `MAGICC.FIC` at `$1C0000` and patches its unpacker's source (`lea` at text `+$628`); below, it loads
+  at `$42000` and leaves the operand at `$42020`: the unpacker reads `$20` bytes too far, writes
+  wrong bytes at `$400` (`jmp $557A` on the 2 MB path), `jmp $400.w` runs them: a bus error at `$402`,
+  then address errors in TOS's bomb code at `$FC9304`. Fixed by one long of the launcher (text
+  `+$628`: `00042020` to `00042000`, `…/THREE-1418/magicb_fix.py`): its title on ST 1 MB, STE 1 MB,
+  ST 2 MB, its demo on ST 1 MB (`…-143858-…-MAGICB1M-fix-*`). Not in `build_gos5.py`: a per-game fix.
+- Muzzy: after its first four loads it reads another part of `MUZIMG` on the ST (141,312 bytes from
+  538,624) than on the STE (134,656 from 403,968); the ST part's unpacker (`$8774`-`$88C8`) writes
+  backwards over its own code, the CPU runs filler to an address error at `$136DA` and halts. What
+  picks the branch (the machine or TOS 1.04 against 1.62) is not found.
+- Prison: after the second `PR1` load, the routine at `$12B66`-`$12B8A` returns to 0 (the first load,
+  153,600 bytes from `$2000`, over its supervisor stack), then an illegal instruction at `$30`; TOS
+  1.62's handler does one `Pterm(-1)` and the game goes on to its game screen, TOS 1.04's loops.
+So all three run in Hatari on an STE with TOS 1.62 and 4 MB, Diego's machine. Their findings say
+so; they stay in `STILLNOT` (ports.tsv: fails, on the test machine, ST TOS 1.04 1 MB) until the
+STE shows it.

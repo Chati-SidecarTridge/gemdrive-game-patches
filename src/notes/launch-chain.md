@@ -1,11 +1,9 @@
 # Lemmings' launcher, from START.TOS to the game
 
-EPIC-02 STORY-01 and STORY-04, 2026-10-11. What every stage does, read from the sources in `src/`
-(each reassembles to the original bytes) and checked against runs on the PPDRIVER reference
+Read on 2026-10-11. What every stage does, read from the sources in `src/` (each reassembles to
+the original bytes) and checked against runs on the PPDRIVER reference
 (`src/probes/epic02/chain_probe.py`, `profile_probe.py`). `text+` offsets are LEMLD2's; names
-are the sources' labels. The stage table, with load addresses, entries and dump hashes, is in
-`docs/epics/EPIC-02-recompilable-launcher/STORY-01-chain-map.md`; the file formats are in
-`launcher-formats.md`.
+are the sources' labels. The file formats are in `launcher-formats.md`.
 
 ## The stages and their sources
 
@@ -41,7 +39,7 @@ reassembles all five and checks them with a `nop` inserted (`tools/dev/shiftchec
    how Gamex returns to the Desktop later.
 6. **`load_ls2dd`**: `LS2DD.FIC` to `$81000`, a fixed 4,929 bytes. **`set_paths`**:
    `Dsetpath("FILES")`, the drive and the path stored in D15R (`$C0734`, `$C0760`).
-7. **`check_pp_driver`**: `hdv_bpb` must be preceded by the XBRA id `PPHD` (EPIC-01).
+7. **`check_pp_driver`**: `hdv_bpb` must be preceded by the XBRA id `PPHD` (`gemdrive-failure.md` §3).
    - **`reuse_pp_driver`** (PP's driver is resident): copy it from its XBRA header, 7,204 bytes,
      to `$B7180`; in the copy, find the three old vectors it chains to (TOS's `hdv_bpb`,
      `hdv_rw`, `hdv_mediach`) and put D15R's copies of TOS's floppy routines in their place
@@ -55,7 +53,8 @@ reassembles all five and checks them with a `nop` inserted (`tools/dev/shiftchec
      at `trap1_stub`, which gives the booting driver a fixed area (`Malloc` answers `$AF100`,
      `$186000` on a Falcon or TT; `Mshrink` of it is accepted) and passes every other call on
      (`trap1_old`, written here); run the boot sector; after 29 VBLs keep the vectors it set in
-     D15R's image. On EPIC-01's GEMDOS-drive runs this path finds no disk and ends in `error_exit`.
+     D15R's image. On the GEMDOS-drive runs of `gemdrive-failure.md` this path finds no disk and
+     ends in `error_exit`.
 8. **`start_d15r`**: call D15R's init (`$C0100` + its fourth offset, `$C02BC`, with
    `a1 = $FFFAA`: it keeps the 24 bytes there), copy the block to `$80100` with interrupts off,
    jump to it.
@@ -83,7 +82,7 @@ LEMLD2 text+`$912`. Called where the game (or LS2DD) would read its floppy, with
 at `a0` and the destination at `a1`:
 
 1. A name that starts below `"0"` or with `"F"` (the game passes data starting `"FORM"` this way,
-   STORY-05), or `d1 = 100`: not a file, `loader_skip` returns 0.
+   `disk-layer.md` §4), or `d1 = 100`: not a file, `loader_skip` returns 0.
 2. The name (8.3) is copied into D15R's parameters (`io_params`, the name at `$C0752`).
 3. Offset 0, length `$19B04` (105,220 bytes, the largest file, MAIN), destination `a1`. A
    destination below `$800` (over the vectors) is loaded in two parts (`loader_low`): the bytes
@@ -104,10 +103,10 @@ into `$80400` and copy afterwards; **`swap_low_ram`**: the game's `$8-$7FF` out,
 `tos_paths` once (drive and path); `Fopen` (mode 0, or 1 for writing with `"Wr"`), `Fseek` to
 the offset, `Fread` (or `Fwrite`) of the length, `Fclose`; swap back, MFP back; the result in `$C02B4`. With
 TOS's image in, every `TRAP #1` goes to D15R's own GEMDOS, which reads the FAT volume by sectors
-with BIOS `Rwabs` through `hdv_rw`: the driver copy, PPDRIVER's code (EPIC-01 §2). The ROM's
+with BIOS `Rwabs` through `hdv_rw`: the driver copy, PPDRIVER's code (`gemdrive-failure.md` §2). The ROM's
 TOS is not used, and neither is Hatari's GEMDOS-drive hook (it sits on the ROM's `TRAP #1`,
-`$84` = `$FA002A` in the game's state, never in TOS's image). Who calls `file_io_2` (entry 4) is
-for STORY-05.
+`$84` = `$FA002A` in the game's state, never in TOS's image). Nothing calls `file_io_2` (entry 4)
+in the reference's runs (`disk-layer.md` §4).
 
 ## LS2DD
 

@@ -134,6 +134,7 @@ td code { font-size: 0.8em; }
 .fix { background: var(--fix); }
 .no { background: var(--no); }
 .unsure { background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink); }
+.fix.built { background: var(--ok); box-shadow: inset 0 0 0 3px var(--fix); }
 
 @media (prefers-reduced-motion: no-preference) {
   .squares a { animation: read 1ms steps(1) both; animation-delay: calc(var(--b) * 110ms + var(--k, 0) * 40ms); }
@@ -153,10 +154,6 @@ td code { font-size: 0.8em; }
 .readout { font-size: 0.9375rem; color: var(--grey); min-height: 3em; margin-top: 0.75rem; }
 
 .prose { margin-top: 1.5rem; }
-.epics { max-width: var(--measure); list-style: none; padding: 0; border-top: 2px solid var(--ink); }
-.epics li { display: grid; grid-template-columns: 5.5rem 1fr auto; gap: 1rem; margin: 0; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); font-size: 1rem; }
-.epics .ep { font-family: var(--head); }
-.epics .state { color: var(--grey); font-size: 0.9375rem; white-space: nowrap; }
 
 /* The catalogue. */
 .filters {
@@ -239,8 +236,6 @@ button:hover { background: var(--shade); }
   main h1 { font-size: 1.875rem; }
   .band { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
   .band .label { justify-content: flex-start; }
-  .epics li { grid-template-columns: 4.5rem 1fr; }
-  .epics .state { grid-column: 2; }
   .filters .search input { width: 100%; }
   .filters > label { flex: 1 1 100%; }
   .catalogue thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

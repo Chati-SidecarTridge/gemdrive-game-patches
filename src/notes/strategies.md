@@ -1,15 +1,15 @@
 # The strategies, from the files
 
-EPIC-03 STORY-04, 2026-10-11. Every game of PP's list (`src/survey/catalogue.csv`, 1,831 records)
+2026-10-11. Every game of PP's list (`src/survey/catalogue.csv`, 1,831 records)
 gets a strategy in `src/survey/migration.csv`, from what its download contains
 (`src/survey/files.csv`) and the signatures in its programs. `python3 tools/survey/classify.py`
-writes it. The strategies are STORY-01's modes (`pp-modes.md`) where the files show them; a game
+writes it. The strategies are PP's modes (`pp-modes.md`) where the files show them; a game
 gets the strategy of its first download that is a hard-disk adaptation, and its other downloads
 are listed in `other_downloads`.
 
 ## 1. Twelve strategies, two ways to the disk
 
-| strategy | games | how it runs from a hard disk | what it needs | the files that mark it | first guess (STORY-01) |
+| strategy | games | how it runs from a hard disk | what it needs | the files that mark it | first guess (from PP's modes) |
 | --- | --- | --- | --- | --- | --- |
 | HAGA | 1,022 | `RUNME.TOS` loads `HAGA` to the top of RAM; HAGA's file service reads the game's files by name through the machine's GEMDOS; a GOS (`D15RH`/`D15RF` or `D15RU`) for the game's TOS calls, or none | any driver, or none at all, behind GEMDOS; 1 MB | the file `HAGA` | as it is |
 | HAGE | 203 | `HAGE` loads TOS 1.04 with GEM into RAM (`T14AG.FIC`); the game's floppy is an image file (`FILES\X.ST`) that HAGE reads by name | the same | the file `HAGE`, `T14AG.FIC`, a floppy image | as it is |
@@ -27,11 +27,11 @@ are listed in `other_downloads`.
 No game is left unclassified. The twelve reach the disk in **two ways**: by name, through the
 machine's GEMDOS (every strategy but two: 1,628 games), or by sectors through a hard-disk driver the
 launcher finds or boots (Gamex + GOS4 and GOS5: 203 games). A GEMDOS drive serves the first and has
-nothing for the second (EPIC-01). STORY-05 checks every game with a run.
+nothing for the second (`gemdrive-failure.md`). A run of every game checks it (`hd-strategies.md`).
 
 ## 2. Set against PP's categories
 
-The category comes from each page's code (`catalogue.csv`, `code_category`; STORY-02):
+The category comes from each page's code (`catalogue.csv`, `code_category`, read from PP's list):
 
 | strategy | games | 1–2 file system | 3 singleparted | 4 low RAM | 5 XBIOS | 6 floppy controller | code without a category | no code |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -86,19 +86,19 @@ file calls only). The patterns are in `launcher-signatures.md` ("Disk access").
   PowerBoat Simulator, BeastLord, Elvira the Arcade Game, Microprose Golf, Infestation, Disc,
   Vroom, Maupiti Island) have floppy-controller code in their `RUNME.TOS` (IK+'s writes a command
   to the floppy controller and waits for the MFP to signal it done), and 3 call `Rwabs` or `Floprd` (Lure
-  of the Temptress, Cannon Fodder, Operation Wolf). Their runs settle it (STORY-05).
+  of the Temptress, Cannon Fodder, Operation Wolf). Their runs settle it (`hd-strategies.md`).
 - **plain with sectors or registers** (13), and the 35 plain programs where nothing shows (their
   code is packed): the plain games most likely to read the floppy themselves.
 - `inner_evidence` lists the same signatures in the download's PP-packed files, unpacked (the
   game's own stages; D15R and T14 left out). 164 HAGA games and Lemmings (`LS2DD.FIC`) have
   floppy-controller code there: the games' own loaders, which PP's launchers patch at run time
-  (EPIC-02 for Lemmings), so this is not a verdict either.
+  (Lemmings': `launch-chain.md`), so this is not a verdict either.
 
-## 4. For STORY-05
+## 4. What the runs were to check
 
 - The two-way split is the hypothesis to test: every "by name" strategy should run from the GEMDOS
   drive past its first file load; GOS4 and GOS5 should stop at the launcher.
 - 18 games need a monochrome monitor (`monitor` = mono only; the harness's `--monitor mono`), and
-  some need more RAM than their page gives (Vector Invaders: 2 MB, STORY-01).
+  some need more RAM than their page gives (Vector Invaders: 2 MB, `pp-modes.md`).
 - Lemmings has two downloads: `LEMMINGS.ZIP` (GOS5, the row's strategy) and `LEMMSRD.ZIP` (FWRD RAM
   disk, 2 MB), listed in `other_downloads`.

@@ -1,7 +1,7 @@
 # The launcher's file formats
 
-EPIC-02 STORY-02, 2026-10-11. Every format below is unpacked by `tools/unpack.py`, and the result
-was compared with what Hatari holds when that stage starts (EPIC-02 STORY-01's dumps, runs
+2026-10-11. Every format below is unpacked by `tools/unpack.py`, and the result was compared
+with what Hatari holds when that stage starts (memory dumps at each stage's entry, runs
 `tools/dev/logs/*-ppdriver-chain`). `text+` offsets are LEMLD2's.
 
 ## The packer
@@ -56,7 +56,7 @@ STE TOS 2.06 (`$1D2E4`).
 ## `LS2DD.FIC`
 
 7,168 bytes, run at `$70000`, entered at `$7005A`. Equal to Hatari's memory at its entry except
-for the 9 bytes the block at `$80100` patches before starting it (STORY-01):
+for the 9 bytes the block at `$80100` patches before starting it (`launch-chain.md`):
 
 | address | LS2DD's own | at its entry | |
 | --- | --- | --- | --- |
@@ -66,8 +66,8 @@ for the 9 bytes the block at `$80100` patches before starting it (STORY-01):
 ## `D15R_H5.FIC` and `D15R_F5.FIC`
 
 91,460 and 91,512 bytes, run at `$C0100`. The two builds differ from byte `$6E9` on (`F5` is the
-Falcon build, STORY-01). `D15R_H5` equals Hatari's memory at D15R's first instruction (`$C02BC`)
-except for 32 bytes in 8 runs, all written before it by LEMLD2 or by GEMDOS for it:
+Falcon build, `launch-chain.md`). `D15R_H5` equals Hatari's memory at D15R's first instruction
+(`$C02BC`) except for 32 bytes in 8 runs, all written before it by LEMLD2 or by GEMDOS for it:
 
 | address | written | by |
 | --- | --- | --- |

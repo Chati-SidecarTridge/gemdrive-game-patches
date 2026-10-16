@@ -116,6 +116,8 @@ python3 tools/unpack.py start|fic|text|relocate ...   # PP's formats unpacked; t
 python3 src/probes/epic02/chain_probe.py <setup>      # a dump of every launcher stage at its entry
 tools/build_launcher.sh [--allow-longer] [<src folder>] [<out>]  # the launcher built from src/ into tools/dev/builds/launcher/
 tools/build_gemdrive.sh [<out>]                # the launcher changed for a GEMDOS drive (EPIC-04, S1): builds/gemdrive/build/LEMMINGS
+python3 tools/build_gos5.py <START.TOS> <out> [--info] [--floppy]   # a GOS5 game's start program built for a GEMDOS drive (EPIC-04)
+python3 src/probes/epic04/gos5_run.py <ZIP> [--setup <s>] [--disk <d>]  # one GOS5 game built (src/survey/ports.tsv) and run
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
 python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
 python3 tools/survey/unpack_games.py           # every archive in the mirror into tools/dev/builds/survey/games/
@@ -197,6 +199,14 @@ the patcher that installs them (D-17).
 - **Nothing leaves this Mac yet** (D-15): no remote, no push. Before the repository goes public,
   `LEMMINGS/` and `_archive/`'s binaries are removed from it and its history.
 - `.DS_Store` files are macOS noise; ignore them.
+- **The website speaks to its readers, never to the backlog** (Diego, 2026-10-16, D-20). Nothing the
+  site publishes refers to `docs/epics/` or what is in it: no iterations, epics, stories or tasks
+  (`EPIC-04 STORY-05`), no `D-NN`, `C-NN` or `H-NN`, no `ITERATIONS.md`, `DECISIONS.md` or
+  `STATUS.md`. That covers `src/notes/*.md`, `tools/dev/README.md` (the Tools page), the
+  catalogue's reasons and solutions (`src/survey/findings.tsv`, `solutions.tsv`, so
+  `migration.csv`) and `tools/site/build_site.py`'s own text. Write what a reader follows: what was
+  found, when, on which machine, and which page or tool shows it. The backlog may cite the notes;
+  the notes never cite the backlog. `build_site.py --check` fails on such a reference.
 
 ---
 

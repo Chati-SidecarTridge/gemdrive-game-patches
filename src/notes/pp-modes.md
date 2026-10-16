@@ -1,8 +1,9 @@
 # PP's modes: how his adaptations reach their files
 
-EPIC-03 STORY-01, 2026-10-11. The vocabulary EPIC-03 classifies with. Sources:
+Written 2026-10-11: the words every game's classification uses (`strategies.md`, `hd-strategies.md`).
+Sources:
 
-- PP's pages, read in the mirror (D-11, D-12) and cited by name under
+- PP's pages, read in a local copy of his site (never republished here) and cited by name under
   <https://atari.8bitchip.info/>: `agcat.html` (his categories),
   `GAMEXdoc.html`, `GamexUsage.html`, `playfhd.html`, `plafh.html`, `fromhd.php`, `fromhd2.php`,
   `fromhd3.php` (the list and its help), `imgrun.php`, `astopensw.php`, and the 1,829 game pages
@@ -16,9 +17,9 @@ EPIC-03 STORY-01, 2026-10-11. The vocabulary EPIC-03 classifies with. Sources:
   `src/probes/epic03/mode_probe.py <ZIP>`, run folders
   `tools/dev/logs/20261011-*-st-104-gemdrive-<game>` (and `-ppdriver-` for the reference).
 
-What PP writes is his account (D-01): a statement marked **PP** quotes him; **run** is what a run
-showed; **code** is what his files contain. Nothing here is a verdict yet: the guesses in §4 are
-STORY-05's to check, game by game.
+What PP writes is his account, which counts once a run shows it: a statement marked **PP** quotes
+him; **run** is what a run showed; **code** is what his files contain. Nothing here is a verdict:
+the guesses in §4 were then checked game by game (`hd-strategies.md`).
 
 ## 1. Two ways PP sorts games
 
@@ -56,7 +57,7 @@ GEMDOS drive (§3.3): his GEMDOS and a hard-disk driver in high RAM, reaching th
 ## 3. The modes, from a game's files
 
 The mode shows in the game folder's files. Counts are of the 1,947 archives, each counted once in
-the first row that matches (STORY-03 makes the real table, game by game):
+the first row that matches (`strategies.md` has the real table, game by game):
 
 | files in the folder | mode | archives | how the game reaches its files | run on the GEMDOS drive |
 | --- | --- | --- | --- | --- |
@@ -66,12 +67,12 @@ the first row that matches (STORY-03 makes the real table, game by game):
 | `START.TOS`/`.PRG` + `GXUTnnn.PRG`, no `D15R` | Gamex, no GOS | 120 | the machine's GEMDOS: the launcher loads or `Pexec`s the game's files | Castle Master: "Choose your character" |
 | `START.TOS` + `D15R_NG1.FIC`/`D15R_F1.FIC` | Gamex + GOS 1.00 | 7 | the machine's GEMDOS before the game starts; the game runs under GOS | Garfield: its intro |
 | `START.TOS` + `D15R_HH4.FIC`/`D15R_F4.FIC` | Gamex + GOS4 | 90 | GOS's GEMDOS, by sectors, through a driver it copies or boots | Magnetik Tank: back to the desktop |
-| `START.TOS` + `D15R_H5`/`F5`, `H15`/`F15`, `5H`/`5F` | Gamex + GOS5 | 33 + 44 | the same (Lemmings, EPIC-01/02) | Clever & Smart, Bubble Dizzy: back to the desktop |
+| `START.TOS` + `D15R_H5`/`F5`, `H15`/`F15`, `5H`/`5F` | Gamex + GOS5 | 33 + 44 | the same (Lemmings: `gemdrive-failure.md`, `disk-layer.md`) | Clever & Smart, Bubble Dizzy: back to the desktop |
 | `START.TOS`/`.PRG` without `GXUT` | PP's launcher without Gamex | 56 | the machine's GEMDOS (Recoil: one packed file, `RECCODE.FIC`) | Recoil: its attract screens |
 | an `AUTO` folder | AUTO | 1 | the machine's GEMDOS, started at boot | not run |
 | `FBHOLE.PRG`/`SBHOLE.PRG`/`HOLE.PRG` + the game's own files | HOLE | 5 (+ the tool) | the machine's GEMDOS; HOLE only keeps the low 512 KB free | Aquanaut, without HOLE: back to the desktop |
 | a floppy image (`.ST`, `.MSA`) and no launcher | for the Image Runner | 13 | the image, read with GEMDOS `Fopen`, becomes drive A | not run |
-| none of the above | | 103 | (PP's tools, plain installations: STORY-03) | |
+| none of the above | | 103 | (PP's tools, plain installations: `strategies.md`) | |
 
 **What the launchers share** (code): every Gamex launcher unpacked here (Lemmings, Magnetik Tank,
 Clever & Smart, Bubble Dizzy, Garfield, Castle Master) has the frame of PP's three published
@@ -106,7 +107,7 @@ saves the game's state and calls the machine's GEMDOS (`Fopen`/`Fcreate`, `Fseek
 versions; the most common two cover 912 of the 1,109 copies. `D15RU.FIC` is a GOS (TOS 1.04's
 BIOS, XBIOS and GEMDOS in RAM, 89,632 bytes unpacked; "new HAGA file with single D15R* (TOS 1.04
 in RAM) solution" on the game pages), started before the game; by their names `D15RH`/`D15RF`
-are an ST and a Falcon build, as `D15R_H5`/`F5` are (EPIC-02). Game data is PP's
+are an ST and a Falcon build, as `D15R_H5`/`F5` are (`launch-chain.md`). Game data is PP's
 packed format, several streams in one file (Wormhole's `FILES\WHD`: `DATA1.DAT`…`DATA5.DAT`).
 
 **Run** (Wormhole, 20261011-190920 on the GEMDOS drive, 20261011-190812 on PPDRIVER): both reach
@@ -155,7 +156,7 @@ emulation is set". `fromhd.php`, on GEMDOS drives: "some game hard disk adaptati
 functions [XBIOS sector access], and worse: direct hard disk access - that's not present in
 GEMdrive".
 
-**Code**: every GOS4/GOS5 launcher looked at has the checks EPIC-01 found in Lemmings
+**Code**: every GOS4/GOS5 launcher looked at has the checks found in Lemmings' launcher
 (`src/notes/launch-chain.md` step 7, `src/notes/gemdrive-failure.md`): the `PPHD` check on
 `hdv_bpb`; PP's driver copied to `$B7180`; otherwise `pun_ptr` and XBIOS `DMAread` of sector 0 and
 the driver booted from it (`'DMAr'`). Found in Lemmings' `LEMLD2.TOS` and in Magnetik Tank's
@@ -168,7 +169,7 @@ data file (`BUDI.FIC`) first, then quits the same way. On PPDRIVER all three pla
 Magnetik Tank in its first room, 20261011-192854 Clever & Smart in play, 20261011-192945 Bubble
 Dizzy's high scores), with 42, 61 and 56 `Rwabs` on drive C and no file opened by name after the
 GOS: from there the game's files are read by sectors. Lemmings prints "This prg. requires PP,
-AHDI or Hddriver" (EPIC-01).
+AHDI or Hddriver" (`gemdrive-failure.md`).
 
 ### 3.4 Gamex without GOS, and with GOS 1.00
 
@@ -215,21 +216,22 @@ reaches "Choose your character"; Garfield (20261011-191612) loads `D15R_NG1.FIC`
 
 ## 4. First guesses at the verdicts
 
-For STORY-05 to check game by game (D-14: as it is / fix / not feasible):
+To be checked game by game, each with one of the verdicts as it is, fix or not feasible (the
+results: `hd-strategies.md`):
 
 | mode | guess | why |
 | --- | --- | --- |
 | HAGA | as it is | runs reach the game; files by name through the machine's GEMDOS. To check: the state saves (`GSxx.TOS`, written through the same service), and GOS's two reads of drive A |
 | HAGE, HAG2 | as it is | Breakout ACC, 180 and Vector Invaders run; the floppy image is read by name. Some games need the harness's `--monitor mono` or more RAM than their page says (Vector Invaders: 2 MB) |
 | Gamex, no GOS; Gamex + GOS 1.00 | as it is | runs reach the game; no driver checks in the launcher |
-| Gamex + GOS4, GOS5 | fix | the launcher needs a driver (PP's, or one it can boot from sector 0) and GOS reads by sectors; EPIC-01 and these runs |
-| PP's launcher without Gamex | as it is, likely | Recoil runs; these launchers are not all read yet (STORY-03) |
+| Gamex + GOS4, GOS5 | fix | the launcher needs a driver (PP's, or one it can boot from sector 0) and GOS reads by sectors; Lemmings' trace (`gemdrive-failure.md`) and these runs |
+| PP's launcher without Gamex | as it is, likely | Recoil runs; not all of these launchers were read yet (`strategies.md` reads them) |
 | HOLE, AUTO, plain | as it is, likely | the game reads by name; HOLE needs its floppy boot sector (Aquanaut stops without it), AUTO a boot from C: |
 | floppy image for the Image Runner | open | the image is read by name, then a reset with the driver discarded |
 | iTOS | not feasible as it is | needs PP's own TOS |
 
 So the "fix" work is the pre-2012 Gamex launchers with GOS4/GOS5 (about 167 archives), not the
-HAGA family (about 1,468): the opposite of what EPIC-01's Lemmings alone suggested.
+HAGA family (about 1,468): the opposite of what Lemmings alone suggested.
 
 ## 5. Signatures and the GOS builds
 
@@ -240,7 +242,7 @@ the GOS 1.00 and Gamex-only ones), the GOS builds' header names, and the TOS-in-
 How much of each shared file is TOS 1.04 (16-byte runs found in the UK ROM, without relocation):
 `D15R_NG1`/`F1`/`HH4`/`F4` 89–90% (nearly whole copies of BIOS, XBIOS and GEMDOS), `D15RH`/`RF`/`RU`
 67–74%, `T14GG` 64%, `T14AG` 67% (with GEM), `D15R_5H`/`5F` 58%, `D15R_H5`/`F5`/`H15`/`F15` 44%
-(EPIC-02 found 70.4% for `D15R_H5` once relocation is counted).
+(70.4% for `D15R_H5` once relocation is counted: `disk-layer.md` §1).
 
 ## 6. The glossary
 
@@ -256,7 +258,7 @@ Terms from the list's Note column and the game pages, and where they belong:
 | "TOS 1.04 in RAM", "single D15R*" | `D15RU.FIC`, one GOS for every machine | HAGA |
 | singleparted, singlepart | the RAM at the game's start, packed, restored from disk (`agcat.html` 3) | Cat `S…` |
 | filed | a game stored outside the file system made into files (`playfhd.html`: "transfer disk content to file(s)") | Lemmings |
-| filewise ramdisked | all the game's files in one file, `FWRD` (a directory, then the files), read whole into RAM at the start: Lemmings' 2 MB download `LEMMSRD.ZIP` (EPIC-03 STORY-03); `playfhd.html` calls a RAM disk the "usual way" for games that load during play. Only two adaptations have one (Lemmings, Pick'n'Pile) | Lemmings |
+| filewise ramdisked | all the game's files in one file, `FWRD` (a directory, then the files), read whole into RAM at the start: Lemmings' 2 MB download `LEMMSRD.ZIP`; `playfhd.html` calls a RAM disk the "usual way" for games that load during play. Only two adaptations have one (Lemmings, Pick'n'Pile) | Lemmings |
 | "redirect to hard disk" (325 pages) | the game's floppy paths changed to the hard disk (`agcat.html` 2: "path corrections in code") | Cat 2 |
 | "instead ramdisk, load from drive" | levels read from disk during play instead of a RAM disk (Clever & Smart's page) | GOS5 |
 | "xbios loads directed to image files on hard disk" | the XBIOS floppy reads served from an image file (Black Cauldron) | Cat 5 |
@@ -276,10 +278,10 @@ Lemmings is Gamex with GOS5 (`D15R_H5`/`F5`), from before 2012 (`LEMMINGS.ZIP` i
 the same 76 files as `LEMMINGS/`, SHA-256 for SHA-256). Its page: "Added gamex, deprotected,
 filed, filewise ramdisked"; no `Cat:`. Its launcher has the three driver checks (§3.3, §5), its
 files are read by GOS by sectors through PP's driver copy (`src/notes/disk-layer.md`), and from a
-GEMDOS drive it stops at the check (EPIC-01). In this note's terms: mode Gamex + GOS5, first guess
+GEMDOS drive it stops at the check (`gemdrive-failure.md`). In this note's terms: mode Gamex + GOS5, first guess
 "fix", like the other 166 archives of §3.3.
 
 Its page offers a second download, `LEMMSRD.ZIP` ("2MB RAM min"), PP's other Lemmings adaptation:
 no GOS, no driver check, every file in one `FWRD` file read whole into RAM ("filewise ramdisked").
-It reaches the title menu from the GEMDOS drive as it is (EPIC-03 STORY-03); whether it plays a
-level there is STORY-05's to show.
+It reaches the title menu from the GEMDOS drive as it is (`strategies.md`); whether it plays a
+level there was not tried.
