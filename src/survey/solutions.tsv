@@ -16,3 +16,4 @@ Gamex + GOS5	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.p
 1684	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and a disk in drive A
 1477	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and its cartridge check turned off in AWE
 104	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and D15R_5H.FIC and D15R_5F.FIC from another GOS5 game
+1483	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and its cartridge check turned off in PR1

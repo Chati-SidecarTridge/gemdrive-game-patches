@@ -248,3 +248,47 @@ Every ST 1 MB failure is the same, step for step, on PP's path (Hatari's excepti
 So all three run in Hatari on an STE with TOS 1.62 and 4 MB, Diego's machine. Their findings say
 so; they stay in `STILLNOT` (ports.tsv: fails, on the test machine, ST TOS 1.04 1 MB) until the
 STE shows it.
+Diego's STE, 2026-10-16, the three from `STILLNOT` with our builds: "they dont work". The STE
+disagrees with Hatari's STE 4 MB; re-run from the card's exact files (`tools/dev/builds/gos5/stillnot-1510/`).
+Hatari's STE, TOS 1.62, 4 MB, the card's exact files, no key, shots at 10/30/60/90 s
+(`tools/dev/logs/20261016-151032-ste-162-gemdrive-stillnot-*`): Magic Boy plays its demo and shows
+its title; Muzzy its attract mode (a level, the high scores, its title); Prison one `Pterm(-1)`, then
+the same empty game frame from 10 s to 90 s: not the "game screen" the earlier table said, broken in
+Hatari too. Magic Boy and Muzzy again with the Multidevice's RAM use and slow loads imitated
+(`…/diag/ROBOCOP2-20261016-002000/emu_build.py`, `…-151300-…-stillnot-emu-*`): the same. Hatari does
+not show what the STE does; waiting for what Diego sees.
+Diego, 2026-10-16, later: "Magic boy and Muzzy now works in real hardwere but Prision halts right
+after starting the game", and with the intro left to end on its own, "it fails more or less in the
+same point: when starting the game. I think it can be an interrupt issue." So `ports.tsv` has Magic
+Boy and Muzzy as `runs` (their pictures from the STE runs), their findings say an STE (Muzzy) or
+2 MB (Magic Boy), Prison's that it halts at the game's start everywhere, its solution a fix of its own
+(not built); the site counts 86 built; `sdcard-1518` has the two back in `FIXGOS5` and Prison alone
+in `STILLNOT/1MB/PRI-PRI/`. Prison traced again, Diego's interrupt idea among the checks.
+
+**Prison: a cartridge check, as Awesome's** (`tools/dev/builds/gos5/diag/PRISON-1522/`; STE 4 MB,
+our build, no key: `tools/dev/logs/20261016-152252-ste-162-gemdrive-prison-crash-ours`). Code from
+`PR1` (offset `$11874`, at `$12474`): `move.l #$EA42334F,d7 / eor.l #$10101010,d7` ($FA52235F),
+`cmp.l (0,a6,d6.l),d7` with `a6+d6` = `$FA0000`, `beq.w $129F8`; then `#$BACDFE42` XOR `$11001100`
+($ABCDEF42), the same. `$129F8`: `move.w #$2700,sr`, then `move.l d7,(a6)+` from `$2000` up, forever
+(a watchpoint on `$2000` fires at `$12A06`; the history goes `$1248C`, `$12490`, `$129F8`): the rts to
+0 was the wipe's debris, and the game's stack is at `$1FA6`-`$1FFC`, below the first load (the
+earlier stack theory was wrong). Not an interrupt (Diego's guess): the game masks them itself, after
+the compare; gd_quiet and gd_forward are not on that path. PP's PPDRIVER path the same in Hatari
+(its cartridge too, `…-142944-ste-162-ppdriver-diag3-PRISON-pp-ste4`). The two `beq.w` made `nop`
+in a copy of `PR1` (offsets `$11890` `67000566`, `$118A4` `67000552`; `1e52f573…` to `3b5cd857…`): no
+crash, "PRESS FIRE TO START", and with fire play, 7 `PR1` loads through gd_forward, on STE 4 MB and
+ST 1 MB (`…-152450-*-prison-fix-*`, `…-152633-*-prison-fire-*`). A data file's patch, as Awesome's
+`AWE`. A scan of every GOS5 file for `move.l #imm` then `eor.l #imm` giving either signature finds
+only Prison's two (packed data not covered).
+
+**The catalogue's pictures** (Diego, 2026-10-16: "in the website 'The catalogue' you ar using images
+from GOS5 before patching it, so there are a lot of wrong images"): each built game's picture is
+its build's run at 45 s, or at 30 s when that screen shows much more and is not still the 10 s one
+(PP's cover); the floppy games' from their runs with a disk, Magic Boy's and Muzzy's from the STE.
+
+**Awesome to the games still not working** (Diego, 2026-10-16, "yes" to moving it beside Prison):
+it hangs on his STE and in Hatari, and its fix is a data file's, as Prison's. `ports.tsv` has it as
+`fails`; its picture stays its title, where it stops. The counts: 85 of the 87 run from the GEMDOS
+drive with their build (five with a disk in drive A, Forgotten Worlds with two added files, Magic
+Boy at 2 MB or more, Muzzy on an STE); Awesome and Prison do not, each refusing the cartridge in the
+port, each with a two-byte fix of a game file tested in Hatari.

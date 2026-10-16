@@ -64,3 +64,12 @@ drive. The card and the site show the new verdicts.
   (Magic Boy 27 files, Muzzy 6, Prison 9, each read back by SHA-256), the card's `INDEX.TXT`
   replaced by the new one, then the three folders in `FIXGOS5/1MB/ALI-ZOU/` removed (checked
   first: PP's files, as the old layout has them).
+- **The card, again** (2026-10-16): Magic Boy and Muzzy run on Diego's STE, so `sdcard-1518` has
+  them back in `FIXGOS5/1MB/ALI-ZOU/` with their builds and Prison alone in `STILLNOT/1MB/PRI-PRI/`;
+  written to the card (his "serve yourself"). Then Awesome, which hangs on his STE for the same
+  kind of check as Prison's (Diego's "yes"): `ports.tsv` has it as `fails`, `sdcard-1635` puts both
+  in `STILLNOT/1MB/AWE-PRI/`. On the card, two renames and no delete: `PRI-PRI` to `AWE-PRI`, and
+  `AWESOME` moved there from `FIXGOS5/1MB/ALI-ZOU/` (each folder first checked against the layout by
+  SHA-256), and `INDEX.TXT` replaced. Read back: `STILLNOT` 18 files, `FIXGOS5` 1,340, all as
+  `sdcard-1635`. The instructions list both under "Still not working", the site counts 85 built
+  and running.

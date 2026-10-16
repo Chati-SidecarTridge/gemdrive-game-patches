@@ -3,7 +3,7 @@
 PP adapted 87 games to start from a hard disk with a Gamex launcher and GOS5, his GEMDOS 0.15
 running from RAM (`hd-strategies.md` §3.1). As PP made them, they need his hard-disk driver and
 a partition that GOS reads by sectors, so they do not start from a GEMDOS drive: Hatari's, or the
-SidecarTridge Multidevice's GEMDRIVE. Built again with `tools/build_gos5.py`, 84 of them do
+SidecarTridge Multidevice's GEMDRIVE. Built again with `tools/build_gos5.py`, 85 of them do
 (2026-10-16), in Hatari and on an STE with the Multidevice.
 
 ## What the build changes
@@ -48,22 +48,34 @@ To undo, put `START.ORG` back as `START.TOS`.
 |---|---|
 | Pit Fighter, Chaos Engine, Fire and Forget II, Venus the Flytrap, Jetsons | A floppy disk in drive A, any: the game waits for the drive's motor to stop, which an empty drive never lets it do. Build with `--floppy`. |
 | Forgotten Worlds | Its launcher asks for `D15R_5H.FIC` and `D15R_5F.FIC`; its download has an older GOS under other names. Copy those two files from any other GOS5 game's download, beside its `START.TOS` (all 56 games that carry them carry the same files). |
-| Awesome | It stops on its title while a cartridge is in the port, the Multidevice or Hatari's own: the game itself checks. Two bytes of its file `AWE` change that (the two `beq` after its check, at offsets `$141E` and `$1CD0`, made `nop`); the build does not. |
 | Heimdall | Its first screen is black with a question: skip the intro, y or n. |
 | Cadaver | Dying in the swamp's water halts it, as with PP's own driver. |
 | Popeye 2 | A key pressed while it loads crashes it, as with PP's own driver. |
 
-## Still not working on every machine
+## Not on every machine
 
-Three games, built, fail on an ST with TOS 1.04 and 1 MB, as they do with PP's own driver there,
-and run in Hatari on an STE with TOS 1.62 and 4 MB:
+Two games, built, fail on an ST with TOS 1.04 and 1 MB, as they do with PP's own driver there,
+and run on an STE with TOS 1.62 and 4 MB, in Hatari and on the real machine:
 
 - **Magic Boy** needs 2 MB or more: below that, PP's launcher unpacks its loader from 32 bytes too
   far into `MAGICC.FIC` and crashes. One long of the launcher fixes it; the build does not yet.
 - **Muzzy** takes another branch on the ST, whose unpacker writes over its own code and halts the
   CPU. It runs on the STE.
-- **Prison**'s first load writes over its own stack. TOS 1.62's error handler lets it go on to its
-  game screen; TOS 1.04's does not.
+
+## Still not working
+
+Two games refuse a cartridge in the port, the Multidevice or Hatari's own, which GEMDRIVE needs
+there. The game itself checks, so its build starts it and then it stops. Two bytes of one of its
+files turn the check off; the build does not change game files.
+
+- **Awesome** stops on its title: with interrupts off, it compares the cartridge's first long with
+  the two cartridge signatures (`$ABCDEF42`, `$FA52235F`) and loops while one matches. In its file
+  `AWE`, the two `beq` after the `$ABCDEF42` compares, at offsets `$141E` and `$1CD0`, made `nop`.
+  With them it goes on to its options menu in Hatari on an ST with 1 MB and an STE with 4 MB.
+- **Prison** halts when play starts: it compares the cartridge's first long with the two cartridge
+  signatures (`$ABCDEF42`, `$FA52235F`, the constants hidden by an XOR in its file `PR1`) and on a
+  match wipes its own memory. In `PR1`, the two `beq.w` after the compares, at offsets `$11890` and
+  `$118A4`, made `nop`. With them it plays in Hatari on an ST with 1 MB and an STE with 4 MB.
 
 ## Tested
 

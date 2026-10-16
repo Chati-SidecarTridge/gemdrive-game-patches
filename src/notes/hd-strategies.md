@@ -19,8 +19,8 @@ working reference.
   the 204 GOS4/GOS5 games; S2, a BPB for the GEMDOS drive, four Silmarils games; S3, the fastload
   bit, three games whose start program Hatari ends when it starts the next one; S4 one game
   missing a file. S2, S3 and S4 were shown in trials (§3). S1 is built for the 87 GOS5 games
-  (2026-10-16): 84 run from the GEMDOS drive, in Hatari and on an STE with the Multidevice, and 3 do
-  not yet (`gos5-gemdrive.md`); GOS4 is next.
+  (2026-10-16): 85 run from the GEMDOS drive, in Hatari and on an STE with the Multidevice, and
+  Awesome and Prison do not yet (`gos5-gemdrive.md`); GOS4 is next.
 - **Already there**: 43 of the 204 GOS games have another download of PP's that runs as it is
   from the GEMDOS drive (§5), Lemmings' own 2 MB RAM-disk version among them.
 
@@ -222,10 +222,10 @@ launcher's text, found by signature in all 87, and turns the `PPHD` check into a
 GOS's code stays as PP's: the block points the `TRAP #1` of GOS's image of the system variables at
 a forwarder that hands the file functions to the machine's handler, names cut to 8.3, and the rest
 to GOS. On the Multidevice it also moves GEMDRIVE's stack out of the game's memory, and before each
-load it lets a keyboard message under way finish. 84 games run; five need a disk in drive A (their
-own wait for the floppy motor), Forgotten Worlds two GOS files from another download, Awesome its
-cartridge check turned off; Muzzy, Magic Boy and Prison still fail, as with PP's own driver in
-Hatari.
+load it lets a keyboard message under way finish. 85 games run; five need a disk in drive A (their
+own wait for the floppy motor), Forgotten Worlds two GOS files from another download, Magic Boy 2 MB
+and Muzzy an STE. Awesome and Prison still fail: each refuses the cartridge in the port, and two bytes
+of one of its files turn its check off.
 
 **Not proposed, for the same 204 games:**
 - **A driver that serves records**: a resident driver shaped like PP's (the `PPHD` mark, laid
