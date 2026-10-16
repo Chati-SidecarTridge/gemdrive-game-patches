@@ -2,7 +2,7 @@
 id: EPIC-05
 iteration: 2
 title: The GOS4 games from a GEMDOS drive (FIXGOS4, Operation Stealth first)
-status: todo
+status: in-progress
 ---
 
 ## Goal

@@ -63,15 +63,15 @@ def even(pattern: re.Pattern, data: bytes) -> list[re.Match]:
     return [m for m in pattern.finditer(data) if m.start() % 2 == 0]
 
 
-def patch_block() -> bytes:
-    if not PATCH_BIN.exists() or PATCH_BIN.stat().st_mtime < PATCH_SRC.stat().st_mtime:
-        PATCH_BIN.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run([str(REPO / "tools" / "dev" / "asm.sh"), str(PATCH_SRC), str(PATCH_BIN)],
+def patch_block(src: Path = PATCH_SRC, out: Path = PATCH_BIN) -> bytes:
+    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run([str(REPO / "tools" / "dev" / "asm.sh"), str(src), str(out)],
                        check=True, stdout=subprocess.DEVNULL)
-    block = PATCH_BIN.read_bytes()
+    block = out.read_bytes()
     if block[GD_CHECK:GD_CHECK + 4] != b"\x22\x78\x04\x72" or block[GD_INFO:GD_INFO + 2] != b"\x60\x00" \
             or len(block) % 2:
-        fail(f"{PATCH_BIN}: not the block this tool was written for")
+        fail(f"{out}: not the block this tool was written for")
     return block
 
 
@@ -134,6 +134,15 @@ def find(text: bytes) -> dict:
             fail("GOS's start: no end of set_buffers after the check")
         found["family"] = "A"
         found["gos_start"] = ends[0].start() + 12 + struct.unpack(">h", ends[0].group(1))[0]
+    found["info"], found["info_call"] = info_screen(text)
+    if found["gos"] not in AREAS:
+        fail(f"GOS at ${found['gos']:X}: no place known for the forwarder")
+    found["run"], found["md_stack"] = AREAS[found["gos"]]
+    return found
+
+
+def info_screen(text: bytes) -> tuple[int, int]:
+    """show_info, and its one call after Vsync."""
     def target(at: int) -> int:
         return at + 2 + struct.unpack(">h", text[at + 2:at + 4])[0]
 
@@ -143,14 +152,12 @@ def find(text: bytes) -> dict:
              and text[k - 8:k] == VSYNC]
     if len(infos) != 1 or len(calls) != 1:
         fail(f"the info screen: {len(infos)} show_info, {len(calls)} calls, not one")
-    found["info"], found["info_call"] = infos[0], calls[0]
-    if found["gos"] not in AREAS:
-        fail(f"GOS at ${found['gos']:X}: no place known for the forwarder")
-    found["run"], found["md_stack"] = AREAS[found["gos"]]
-    return found
+    return infos[0], calls[0]
 
 
-def build(prog: bytes, block: bytes, f: dict, floppy: bool) -> bytes:
+def build(prog: bytes, block: bytes, f: dict, floppy: bool, params: tuple | None = None) -> bytes:
+    """The block's five longs at +24 are params, by default GOS5's: GOS, the image, its addend, the
+    forwarder's place, GEMDRIVE's stack."""
     magic, tlen, dlen, blen, slen = struct.unpack(">HIIII", prog[:18])
     relocs = relocations(prog, tlen, dlen, slen)
     if any(f["check"] <= p < f["check_end"] or f["info_call"] - 3 <= p < f["info_call"] + 4 for p in relocs):
@@ -169,7 +176,8 @@ def build(prog: bytes, block: bytes, f: dict, floppy: bool) -> bytes:
     branch(8, f["no_pp"] + d)
     branch(12, f["gos_start"] + d)
     branch(16, f["info"] + d)
-    struct.pack_into(">IIIIIH", body, 24, f["gos"], f["img"], f["img_add"], f["run"], f["md_stack"], floppy)
+    struct.pack_into(">IIIIIH", body, 24, *(params or (f["gos"], f["img"], f["img_add"], f["run"], f["md_stack"])),
+                     floppy)
     call = f["info_call"] + d
     body[call + 2:call + 4] = struct.pack(">h", GD_INFO - (call + 2))     # bsr.w gd_info
     site = f["check"] + d

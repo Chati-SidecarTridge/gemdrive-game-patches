@@ -117,7 +117,10 @@ python3 src/probes/epic02/chain_probe.py <setup>      # a dump of every launcher
 tools/build_launcher.sh [--allow-longer] [<src folder>] [<out>]  # the launcher built from src/ into tools/dev/builds/launcher/
 tools/build_gemdrive.sh [<out>]                # the launcher changed for a GEMDOS drive (EPIC-04, S1): builds/gemdrive/build/LEMMINGS
 python3 tools/build_gos5.py <START.TOS> <out> [--info] [--floppy]   # a GOS5 game's start program built for a GEMDOS drive (EPIC-04)
-python3 src/probes/epic04/gos5_run.py <ZIP> [--setup <s>] [--disk <d>]  # one GOS5 game built (src/survey/ports.tsv) and run
+python3 tools/build_gos4.py <START.TOS> <out> [--info] [--floppy]   # a GOS4 game's start program built for a GEMDOS drive (EPIC-05)
+python3 src/probes/epic04/gos5_run.py <ZIP> [--setup <s>] [--disk <d>] [--memsize N]  # one GOS5 or GOS4 game built (src/survey/ports.tsv) and run
+python3 src/probes/epic05/gos4_calls.py <ZIP> | --report <run>  # the GEMDOS calls a GOS4 game makes to GOS, from PPDRIVER
+python3 src/probes/epic05/gos4_selftest.py [--setup <s>]        # the GOS4 forwarder's file calls tested under GOS4 (PASS or the step)
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR (D-12)
 python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
 python3 tools/survey/unpack_games.py           # every archive in the mirror into tools/dev/builds/survey/games/
