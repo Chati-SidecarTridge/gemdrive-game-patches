@@ -27,7 +27,11 @@ Two iterations (D-14): first understand and classify, then the solutions.
    - EPIC-04, GOS5, with Lemmings first;
    - EPIC-05, GOS4;
    - EPIC-06, the small fixes;
-   - EPIC-07, the unsure games.
+   - EPIC-07, the unsure games;
+   - EPIC-08, the ports checked on acsi2stm's GemDrive, the other GEMDRIVE: an STM32 on the ACSI
+     port, its driver in the ST's RAM (D-18);
+   - EPIC-09, last, the patcher: a program that checks a user's original start files by signature
+     and replaces them with our builds (D-17).
    Each is checked in Hatari, and each checkpoint also on Diego's SidecarTridge Multidevice from a
    card.
 
@@ -157,7 +161,8 @@ booted by PP's driver, PPDRIVER, as the working reference); EPIC-01, why the gam
 GEMDRIVE mode; EPIC-02, the launcher recompilable and tested with our own build, the groundwork
 for the solutions; EPIC-03, PP's modes and every adaptation classified with a verdict. Iteration
 2 is **solutions**: EPIC-04 to EPIC-07, one per group of the test card, chosen and ordered at
-EPIC-03's checkpoint (D-16).
+EPIC-03's checkpoint (D-16), then EPIC-08, the ports on acsi2stm's GemDrive (D-18), and EPIC-09,
+the patcher that installs them (D-17).
 
 ## Conventions and gotchas
 

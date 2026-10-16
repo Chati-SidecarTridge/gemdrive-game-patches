@@ -2,7 +2,7 @@
 id: STORY-02
 epic: EPIC-04
 title: The reference's first level: the address error at $2B10
-status: in-progress
+status: done
 ---
 
 ## Goal
@@ -19,7 +19,7 @@ level. This is the candidate found in EPIC-01 STORY-01 (`ITERATIONS.md`).
       or Hatari. Traced back from the load.
 - [x] What gets past it without changing Hatari (C-02), and its cost; or, if it is Hatari's, the
       evidence for a report (which waits for Diego, D-15).
-- [ ] The first level reached from PPDRIVER, and then from the GEMDOS drive with STORY-01's build.
+- [x] The first level reached from PPDRIVER, and then from the GEMDOS drive with STORY-01's build.
 
 ## Acceptance
 
@@ -91,3 +91,8 @@ build of `START.TOS` `27c534e8…`, "it works great". The PPDRIVER half of the l
 own launcher is the reference and stays as it is, and our build takes `gd_quiet` only on the GEMDOS
 drive's path (`gd_start`). Whether a build from a real disk with PP's driver should get it too is
 Diego's to decide.
+
+**Closed (2026-10-15).** From the GEMDOS drive, the first level is reached in Hatari and on Diego's
+STE. From PPDRIVER, PP's own launcher keeps its stop: Diego, the same day, "we should only apply
+to our changes, not original ppera" (D-17). The acceptance's other branch holds: the cause is shown
+in a trace, and Diego decided.

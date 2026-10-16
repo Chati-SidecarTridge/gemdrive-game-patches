@@ -14,6 +14,9 @@ and the website show the result.
 
 - [ ] A README a user can follow on a fresh copy: what the patch changes, how to run the tool,
       and how to undo it.
+- [ ] In it, the games that need more than the build: a disk in drive A (Pit Fighter, Chaos Engine,
+      Fire and Forget II, Venus the Flytrap, Jetsons), and Forgotten Worlds' two GOS files copied from
+      another game's download (`D15R_5H.FIC`, `D15R_5F.FIC`, alike in all 56 that carry them, D-19).
 - [ ] `tools/survey/sdcard.py`: the card holds the patched GOS5 games, under the verdict they
       have now.
 - [ ] The site: the GOS5 band, the catalogue's verdicts, and the solution's page updated.

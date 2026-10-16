@@ -8,7 +8,7 @@ status: todo
 ## Goal
 
 The 117 games of the card's `FIXGOS4` folder, Gamex launchers with GOS4, run from a Hatari GEMDOS
-drive with solution S1. They reuse EPIC-04's patchers, extended to GOS4's D15R build. In GOS4 the
+drive with solution S1. They reuse EPIC-04's builds by signature, extended to GOS4's D15R build. In GOS4 the
 game calls GOS's GEMDOS itself during play, so the epic first finds which functions those calls
 use; that is S1's largest risk (`hd-strategies.md` §4). Operation Stealth is the first test game.
 Chosen by Diego, 2026-10-15 (D-16).

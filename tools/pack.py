@@ -131,7 +131,8 @@ def in_place_margin(stream: bytes, top: int, out_start: int = -28) -> int:
             return margin
 
 
-def build_start(prog: bytes, like: bytes, stub_text: bytes | None = None) -> bytes:
+def build_start(prog: bytes, like: bytes, stub_text: bytes | None = None,
+                raise_top: bool = False) -> bytes:
     stream = pack(prog)
     payload_header = bytearray(header(len(stream), len(prog), like[28 + 230:28 + 230 + 32]))
     payload_header[10:14] = prog[10:14]  # +10: the program's BSS size, from its own header
@@ -142,6 +143,10 @@ def build_start(prog: bytes, like: bytes, stub_text: bytes | None = None) -> byt
         sys.exit("error: the stub must be 230 bytes")
     top = struct.unpack(">I", stub[STUB_TOP:STUB_TOP + 4])[0]
     margin = in_place_margin(data[32:], top)
+    if margin < 0 and raise_top:  # a longer program: copy the stream higher (EPIC-04 STORY-04)
+        top += (-margin + 3) & ~3
+        struct.pack_into(">I", stub, STUB_TOP, top)
+        margin = in_place_margin(data[32:], top)
     if margin < 0:
         sys.exit(f"error: the stream would overwrite itself while unpacking (margin {margin})")
     struct.pack_into(">I", stub, 6, len(data))                       # header: data size

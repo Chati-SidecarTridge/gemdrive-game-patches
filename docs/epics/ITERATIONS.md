@@ -95,20 +95,23 @@ Epic numbers are the execution order. One epic at a time, each on its own `epic-
 **Goal:** the games that do not run from a GEMDOS drive are ported, group by group, with Hatari
 unchanged (C-02). The groups are the test card's folders (`tools/survey/sdcard.py`). Each epic has:
 - a first test game;
-- the build of its fix, as tools or instructions that change a user's own copy (D-11);
+- the build of its fix: each game's start files for a GEMDOS drive, with their originals'
+  signatures, which EPIC-09's program installs on a user's copy (D-17);
 - its runs on Hatari's three setups;
 - Diego's checkpoint, which also covers his Multidevice, from a card (D-16).
 
 ### Implementation path
 
-Order set by Diego, 2026-10-15 (D-16).
+Order set by Diego, 2026-10-15 and 2026-10-16 (D-16, D-17, D-18).
 
 | # | Epic | Why at this point |
 | --- | --- | --- |
 | EPIC-04 | The GOS5 games from a GEMDOS drive (`FIXGOS5`, 87 games, S1) | Lemmings' own strategy, and the project's aim. Its launcher and GOS are EPIC-02's sources, so S1 is built and tested there first. The reference's first-level error, a candidate until now, is its STORY-02. |
-| EPIC-05 | The GOS4 games from a GEMDOS drive (`FIXGOS4`, 117 games, S1) | The largest group. It reuses EPIC-04's patchers and adds S1's largest risk: the GEMDOS calls GOS4 games make during play. |
-| EPIC-06 | The small fixes (`FIXPLAIN`, `FIXHOLE`, `FIXHAGE`: 8 games, S2 to S4) | Each fix is already shown by a trial (EPIC-03 STORY-06). One epic turns the three into tools a user can apply. |
-| EPIC-07 | The unsure games settled (`UNSURE`, 10 games) | Last: each needs its cause found first, and their fixes may reuse the earlier epics' work. |
+| EPIC-05 | The GOS4 games from a GEMDOS drive (`FIXGOS4`, 117 games, S1) | The largest group. It reuses EPIC-04's builds by signature and adds S1's largest risk: the GEMDOS calls GOS4 games make during play. |
+| EPIC-06 | The small fixes (`FIXPLAIN`, `FIXHOLE`, `FIXHAGE`: 8 games, S2 to S4) | Each fix is already shown by a trial (EPIC-03 STORY-06). One epic builds the three. |
+| EPIC-07 | The unsure games settled (`UNSURE`, 10 games) | Last of the ports: each needs its cause found first, and their fixes may reuse the earlier epics' work. |
+| EPIC-08 | The ports on acsi2stm's GemDrive (<https://github.com/retro16/acsi2stm>) | Asked by Diego (D-18): a check, after the ports, that their builds also work with the other GEMDRIVE, an STM32 on the ACSI port whose driver lives in the ST's RAM. Before the patcher, so that it installs builds that know both. |
+| EPIC-09 | The patcher: a user's original start files checked by signature and replaced with our builds | Last (D-17): it installs what EPIC-04 to EPIC-08 built, so it comes when they are done. |
 
 What was known before these epics were written, as their input:
 

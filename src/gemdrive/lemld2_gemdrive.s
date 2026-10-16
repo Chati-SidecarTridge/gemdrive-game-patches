@@ -185,8 +185,10 @@ gd_functions:
 ; masked, it watches the keyboard ACIA until no byte has come for GD_QUIET loops (longer than the
 ; IKBD takes to answer a poll), and hands each byte to the game's keyboard interrupt as the MFP
 ; would: through the vector its vector register gives channel 6 (Lemmings sets it to 0: $18, not
-; TOS's $118), and only while that interrupt is enabled, unmasked, not in service, and the ACIAs'
-; line asks for it. A game that reads the ACIA itself (Lemmings' intro) gets no wait: the load
+; TOS's $118), and only while the game's own SR (kept by PP's loader) lets it in, that interrupt is
+; enabled, unmasked, not in service, its handler is the game's, and the ACIAs' line asks for it. A
+; game that loads with interrupts masked, reads the ACIA itself (Lemmings' intro), or has not
+; taken the keyboard from TOS yet, gets no wait: the load
 ; goes on as PP's. Lemmings asks for the mouse's position at every VBL, and its level load came
 ; while an answer was arriving: the y was read from the next packet, and drawing the pointer there
 ; ended in an address error. Interrupts stay masked: Lemmings' intro calls the loader from its VBL
@@ -196,6 +198,20 @@ gd_quiet:
 	movem.l	d0-d2/a0-a1,-(sp)
 	move.w	sr,d1				; the caller's, which file_io gives back
 	move.w	#$2700,sr
+	move.w	d1,d0				; the game's SR: the caller's, or the one PP's loader
+	movea.l	(20,sp),a0			; keeps in loader_sr before it masks them (after jsr
+	cmpi.l	#$4279000c,(a0)			; (a0): clr.w $c0734.l, then move.w (loader_sr,pc),sr)
+	bne.s	gd_q_loader
+	addq.l	#6,a0
+gd_q_loader:
+	cmpi.w	#$46fa,(a0)
+	bne.s	gd_q_ipl
+	adda.w	(2,a0),a0
+	move.w	(2,a0),d0
+gd_q_ipl:
+	andi.w	#$0700,d0			; masked for the keyboard's level 6 (Warp loads at
+	cmpi.w	#$0600,d0			; $2700, its handler using a3 as it is in its own code):
+	bcc.s	gd_q_done			; no interrupt could come, as on PP's path
 	btst	#6,(mfp_ierb).w			; the keyboard ACIA's interrupt: enabled
 	beq.s	gd_q_done
 	btst	#6,(mfp_imrb).w			; unmasked
@@ -208,6 +224,11 @@ gd_quiet:
 	addq.w	#6,d0				; channel 6's vector
 	lsl.w	#2,d0
 	movea.w	d0,a0
+	move.l	(a0),d0				; the handler: the game's, below this block; not TOS's or
+	andi.l	#$ffffff,d0			; GOS's, which would run on the game's RAM (Robocop 2
+	lea	gd_forward(pc),a1		; loads before it takes the keyboard)
+	cmp.l	a1,d0
+	bcc.s	gd_q_done
 	lea	(acia_kbd_ctrl).w,a1
 	move.w	#GD_GIVE_UP,d2
 gd_q_start:
