@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patch a game | Atari ST hard-disk adaptations, from GEMDOS and GEMDRIVE</title>
+<meta name="description" content="Check a game&#x27;s ZIP, and patch it to run from GEMDOS and GEMDRIVE.">
+<link rel="canonical" href="https://gemdrive.sidecartridge.com/patch.html">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="cookieconsent.css">
+<script src="cookieconsent.js"></script>
+<script src="consent.js"></script>
+<!-- Google Analytics, the sidecartridge.com property, as on the SidecarTridge sites: cookieconsent runs
+     it only after the analytics category is accepted, and it loads gtag only on *.sidecartridge.com. -->
+<script type="text/plain" data-cookiecategory="analytics">
+    (function () {
+        var GA_ID = 'G-6VT9RXTJ2N';
+        if (!/(^|\.)sidecartridge\.com$/.test(location.hostname)) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+    })();
+</script>
+</head>
+<body class="home">
+<a class="skip" href="#main">Skip to the content</a>
+<header class="bar">
+<a class="brand" href="https://sidecartridge.com" target="_blank" rel="noopener"><img class="brand-mark" src="logo.png"
+alt="SidecarTridge logo mark" width="26" height="26"><img class="brand-wordmark" src="logo-text.png" alt="SidecarTridge"
+width="84" height="14"></a>
+<a class="mark" href="index.html">Atari ST hard-disk adaptations<span>, from GEMDOS and GEMDRIVE</span></a>
+<nav aria-label="Sections"><ul><li><a href="index.html">The project</a></li><li><a href="findings.html">Findings</a></li><li><a href="modes.html">The modes</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="patch.html" aria-current=page>Patch a game</a></li><li><a href="catalogue.html">Catalogue</a></li><li><a href="tools.html">Tools</a></li></ul></nav>
+<a class="back" href="https://sidecartridge.com">&#8592; Back</a>
+</header>
+<div class="desk">
+
+<main class="window doc" id="main"><div class="titlebar"><a class="closer" href="index.html" aria-label="Close: back to the project"></a><span class="path">C:\PATCH.HTM</span><span class="fuller" aria-hidden="true"></span></div><div class="work">
+<h1>Patch a game</h1>
+<p class="lead">Give this page a game's ZIP exactly as you downloaded it from the 8bitchip.info website.
+The page checks that it is one of the downloads it knows, tells you whether the game runs from GEMDOS and
+GEMDRIVE as it is, and when a fix makes it run, patches the ZIP and gives it back to you. Everything
+happens in your browser: your file is not sent anywhere.</p>
+<form class="check patcher" aria-labelledby="patch-title">
+<p class="alert" aria-hidden="true">?</p>
+<div>
+<h2 id="patch-title">Choose the game's ZIP</h2>
+<p>Drop it here, or choose it.</p>
+<p class="ask"><input id="patch-zip" type="file" accept=".zip,.ZIP,application/zip"></p>
+<div class="patch-result" aria-live="polite"></div>
+</div>
+</form>
+<h2 id="after">Then</h2>
+<ol>
+<li>Unpack the ZIP the page gave you, or the original when there is nothing to patch.</li>
+<li>Copy the game's folder to your GEMDOS drive: the folder Hatari serves as drive C:, or the microSD
+card of the SidecarTridge Multidevice, which GEMDRIVE serves.</li>
+<li>Start the game's program from that folder, as the page says. A fix that adds
+<code>GDBPB.PRG</code> needs it run first, once after each reset or power-on.</li>
+</ol>
+<p>The page holds no file of the games. It rebuilds the fixed file from your own copy, and checks the
+result against this project's build before it gives it to you. How each fix works:
+<a href="solutions.html#solutions-4-the-solutions-proposed">the solutions</a>.</p>
+<noscript><p>The patcher needs JavaScript.</p></noscript>
+</div></main>
+</div>
+<footer class="credits">
+<p>The adaptations, their list and their documentation come from a third party website. This site
+links to its pages and copies none of its files. Every run was made in
+<a href="https://www.hatari-emu.org/">Hatari</a> 2.6.1 and
+<a href="https://sidecartridge.com/products/sidecartridge-multidevice-atari-st/">SidecarTridge
+Multi-device</a> with the Multidrive Emulator. Atari, ST, STE, TT, Falcon and TOS are Atari's
+names.</p>
+<p class="contact">A game missing, a fix that fails, or something else to ask?
+<a href="https://store.sidecartridge.com/pages/contact">Contact SidecarTridge</a>.</p>
+</footer>
+<script src="patcher.js"></script>
+<script src="patch-data.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

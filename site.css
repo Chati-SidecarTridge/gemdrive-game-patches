@@ -1,0 +1,337 @@
+/* The site's style, GEM's desktop on a monochrome monitor: a
+   dithered desk, white windows with black frames, striped title bars, inverse video for what is
+   selected. Colour is kept for the data: the verdicts and the screenshots. Every colour is one the
+   STE could show (each channel a multiple of 0x11). Fonts are the system's: its monospace where GEM
+   drew with the ST's system font, Charter for the reading text. */
+
+:root {
+  --paper: #ffffff;
+  --ink: #000000;
+  --grey: #555555;
+  --rule: #aaaaaa;
+  --shade: #eeeeee;
+  --unread: #dddddd;
+  --link: #0000aa;
+  --mark: #ffffaa;
+  --ok: #00aa44;
+  --fix: #ffaa00;
+  --no: #dd2200;
+  --sys: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --text: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --measure: 68ch;
+  --square: 10px;
+  --frame: 2px solid var(--ink);
+  /* the desk: GEM's green, the ST desktop's colour (palette 070, #00EE00 as Hatari shows it) */
+  --desk: #00ee00;
+  --dither: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2' shape-rendering='crispEdges'%3E%3Crect width='2' height='2' fill='%23fff'/%3E%3Crect width='1' height='1'/%3E%3Crect x='1' y='1' width='1' height='1'/%3E%3C/svg%3E") 0 0 / 2px 2px;
+  /* a title bar: GEM's lines, one in two */
+  --stripes: repeating-linear-gradient(var(--ink) 0 1px, var(--paper) 1px 2px);
+}
+
+* { box-sizing: border-box; }
+html { font-size: 100%; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--desk);
+  color: var(--ink);
+  font: 1.125rem/1.6 var(--text);
+  font-variant-numeric: lining-nums;
+}
+
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+a:hover { text-decoration-thickness: 2px; }
+main a { hyphens: manual; }
+:focus-visible { outline: 3px solid var(--link); outline-offset: 2px; }
+
+[hidden] { display: none !important; }
+.skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--paper); padding: 0.5rem 1rem; z-index: 10; }
+.skip:focus { left: 0; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* The menu bar: the site's name where GEM has its Desk menu, the sections as menu titles, the
+   current one in inverse video. */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0 1rem;
+  background: var(--paper);
+  border-bottom: var(--frame);
+  padding: 0 1rem;
+  font: 0.9375rem/1 var(--sys);
+}
+.bar .brand { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.3rem 0.5rem 0.3rem 0; text-decoration: none; }
+.bar .brand img { display: block; }
+.bar .brand-mark { width: 26px; height: 26px; }
+.bar .brand-wordmark { height: 14px; width: auto; }
+.bar .mark { color: var(--ink); text-decoration: none; padding: 0.55rem 0.5rem; font-weight: 700; }
+.bar .back { align-self: center; color: var(--ink); text-decoration: none; padding: 0.3rem 0.6rem; border: var(--frame); margin-left: 0.5rem; white-space: nowrap; }
+.bar .back:hover { background: var(--ink); color: var(--paper); }
+.bar .mark:hover { background: var(--ink); color: var(--paper); }
+.bar nav { margin-left: auto; }
+.bar ul { display: flex; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
+.bar li a { display: block; padding: 0.55rem 0.6rem; color: var(--ink); text-decoration: none; }
+.bar li a:hover, .bar li a[aria-current] { background: var(--ink); color: var(--paper); }
+
+/* The desk: the section's window beside the page's. */
+.desk {
+  display: grid;
+  grid-template-columns: 16rem minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 2.5rem 2.5rem 0;
+}
+.desk > main:only-child { grid-column: 1 / -1; }
+.home .desk { max-width: 80rem; }
+.wide .desk { max-width: 100rem; }
+
+/* A window: its title bar (close box, the path in a white plate on GEM's stripes, full box), its
+   info line, its work area. */
+.window { background: var(--paper); border: var(--frame); min-width: 0; }
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 1.75rem;
+  padding: 0 0.25rem;
+  border-bottom: var(--frame);
+  background: var(--stripes);
+  font: 700 0.875rem/1 var(--sys);
+}
+.titlebar .path { margin: 0 auto; padding: 0.2rem 0.7rem; background: var(--paper); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.closer, .fuller { flex: none; width: 1.25rem; height: 1.25rem; background: var(--paper); border: 1px solid var(--ink); }
+.closer { position: relative; }
+.closer::before, .closer::after { content: ""; position: absolute; left: 50%; top: 50%; width: 0.8rem; height: 2px; background: var(--ink); }
+.closer::before { transform: translate(-50%, -50%) rotate(45deg); }
+.closer::after { transform: translate(-50%, -50%) rotate(-45deg); }
+a.closer:hover { background: var(--ink); }
+a.closer:hover::before, a.closer:hover::after { background: var(--paper); }
+.fuller { background: linear-gradient(var(--ink), var(--ink)) 0.3rem 0.3rem / 0.55rem 0.55rem no-repeat var(--paper); }
+.info { margin: 0; padding: 0.35rem 1rem; border-bottom: 1px solid var(--ink); font: 0.8125rem/1.4 var(--sys); max-width: none; }
+.work { padding: 2rem 2.5rem 2.5rem; }
+
+/* The section's window: its pages, as a directory, then the page's headings. */
+.rail { position: sticky; top: 1rem; font-size: 0.9375rem; line-height: 1.35; max-height: calc(100vh - 2rem); overflow: auto; }
+.rail .work { padding: 0.5rem 0 0.75rem; }
+.rail ul { list-style: none; margin: 0; padding: 0; }
+.rail .pages { margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--ink); }
+.rail .pages a { display: block; padding: 0.3rem 1rem; color: var(--ink); text-decoration: none; }
+.rail .pages a:hover { text-decoration: underline; }
+.rail .pages a[aria-current] { background: var(--ink); color: var(--paper); }
+.rail .toc summary { font: 700 0.8125rem/1.2 var(--sys); cursor: pointer; padding: 0.3rem 1rem; }
+.rail .toc > ul { padding: 0 1rem; }
+.rail .toc li { margin: 0.35rem 0; }
+.rail .toc ul ul { padding-left: 0.9rem; font-size: 0.875rem; }
+.rail .toc a { color: var(--ink); text-decoration: none; }
+.rail .toc a:hover { text-decoration: underline; }
+.rail code { color: inherit; background: none; padding: 0; font-size: 0.8em; }
+
+/* Documents. */
+main h1, main h2, main h3, main h4 { font-family: var(--sys); font-weight: 700; line-height: 1.2; max-width: 40ch; letter-spacing: -0.01em; }
+main h1 { font-size: 1.875rem; margin: 0 0 1.25rem; }
+main h2 { font-size: 1.3125rem; margin: 2.75rem 0 0.75rem; padding-top: 0.6rem; border-top: var(--frame); }
+main h3 { font-size: 1.125rem; margin: 2rem 0 0.5rem; }
+main h4 { font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+main p, main li, main pre { max-width: var(--measure); }
+main p { margin: 0 0 1rem; hyphens: auto; hyphenate-limit-chars: 8 4 4; }
+main h1 code, main h2 code, main h3 code { font-size: 0.85em; background: none; padding: 0; }
+main ul, main ol { padding-left: 1.4rem; margin: 0 0 1rem; }
+main li { margin: 0.3rem 0; }
+main li > p { margin: 0.4rem 0; }
+main li ul, main li ol { margin: 0.3rem 0; }
+.lead { font-size: 1.3125rem; line-height: 1.5; max-width: 60ch; }
+
+code { font: 0.84em/1 var(--sys); background: var(--shade); padding: 0.1em 0.25em; overflow-wrap: anywhere; }
+a code { color: var(--link); }
+pre { background: var(--paper); border: 1px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); padding: 0.9rem 1rem; overflow-x: auto; margin: 0.5rem 0 1.5rem; line-height: 1.4; }
+pre code { background: none; padding: 0; font-size: 0.84rem; overflow-wrap: normal; }
+
+.table { overflow-x: auto; margin: 0 0 1.5rem; }
+table { border-collapse: collapse; font-size: 0.9375rem; line-height: 1.4; font-variant-numeric: lining-nums tabular-nums; }
+th { text-align: left; vertical-align: bottom; background: var(--ink); color: var(--paper); padding: 0.4rem 0.6rem; font: 700 0.8125rem/1.3 var(--sys); }
+td { vertical-align: top; border-bottom: 1px solid var(--rule); padding: 0.45rem 0.6rem; }
+.num { text-align: right; }
+td code { font-size: 0.8em; }
+
+.credits { max-width: 84rem; margin: 3rem auto 0; padding: 0 2.5rem 2.5rem; font-size: 0.875rem; }
+.home .credits { max-width: 80rem; }
+.wide .credits { max-width: 100rem; }
+.credits p { max-width: none; margin: 0; background: var(--paper); border: var(--frame); padding: 0.75rem 1rem; }
+.credits p + p { border-top: 0; }
+
+/* The home page: the map of every game, read in band by band. */
+.nb { white-space: nowrap; }
+.hero h1 { font-size: clamp(1.75rem, 1.1rem + 1.9vw, 2.75rem); max-width: 30ch; text-wrap: balance; margin-bottom: 1.25rem; letter-spacing: -0.03em; line-height: 1.1; }
+.hero .lead { margin-bottom: 2.25rem; }
+/* The check: a GEM alert box, its frame doubled, its default button in a thick frame. */
+.check {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 1.5rem;
+  max-width: 52rem;
+  margin: 0 0 2.75rem;
+  padding: 1.25rem 1.5rem 1.4rem;
+  background: var(--paper);
+  border: var(--frame);
+  outline: 2px solid var(--paper);
+  box-shadow: 0 0 0 4px var(--ink), 6px 6px 0 4px var(--ink);
+}
+.check .alert { margin: 0; width: 3rem; height: 3rem; display: grid; place-items: center; border: 3px solid var(--ink); font: 700 2rem/1 var(--sys); }
+.check h2 { font-size: 1.375rem; margin: 0 0 0.4rem; padding: 0; border: 0; max-width: none; }
+.check p { margin: 0 0 0.9rem; max-width: 60ch; }
+.check .ask { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: stretch; margin: 0; }
+.check input { flex: 1 1 14rem; font: 1.0625rem/1.3 var(--text); padding: 0.5rem 0.65rem; border: 2px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); }
+.check .default { border-width: 4px; font-weight: 700; padding: 0.4rem 1rem; }
+.check .button { display: inline-flex; align-items: center; font: 0.875rem/1.2 var(--sys); color: var(--ink); text-decoration: none; border: var(--frame); padding: 0.35rem 0.9rem; }
+.check .button:hover { background: var(--shade); }
+.check .button:active { background: var(--ink); color: var(--paper); }
+.check.over { background: var(--mark); }
+.patcher input[type=file] { flex: 1 1 100%; font: 0.9375rem/1.3 var(--sys); padding: 0.6rem; border: 2px dashed var(--ink); }
+.patch-result { margin-top: 1rem; }
+.patch-result:empty { display: none; }
+.patch-result .default { border-width: 4px; font-weight: 700; }
+
+.map { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; gap: 2.5rem; align-items: start; }
+.bands { border-top: var(--frame); }
+.band { display: grid; grid-template-columns: 10.5rem minmax(0, 1fr); gap: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--rule); }
+.band .label { display: flex; justify-content: space-between; gap: 0.5rem; font: 0.8125rem/1.2 var(--sys); color: var(--ink); text-decoration: none; padding-top: 0.05rem; }
+.band .label:hover span:first-child { text-decoration: underline; }
+.count { font-family: var(--sys); font-variant-numeric: tabular-nums; }
+.band .label .count { color: var(--grey); }
+.squares { display: flex; flex-wrap: wrap; gap: 2px; }
+.squares a { width: var(--square); height: var(--square); }
+.squares a:hover { outline: 2px solid var(--ink); outline-offset: 1px; }
+.ok { background: var(--ok); }
+.fix { background: var(--fix); }
+.no { background: var(--no); }
+.unsure { background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink); }
+.fix.built { background: var(--ok); box-shadow: inset 0 0 0 3px var(--fix); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .squares a { animation: read 1ms steps(1) both; animation-delay: calc(var(--b) * 110ms + var(--k, 0) * 40ms); }
+  .squares a:nth-child(7n+2) { --k: 4; }
+  .squares a:nth-child(7n+3) { --k: 1; }
+  .squares a:nth-child(7n+4) { --k: 6; }
+  .squares a:nth-child(7n+5) { --k: 2; }
+  .squares a:nth-child(7n+6) { --k: 5; }
+  .squares a:nth-child(7n) { --k: 3; }
+  @keyframes read { from { background: var(--unread); box-shadow: none; } }
+}
+
+.legend { list-style: none; margin: 0; padding: 0; border-top: var(--frame); font-size: 0.9375rem; line-height: 1.4; }
+.legend li { display: grid; grid-template-columns: var(--square) 3.2rem 1fr; gap: 0 0.6rem; align-items: baseline; padding: 0.55rem 0; border-bottom: 1px solid var(--rule); max-width: none; margin: 0; }
+.legend i, .verdict i, .verdicts i { display: inline-block; width: var(--square); height: var(--square); }
+.legend .count { font-size: 1rem; text-align: right; }
+.readout { font: 0.8125rem/1.5 var(--sys); color: var(--grey); min-height: 3em; margin-top: 0.75rem; }
+
+.prose { margin-top: 1rem; }
+
+/* The catalogue. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.9rem 1.5rem;
+  padding: 1rem 0;
+  margin-bottom: 0.5rem;
+  border-top: var(--frame);
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+  font-size: 0.9375rem;
+  z-index: 2;
+}
+@media (min-width: 60rem) and (min-height: 40rem) { .filters { position: sticky; top: 0; } }
+.filters > label { display: flex; flex-direction: column; gap: 0.25rem; font: 700 0.8125rem/1.2 var(--sys); }
+.filters input[type=search], .filters select {
+  font: 400 0.9375rem/1.3 var(--text);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 0.35rem 0.5rem;
+  min-width: 9rem;
+}
+.filters .search input { width: 14rem; }
+.verdicts { display: flex; flex-wrap: wrap; border: 0; margin: 0; padding: 0; }
+.verdicts legend { font: 700 0.8125rem/1.2 var(--sys); padding: 0 0 0.25rem; }
+.verdicts label { display: flex; align-items: center; gap: 0.4rem; border: 1px solid var(--ink); margin-right: -1px; padding: 0.35rem 0.6rem; cursor: pointer; background: var(--paper); }
+.verdicts input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.verdicts label:has(input:checked) { background: var(--ink); color: var(--paper); }
+.verdicts label:has(input:checked) .unsure { box-shadow: inset 0 0 0 2px var(--paper); background: var(--ink); }
+.verdicts label:has(input:focus-visible) { outline: 3px solid var(--link); outline-offset: 2px; position: relative; z-index: 1; }
+.verdicts .count { font-size: 0.8125rem; }
+.shown { margin: 0 0 0 auto; align-self: center; font: 0.8125rem/1.4 var(--sys); }
+/* GEM's buttons: a frame, a thicker one for the default, inverse video while pressed. */
+button { font: 0.875rem/1.2 var(--sys); color: var(--ink); background: var(--paper); border: var(--frame); border-radius: 0; padding: 0.35rem 0.8rem; cursor: pointer; }
+button:hover { background: var(--shade); }
+button:active { background: var(--ink); color: var(--paper); }
+.shown button { margin-left: 0.75rem; }
+
+.catalogue table { width: 100%; }
+.catalogue td { padding-top: 0.6rem; padding-bottom: 0.6rem; }
+@media (min-width: 60rem) and (min-height: 40rem) { .catalogue tr { scroll-margin-top: 12rem; } }
+.catalogue tr:target td { background: var(--mark); }
+.catalogue .pic { width: 9rem; padding-left: 0; }
+.shot { display: block; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.shot:hover { background: none; }
+.shot img { display: block; width: 8.5rem; height: auto; border: 1px solid var(--ink); image-rendering: pixelated; }
+.catalogue .game { min-width: 16rem; }
+.catalogue .game > a { font-weight: 700; }
+.catalogue .game p { margin: 0.2rem 0 0; font-size: 0.875rem; color: var(--grey); max-width: 60ch; }
+.catalogue .sol { display: block; margin-top: 0.3rem; padding-left: 0.5rem; border-left: 3px solid var(--fix); color: var(--ink); }
+.catalogue small { font-size: 0.8125rem; color: var(--grey); }
+.catalogue .exc { display: block; margin-top: 0.3rem; color: var(--ink); }
+.catalogue .hwnote { display: block; margin-top: 0.3rem; padding-left: 0.5rem; border-left: 3px solid var(--ink); color: var(--ink); }
+.catalogue .verdict { white-space: nowrap; }
+.catalogue .verdict i { margin-right: 0.45rem; }
+.empty { padding: 2rem 0; }
+
+/* The screenshot viewer: a GEM dialog, its frame doubled. */
+.viewer { border: var(--frame); outline: 2px solid var(--paper); box-shadow: 0 0 0 4px var(--ink); padding: 0; max-width: min(96vw, 860px); background: var(--paper); }
+.viewer::backdrop { background: var(--desk); opacity: 0.85; }
+.viewer img { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+.viewer form { display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0.5rem 0.5rem 1rem; border-bottom: var(--frame); }
+.viewer p { margin: 0 auto 0 0; font: 0.875rem/1.4 var(--sys); }
+
+@media (max-width: 110rem) { .bar .mark span { display: none; } }
+
+/* Narrow screens: the section's window above the page's, then one window filling the desk. */
+@media (max-width: 62rem) {
+  .desk { grid-template-columns: minmax(0, 1fr); gap: 1rem; padding-top: 1rem; }
+  .rail { position: static; max-height: none; }
+  .map { grid-template-columns: minmax(0, 1fr); }
+  .work { padding: 1.5rem 1.5rem 2rem; }
+}
+@media (max-width: 40rem) {
+  :root { --square: 7px; }
+  body { font-size: 1.0625rem; }
+  .bar { padding: 0 0.5rem; gap: 0; }
+  .bar .mark span { display: none; }
+  .bar .brand-wordmark { display: none; }
+  .bar nav { margin-left: 0; width: 100%; }
+  .bar li a { padding: 0.5rem 0.45rem; }
+  .desk { padding: 0.75rem 0.5rem 0; }
+  .work { padding: 1.25rem 1rem 1.5rem; }
+  .info { padding: 0.35rem 0.75rem; }
+  main h1 { font-size: 1.5rem; }
+  main h2 { font-size: 1.1875rem; }
+  .band { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
+  .check { grid-template-columns: minmax(0, 1fr); padding: 1rem; box-shadow: 0 0 0 4px var(--ink); }
+  .check .alert { display: none; }
+  .band .label { justify-content: flex-start; }
+  .filters .search input { width: 100%; }
+  .filters > label { flex: 1 1 100%; }
+  .catalogue thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .catalogue tr { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 0.8rem; padding: 0.7rem 0; border-bottom: 1px solid var(--rule); }
+  .catalogue td { display: block; border: 0; padding: 0; }
+  .catalogue .pic { grid-row: span 6; width: auto; }
+  .shot img { width: 6.5rem; }
+  .catalogue .game { min-width: 0; }
+  .catalogue td:not(.pic):not(.game) { font-size: 0.875rem; }
+  .catalogue td br { display: none; }
+  .catalogue td small { margin-left: 0.4rem; }
+  .catalogue td > small:first-child { margin-left: 0; }
+  .credits { padding: 0 0.5rem 1.5rem; margin-top: 1.5rem; }
+}
