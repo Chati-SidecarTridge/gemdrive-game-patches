@@ -64,11 +64,19 @@ python3 tools/site/check_public.py <out>
 
 ## GitHub Pages
 
-The site is built, not committed: `tools/site/build_site.py` writes it from the repository, and
-every link in it is relative, so it works from `https://<user>.github.io/<repository>/`.
+The site is built, not committed, and published from this Mac, with its snapshots (Diego,
+2026-10-26, D-28): the snapshots come from the Hatari runs here and are not in the repository.
 
-- Repository settings, Pages, "Build and deployment": source **GitHub Actions**.
-- The workflow: `site.yml` here, moved to `.github/workflows/site.yml` when the repository goes
-  public. On every push to `main` it builds the site with `--no-snapshots --check` and deploys it.
-- No custom domain, nothing else to configure: the site uses no external services, fonts or
-  scripts.
+```
+tools/site/deploy_site.sh [--dry-run]         # build, check, force-push the site to gh-pages
+```
+
+It refuses when a tracked file has changed, builds the site with its snapshots and `--check`
+into `tools/dev/builds/site-pages/`, and pushes it as a single commit with no parent to `origin`'s
+`gh-pages` branch, so the branch holds only the latest site.
+
+- Repository settings, Pages, "Build and deployment": source **Deploy from a branch**,
+  `gh-pages`, `/` (root); custom domain `gemdrive.sidecartridge.com` (`CNAME`, copied into the
+  site), whose DNS record already points at `sidecartridge.github.io`; HTTPS enforced.
+- `.github/workflows/site.yml` only builds and checks the site, without snapshots, on pull
+  requests and pushes to `main`; it publishes nothing.

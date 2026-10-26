@@ -23,8 +23,8 @@ To be written with Diego when the epic starts. What is known:
   **`gemdrive-game-patches`** (D-26), `https://github.com/sidecartridge/gemdrive-game-patches`.
   The local folder and the docs that name the repository follow.
 - The website published at https://gemdrive.sidecartridge.com/ (`CNAME`, Diego, 2026-10-26;
-  `docs/publication/site.yml`, GitHub Pages, prepared, not in use); whether
-  the snapshots are published (D-15, Diego's call).
+  GitHub Pages); the snapshots published, the site built on this Mac and
+  pushed to `gh-pages` (D-28).
 - Every check passing on the clean clone: `tools/dev/all_harness.sh`, `build_site.py --check`.
 
 ## Setups

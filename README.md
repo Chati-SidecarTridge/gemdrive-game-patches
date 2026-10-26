@@ -76,7 +76,8 @@ whole toolset, and `CLAUDE.md` the working rules.
 The website is <https://gemdrive.sidecartridge.com/> (`CNAME`). `python3 tools/site/build_site.py`
 writes it into `tools/dev/builds/site/`; it works from that folder and needs nothing from another
 site. `--check` verifies every link and anchor, every game's row, and that no page loads another
-site's files. CI runs it on every pull request and push to `main`.
+site's files. CI runs it on every pull request and push to `main`. `tools/site/deploy_site.sh`
+publishes it, with the screenshots of this project's Hatari runs, on the `gh-pages` branch.
 
 ## Licence
 

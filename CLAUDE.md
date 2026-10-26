@@ -88,7 +88,7 @@ removed from the history before the repository went public.
   EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`; `tools/site/`,
   the website's builder, style and script, and the check of a clone before going public.
 - `docs/publication/`: what leaves the repository and its history before it goes public (D-15),
-  and the GitHub Pages workflow, prepared, not in use.
+  and how the site is published on GitHub Pages.
 - `tools/dev/`: the development environment from EPIC-00: pinned toolchain scripts, the
   round-trip check, the Hatari disk setups and harness. `builds/`, `logs/` and `dev.cfg` are
   git-ignored.
@@ -136,6 +136,7 @@ python3 tools/survey/screens.py <png> ...      # is this screenshot the TOS desk
 python3 tools/survey/sheet.py [--all]          # a contact sheet of the runs not shown yet
 python3 tools/survey/sdcard.py                 # every game for the Multidevice's GEMDRIVE: builds/sdcard/, copied to a microSD
 python3 tools/site/build_site.py [--check] [--no-snapshots]  # the website into tools/dev/builds/site/ (open index.html)
+tools/site/deploy_site.sh [--dry-run]          # the site, with its snapshots, force-pushed to gh-pages (D-28)
 python3 tools/site/check_public.py [<clone>]   # is a clone ready to go public: docs/publication/remove.txt (D-15)
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```
