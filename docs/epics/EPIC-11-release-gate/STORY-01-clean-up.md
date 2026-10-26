@@ -2,7 +2,7 @@
 id: STORY-01
 epic: EPIC-11
 title: The clean-up: what leaves the history, and a cleaned clone
-status: in-progress
+status: done
 ---
 
 ## Goal
