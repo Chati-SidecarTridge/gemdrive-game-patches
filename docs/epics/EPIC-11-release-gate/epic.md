@@ -2,7 +2,7 @@
 id: EPIC-11
 iteration: 2
 title: The release gate
-status: in-progress
+status: done
 ---
 
 ## Goal
@@ -35,6 +35,11 @@ A clean clone of the repository; the published site in Chrome, Safari and Firefo
 
 - STORY-01, the clean-up: what leaves the history, decided (D-25), and a cleaned clone that
   `check_public.py` passes.
-- The others written as the epic goes, ending with Diego's checkpoint: the release.
+- STORY-02, the repository on GitHub, private until the release (D-27).
+- STORY-03, the site published with its snapshots on `gh-pages` (D-28), and `make tag`.
+- STORY-04, Diego's checkpoint: the release, v1.0.0, 2026-10-26.
 
 ## Notes
+
+- Closed by Diego, 2026-10-26, with v1.0.0 released and the site published; then, on his word,
+  "make the repo public" (D-27): `github.com/sidecartridge/gemdrive-game-patches` public.
