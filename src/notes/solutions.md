@@ -74,7 +74,7 @@ and on the STE with TOS 1.62 and 2.06. The folder named is the ST run from the G
 - **Every GOS4 and GOS5 game is "fix".** From the GEMDOS drive on the ST, its launcher quits to the
   desktop or prints `"This prg. requires PP, AHDI or Hddriver"`. The representative games do the
   same on the STE with TOS 1.62 and 2.06, and they play from PPDRIVER on all three machines.
-- **Where the verdicts come from.** 241 are Diego's answers on the review page (`review.tsv`), 90
+- **Where the verdicts come from.** 241 come from a human review of the runs, on the review page (`review.tsv`), 90
   come from the game's PPDRIVER run, and 10 from a trace or a trial looked into (`findings.tsv`).
   The other 1,490 come from the run alone.
 
@@ -188,7 +188,7 @@ launcher: the "major modification" that makes a game not feasible.
 
 ### 3.6 Unsure (10 games)
 
-Nine games run "as it is" by the rules, but Diego marked their runs Broken on the review page. A
+Nine games run "as it is" by the rules, but the human review marked their runs Broken on the review page. A
 second look, with the PPDRIVER run beside each, kept them unsure. The tenth game has no hard-disk
 version.
 
@@ -390,7 +390,7 @@ In `migration.csv`, the `solution` column names the other download after S1: "or
   `C:\PABISYS.FIL`. The survey mounted only the folder, so the game quit from both disks.
   `run_all.py` now puts in the drive's root whatever a download keeps beside the game's folder. The
   game then reaches its difficulty menu (`runs.tsv`), and further, with keys, its first screen
-  (`trials/20261013-114212-st-104-gemdrive-1672-maddog-root-1n`). It runs as it is. Diego's Broken
+  (`trials/20261013-114212-st-104-gemdrive-1672-maddog-root-1n`). It runs as it is. The human review's Broken
   was given on the run without the file, so the game is listed in `stale.txt`.
 - **Great Giana Sisters STE.** An earlier finding said its HAGA downloads read through GEMDOS. They
   do not (§3.5), so the game is not feasible.

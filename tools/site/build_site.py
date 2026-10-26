@@ -47,6 +47,7 @@ SNAPSHOTS = REPO / "tools" / "dev" / "builds" / "survey" / "snapshots"
 LOGS = REPO / "tools" / "dev" / "logs"
 PP = "https://atari.8bitchip.info/"
 SITE = "Atari ST hard-disk adaptations, from GEMDOS and GEMDRIVE"
+ADDRESS = (REPO / "CNAME").read_text().strip()  # the published site's address: gemdrive.sidecartridge.com
 
 # The notes, by section, in reading order: (file stem, short title)
 SECTIONS = [
@@ -62,7 +63,7 @@ VERDICTS = [("as it is", "ok", "runs from GEMDOS and GEMDRIVE unchanged"),
             ("fix", "fix", "runs once one of the four solutions is applied"),
             ("not feasible", "no", "would need the game itself rewritten"),
             ("unsure", "unsure", "the runs did not settle it")]
-BY = {"run": "from its run", "Diego": "Diego's review", "ppdriver": "against the PPDRIVER run",
+BY = {"run": "from its run", "Diego": "human review", "ppdriver": "against the PPDRIVER run",
       "trace": "from a trace or a trial"}
 CATEGORIES = {"1-2": "1 or 2: the regular file system", "3": "3: loaded whole, no floppy after the start",
               "4": "4: the file system, in low RAM", "5": "5: XBIOS floppy loads",
@@ -269,6 +270,25 @@ def section_of(page: str) -> str:
     return ""
 
 
+ANALYTICS = r"""<!-- Google Analytics, the sidecartridge.com property, as on the SidecarTridge sites: cookieconsent runs
+     it only after the analytics category is accepted, and it loads gtag only on *.sidecartridge.com. -->
+<script type="text/plain" data-cookiecategory="analytics">
+    (function () {
+        var GA_ID = 'G-6VT9RXTJ2N';
+        if (!/(^|\.)sidecartridge\.com$/.test(location.hostname)) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+    })();
+</script>
+"""
+
+
 def gemdos_path(name: str, folder_only: bool = False) -> str:
     """The page as a GEMDOS drive would name it, each part cut to 8.3: C:\\FINDINGS\\GEMDRIVE.HTM."""
     key = section_of(name)
@@ -306,13 +326,21 @@ def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", le
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{re.sub(r"<[^>]+>", "", head_title)}</title>
 <meta name="description" content="{esc(lead or SITE)}">
+<link rel="canonical" href="https://{ADDRESS}/{"" if name == "index" else name + ".html"}">
 <link rel="stylesheet" href="site.css">
-</head>
+<link rel="stylesheet" href="cookieconsent.css">
+<script src="cookieconsent.js"></script>
+<script src="consent.js"></script>
+{ANALYTICS}</head>
 <body class="{kind}">
 <a class="skip" href="#main">Skip to the content</a>
 <header class="bar">
+<a class="brand" href="https://sidecartridge.com" target="_blank" rel="noopener"><img class="brand-mark" src="logo.png"
+alt="SidecarTridge logo mark" width="26" height="26"><img class="brand-wordmark" src="logo-text.png" alt="SidecarTridge"
+width="84" height="14"></a>
 <a class="mark" href="index.html">Atari ST hard-disk adaptations<span>, from GEMDOS and GEMDRIVE</span></a>
 <nav aria-label="Sections"><ul>{nav}</ul></nav>
+<a class="back" href="https://sidecartridge.com">&#8592; Back</a>
 </header>
 <div class="desk">
 {rail}
@@ -325,6 +353,8 @@ links to its pages and copies none of its files. Every run was made in
 <a href="https://sidecartridge.com/products/sidecartridge-multidevice-atari-st/">SidecarTridge
 Multi-device</a> with the Multidrive Emulator. Atari, ST, STE, TT, Falcon and TOS are Atari's
 names.</p>
+<p class="contact">A game missing, a fix that fails, or something else to ask?
+<a href="https://store.sidecartridge.com/pages/contact">Contact SidecarTridge</a>.</p>
 </footer>
 {"".join(f'<script src="{s}"></script>{chr(10)}' for s in scripts)}<script src="site.js"></script>
 </body>
@@ -710,9 +740,11 @@ def build(out: Path, with_snapshots: bool) -> None:
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    for f in ("site.css", "site.js", "patcher.js"):
-        shutil.copy(HERE / f, out / f)
+    for f in ("site.css", "site.js", "patcher.js", "consent.js", "logo.png", "logo-text.png",
+              "vendor/cookieconsent.css", "vendor/cookieconsent.js"):
+        shutil.copy(HERE / f, out / Path(f).name)
     (out / "patch-data.js").write_text(patch_data(games))
+    shutil.copy(REPO / "CNAME", out / "CNAME")  # the custom domain, for a Pages deploy of this folder
     shots = snapshot_names(games) if with_snapshots else {}
     if shots:
         (out / "snapshots").mkdir()
@@ -773,6 +805,8 @@ def check(out: Path) -> int:
     for name, p in pages.items():
         for tag, attr, ref, rel in p.refs:
             if re.match(r"https?:", ref):
+                if tag == "link" and rel == "canonical":  # the page's own published address: nothing loaded
+                    continue
                 if attr != "href" or tag != "a":
                     bad.append(f"{name}: loads {ref} from another site")
                 elif urllib.parse.urlsplit(ref).netloc.endswith("8bitchip.info"):

@@ -1,0 +1,21 @@
+name: Site
+
+# The website (tools/site/build_site.py): built from the notes, the survey's tables and our sources,
+# and checked (every link and anchor, every game's row, no page loading another site, no reference
+# to the backlog or to the adaptations' author). The patcher's blocks are assembled from our sources
+# with the pinned toolchain (tools/dev/toolchain.sh). Runs on every pull request and every push to
+# main. Publishing the site is docs/publication/site.yml's, at the release gate (EPIC-11).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: The pinned toolchain
+      run: docker pull logronoide/atarist-toolkit-docker-x86_64:1.4.0@sha256:016434131cf53f627c365e55262845fba53f30a7de87a1f122d58f8fa6aeeebe
+    - name: Build and check the site
+      run: python3 tools/site/build_site.py --out _site --no-snapshots --check

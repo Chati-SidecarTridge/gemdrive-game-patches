@@ -145,7 +145,7 @@ A first look at the launcher, in April 2024, left guesses about the cause.
   D15R's handler owns it (§3).
 - On TOS 2.06 the loader works through whatever driver is installed: refuted. It needs
   `PUN_INFO` and an ACSI device (§3).
-- The copy of PPDRIVER embedded in the launcher causes the failure (Diego's starting guess):
+- The copy of PPDRIVER embedded in the launcher causes the failure (the starting guess):
   confirmed in substance. The driver is required and resident, not embedded (§4).
 - `START.TOS` only unpacks the rest, and the `.FIC` files are packed code: consistent with the
   runs (`launcher-formats.md`).
