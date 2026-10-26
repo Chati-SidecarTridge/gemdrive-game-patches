@@ -118,6 +118,7 @@ python3 src/probes/gos4/gos4_calls.py <ZIP> | --report <run>  # the GEMDOS calls
 python3 src/probes/gos4/gos4_selftest.py [--setup <s>]        # the GOS4 forwarder's file calls tested under GOS4 (PASS or the step)
 python3 tools/survey/mirror.py                 # resume or refresh the copy of PP's site in MIRROR
 python3 tools/survey/catalogue.py              # src/survey/catalogue.csv: PP's list, read from the mirror
+python3 tools/survey/watch.py [--head] [--report <file.md>]  # the live list and its downloads against catalogue.csv and patches.tsv
 python3 tools/survey/unpack_games.py           # every archive in the mirror into tools/dev/builds/survey/games/
 python3 tools/survey/inventory.py              # src/survey/files.csv: every file of every adaptation
 python3 tools/survey/classify.py               # src/survey/migration.csv: every game's strategy, from its files
