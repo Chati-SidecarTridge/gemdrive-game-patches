@@ -137,6 +137,7 @@ python3 tools/survey/sheet.py [--all]          # a contact sheet of the runs not
 python3 tools/survey/sdcard.py                 # every game for the Multidevice's GEMDRIVE: builds/sdcard/, copied to a microSD
 python3 tools/site/build_site.py [--check] [--no-snapshots]  # the website into tools/dev/builds/site/ (open index.html)
 tools/site/deploy_site.sh [--dry-run]          # the site, with its snapshots, force-pushed to gh-pages (D-28)
+make tag                                       # the release: deploy_site.sh, then version.txt's tag pushed
 python3 tools/site/check_public.py [<clone>]   # is a clone ready to go public: docs/publication/remove.txt (D-15)
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```

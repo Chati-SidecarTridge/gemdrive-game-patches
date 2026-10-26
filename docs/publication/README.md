@@ -71,7 +71,8 @@ The site is built, not committed, and published from this Mac, with its snapshot
 tools/site/deploy_site.sh [--dry-run]         # build, check, force-push the site to gh-pages
 ```
 
-It refuses when a tracked file has changed, builds the site with its snapshots and `--check`
+A release is `make tag`: it refuses when `version.txt`'s version is already tagged, runs
+`deploy_site.sh`, and only then tags the version and pushes the tag. `deploy_site.sh` refuses when a tracked file has changed, builds the site with its snapshots and `--check`
 into `tools/dev/builds/site-pages/`, and pushes it as a single commit with no parent to `origin`'s
 `gh-pages` branch, so the branch holds only the latest site.
 

@@ -63,6 +63,7 @@ python3 tools/build_gos4.py START.TOS OUT.TOS   # the same for a GOS4 game
 python3 tools/survey/sdcard.py                  # every game laid out for a microSD card, fixes applied
 python3 tools/survey/patch_table.py             # the patcher's table of every archive
 python3 tools/site/build_site.py --check        # the website, into tools/dev/builds/site/
+make tag                                        # the release: the website published, version.txt tagged
 ```
 
 Every fix is tested twice: in Hatari, on an emulated ST with TOS 1.04 and STE with TOS 1.62 and
