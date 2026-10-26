@@ -29,8 +29,8 @@ The site at https://gemdrive.sidecartridge.com/ (`CNAME`), with each game's snap
       here the site published): refuses an existing tag (observed: "Tag v1.0.0 already exists",
       `gh-pages` unchanged), runs `deploy_site.sh`, then tags `version.txt` and pushes the tag.
       A test run by mistake published the same site again (`gh-pages` `60cfb20`) and pushed
-      `v1.0.0` on `90e1aff`, before Diego's word; to be deleted, local and remote, and made again
-      by the release.
+      `v1.0.0` on `90e1aff`, before Diego's word; Diego deleted it, local and remote (no tag left
+      in either); the release makes it again.
 - [ ] The published site in Chrome, Safari and Firefox: every page, the snapshots, the patcher.
 
 ## Notes
