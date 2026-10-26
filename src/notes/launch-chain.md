@@ -19,6 +19,10 @@ formats are in `launcher-formats.md`.
 | D15R, which holds GOS (ST and STE build) | `src/d15r/d15r_h5.s` |
 | D15R, Falcon build | `src/d15r/d15r_f5.s` |
 
+The sources reassemble to the original files, so they are not in the repository: only their maps
+are (`src/<stage>/<stage>.map`, the names, comments and addresses). `tools/make_sources.sh` makes
+the sources from the maps and your own copy of the Lemmings download, unpacked into `LEMMINGS/`.
+
 ## LEMLD2: the launch
 
 1. **`start`** reads the TOS version, the RAM and the machine type. It stops with 512 KB.

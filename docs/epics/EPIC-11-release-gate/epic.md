@@ -2,7 +2,7 @@
 id: EPIC-11
 iteration: 2
 title: The release gate
-status: todo
+status: in-progress
 ---
 
 ## Goal
@@ -19,12 +19,12 @@ To be written with Diego when the epic starts. What is known:
   `tools/site/check_public.py` on a clone.
 - The public repository and its remote, on Diego's word (no push until then). Diego, 2026-10-26:
   "the current local git repo we must change the name to gemdrive-games-patches (or reword for
-  better english) and created in https://github.com/sidecartridge". Suggested: `gemdrive-game-patches`
-  (a noun as a modifier stays singular); the name is Diego's choice when the epic starts. The local
-  folder, the site's texts and the docs that name the repository follow.
+  better english) and created in https://github.com/sidecartridge". The name, Diego, 2026-10-26:
+  **`gemdrive-game-patches`** (D-26), `https://github.com/sidecartridge/gemdrive-game-patches`.
+  The local folder and the docs that name the repository follow.
 - The website published at https://gemdrive.sidecartridge.com/ (`CNAME`, Diego, 2026-10-26;
-  `docs/publication/site.yml`, GitHub Pages, prepared, not in use); whether
-  the snapshots are published (D-15, Diego's call).
+  GitHub Pages); the snapshots published, the site built on this Mac and
+  pushed to `gh-pages` (D-28).
 - Every check passing on the clean clone: `tools/dev/all_harness.sh`, `build_site.py --check`.
 
 ## Setups
@@ -33,6 +33,8 @@ A clean clone of the repository; the published site in Chrome, Safari and Firefo
 
 ## Stories
 
-Written when the epic starts, ending with Diego's checkpoint: the release.
+- STORY-01, the clean-up: what leaves the history, decided (D-25), and a cleaned clone that
+  `check_public.py` passes.
+- The others written as the epic goes, ending with Diego's checkpoint: the release.
 
 ## Notes

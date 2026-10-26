@@ -1,19 +1,17 @@
-# What leaves this repository and its history before it goes public (D-15, EPIC-03 STORY-07).
+# What leaves this repository and its history before it goes public (D-15, EPIC-03 STORY-07, D-25).
 # One entry per line:  <kind> <path>  # why
-#   must    goes, whatever else is decided
-#   review  Diego's call: keep it (delete the line) or remove it (make it must)
+#   must    goes, from the files and every commit
+#   keep    a binary file that stays: the check allows it in the history
 # A path ending in / is a folder; * matches any characters, / included. Checked against a clone by
-# tools/site/check_public.py, which is satisfied only when no entry matches anything, in the files
-# or in any commit.
+# tools/site/check_public.py, which is satisfied only when no must entry matches anything, in the
+# files or in any commit.
 
 must    LEMMINGS/                                       # the Psygnosis game and PP's files: the evidence (C-01, D-03)
-must    _archive/2026-04-first-pass/lemmings-patched/   # PP's START.TOS, patched by the first pass
-must    _archive/2026-04-first-pass/src/unpacked/       # PP's launcher stages and D15R unpacked: his code and TOS 1.04's
-must    _archive/2026-04-first-pass/src/disasm/d15r*    # D15R disassembled: TOS 1.04's code (as D-13)
+must    _archive/                                       # the first pass (D-01): PP's patched START.TOS, his stages unpacked and disassembled, D15R's disassembly (TOS 1.04)
+must    src/start/*.s                                   # PP's launcher, as sources that reassemble to his bytes (EPIC-02, D-25)
+must    src/lemld2/*.s                                  # the same
+must    src/ls2dd/*.s                                   # the same
 must    src/d15r/*.s                                    # D15R's sources: TOS 1.04's code (D-13); git-ignored, never committed
 
-review  _archive/                                       # the first pass: superseded (D-01), its notes contradict its code
-review  src/start/start.s                               # PP's launcher, as sources that reassemble to his bytes (EPIC-02)
-review  src/lemld2/lemld2.s                             # the same
-review  src/ls2dd/ls2dd.s                               # the same
-review  CLAUDE.md                                       # the repository's working instructions
+keep    tools/site/logo.png                             # SidecarTridge's logo, the site's header
+keep    tools/site/logo-text.png                        # the same, with its name

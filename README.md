@@ -47,8 +47,9 @@ hash only.
   (`tools/survey/patch_table.py`).
 - **The website** (`tools/site/`): the findings, the modes, the solutions, the patcher and the
   catalogue of every game.
-- **The reverse engineering** (`src/`): the Lemmings launcher's stages as sources that reassemble to
-  the original bytes, their maps, and the notes (`src/notes/`).
+- **The reverse engineering** (`src/`): the maps of the Lemmings launcher's stages, from which
+  `tools/make_sources.sh` makes sources that reassemble to the original bytes, using your own copy
+  of the game in `LEMMINGS/`; and the notes (`src/notes/`).
 
 ## Building and testing
 
@@ -62,6 +63,7 @@ python3 tools/build_gos4.py START.TOS OUT.TOS   # the same for a GOS4 game
 python3 tools/survey/sdcard.py                  # every game laid out for a microSD card, fixes applied
 python3 tools/survey/patch_table.py             # the patcher's table of every archive
 python3 tools/site/build_site.py --check        # the website, into tools/dev/builds/site/
+make tag                                        # the release: the website published, version.txt tagged
 ```
 
 Every fix is tested twice: in Hatari, on an emulated ST with TOS 1.04 and STE with TOS 1.62 and
@@ -75,7 +77,8 @@ whole toolset, and `CLAUDE.md` the working rules.
 The website is <https://gemdrive.sidecartridge.com/> (`CNAME`). `python3 tools/site/build_site.py`
 writes it into `tools/dev/builds/site/`; it works from that folder and needs nothing from another
 site. `--check` verifies every link and anchor, every game's row, and that no page loads another
-site's files. CI runs it on every pull request and push to `main`.
+site's files. CI runs it on every pull request and push to `main`. `tools/site/deploy_site.sh`
+publishes it, with the screenshots of this project's Hatari runs, on the `gh-pages` branch.
 
 ## Licence
 

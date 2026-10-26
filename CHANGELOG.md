@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.0 (unreleased)
+## v1.0.0 (2026-10-26)
 
 The first release. Every Atari ST hard-disk adaptation on the 8bitchip.info website's list, 1,831
 games, started from a GEMDOS drive and given a verdict; the fixes for the games that do not run as

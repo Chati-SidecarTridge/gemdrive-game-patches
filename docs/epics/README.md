@@ -1,6 +1,6 @@
 # Epics, Stories & Tasks
 
-The backlog for reverse-eng-ppera-hd, the reverse engineering of PP's Gamex hard-disk loader for
+The backlog for gemdrive-game-patches (D-26), the reverse engineering of PP's Gamex hard-disk loader for
 Lemmings on the Atari ST. It follows the same procedure as Diego's other repositories
 (`../sidecartos/docs/epics/`, `../sidecartos-config/docs/epics/`,
 `../romemul-switcher-rom/docs/epics/`), so all of them track work the same way (D-02). This

@@ -14,7 +14,7 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 out="${1:-$repo/tools/dev/builds/gemdrive}"
 rm -rf "$out"
 mkdir -p "$out"
-[[ -f "$repo/src/d15r/d15r_h5.s" && -f "$repo/src/d15r/d15r_f5.s" ]] || "$repo/tools/make_sources.sh"  # D-13
+[[ -f "$repo/src/lemld2/lemld2.s" && -f "$repo/src/d15r/d15r_h5.s" && -f "$repo/src/d15r/d15r_f5.s" ]] || "$repo/tools/make_sources.sh"  # D-13, D-25
 cp -R "$repo/src" "$out/src"
 python3 -I - "$out/src/lemld2/lemld2.s" "$repo/src/gemdrive/lemld2_gemdrive.s" <<'PY'
 import sys

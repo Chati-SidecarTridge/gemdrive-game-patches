@@ -74,8 +74,8 @@ of the games by floppy access), `GamexLSrc.html`, `GamexLSrc2.html` and `GamexLS
 his launcher sources, 2009), `fromhd.php` (his view of GEMdrive). All of it is in the mirror
 (D-12). Cite it by URL and never copy it into the repository (D-11). A claim from them counts only once a run shows it (D-01).
 
-`DESKTOP.INF` in the root is the first pass's emulated `C:` desktop: it pointed a Hatari GEMDOS
-drive at this repository's root.
+`LEMMINGS/` and `_archive/` stay on this Mac and out of git (D-25): both are git-ignored and were
+removed from the history before the repository went public.
 
 ## Layout
 
@@ -88,7 +88,7 @@ drive at this repository's root.
   EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`; `tools/site/`,
   the website's builder, style and script, and the check of a clone before going public.
 - `docs/publication/`: what leaves the repository and its history before it goes public (D-15),
-  and the GitHub Pages workflow, prepared, not in use.
+  and how the site is published on GitHub Pages.
 - `tools/dev/`: the development environment from EPIC-00: pinned toolchain scripts, the
   round-trip check, the Hatari disk setups and harness. `builds/`, `logs/` and `dev.cfg` are
   git-ignored.
@@ -136,6 +136,8 @@ python3 tools/survey/screens.py <png> ...      # is this screenshot the TOS desk
 python3 tools/survey/sheet.py [--all]          # a contact sheet of the runs not shown yet
 python3 tools/survey/sdcard.py                 # every game for the Multidevice's GEMDRIVE: builds/sdcard/, copied to a microSD
 python3 tools/site/build_site.py [--check] [--no-snapshots]  # the website into tools/dev/builds/site/ (open index.html)
+tools/site/deploy_site.sh [--dry-run]          # the site, with its snapshots, force-pushed to gh-pages (D-28)
+make tag                                       # the release: deploy_site.sh, then version.txt's tag pushed
 python3 tools/site/check_public.py [<clone>]   # is a clone ready to go public: docs/publication/remove.txt (D-15)
 ./docs/epics/cockpit.sh                        # after editing any epic or story
 ```
@@ -191,16 +193,20 @@ the patcher that installs them (D-17).
   that is the whole GEMDRIVE problem.
 - **The sources in `src/` are generated from their maps** (`src/<stage>/<stage>.map`) by
   `tools/dev/mksource.py`: change the map (names, comments, entries) and regenerate, then
-  `tools/dev/all_harness.sh`. Hand edits to a `.s` are lost on the next generation. D15R's two
-  sources are TOS 1.04's code and are not committed (D-13): `tools/make_sources.sh` makes them.
+  `tools/dev/all_harness.sh`. Hand edits to a `.s` are lost on the next generation. The
+  launcher's sources are not committed, only their maps: START.TOS's stub, LEMLD2 and LS2DD
+  reassemble to PP's files (D-25), D15R's two are TOS 1.04's code (D-13). `tools/make_sources.sh`
+  makes all five from `LEMMINGS/`. Our own code (`src/gemdrive/`) is committed.
 - **Never read a trace whole.** `hatari.out` is tens of thousands of lines, and a CPU trace gets
   huge (the first pass's reached 800 MB); use `grep`, `head`, `tail` or `sed -n`, and bound CPU
   traces in time.
 - The first pass's tools find the repository through their own location
   (`Path(__file__).parents[2]`), so they break once archived; copy one into `tools/` only when a
   story has verified it.
-- **Nothing leaves this Mac yet** (D-15): no remote, no push. Before the repository goes public,
-  `LEMMINGS/` and `_archive/`'s binaries are removed from it and its history.
+- **The remote is private until the release** (D-27): `origin` is
+  `github.com/sidecartridge/gemdrive-game-patches`, every branch pushed. Push only this working
+  copy, never `../reverse-eng-ppera-hd` (the uncleaned history), and only on Diego's word; nothing
+  under `LEMMINGS/` or `_archive/` is ever committed (D-25).
 - `.DS_Store` files are macOS noise; ignore them.
 - **The website speaks to its readers, never to the backlog** (Diego, 2026-10-16, D-20). Nothing the
   site publishes refers to `docs/epics/` or what is in it: no iterations, epics, stories or tasks

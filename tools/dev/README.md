@@ -13,6 +13,10 @@ released, never changed.
 3. `cp tools/dev/dev.cfg.example tools/dev/dev.cfg` and adjust the paths: Hatari, one TOS image
    per test machine, and a checkout of `sidecartridge/atari-hd`. Relative paths are relative to
    the repository. `dev.cfg` is git-ignored; TOS images and drivers are never copied here.
+4. Your own copy of Lemmings' hard-disk adaptation (`LEMMINGS.ZIP` from the 8bitchip.info
+   website), unpacked at the repository's root as `LEMMINGS/`; `shasum -a 256 -c LEMMINGS.sha256`
+   checks it. It is git-ignored. Then `tools/make_sources.sh` makes the launcher's sources from
+   their maps.
 
 ## Check everything
 

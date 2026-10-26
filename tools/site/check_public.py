@@ -4,8 +4,8 @@
 Usage: check_public.py [<clone>]
 
 Checks a clone (by default a fresh clone of this repository, made in a temporary folder, with every
-branch) against docs/publication/remove.txt: no entry may match a file of the clone or a path in any
-commit of its history; no binary file the list does not name may be left in its history; no commit
+branch) against docs/publication/remove.txt: no must entry may match a file of the clone or a path in
+any commit of its history; no binary file the list does not keep may be left in its history; no commit
 message may carry an AI co-author trailer or a "Generated with" line (CLAUDE.md); and the site must
 build from the clone (tools/site/build_site.py --no-snapshots --check). Prints what it finds and
 exits 0 only when the clone is ready. Standard library only.
@@ -32,7 +32,7 @@ def git(clone: Path, *args: str) -> bytes:
 def entries() -> list[tuple[str, str, str]]:
     out = []
     for line in LIST.read_text().splitlines():
-        m = re.match(r"(must|review)\s+(\S+)\s*(?:#\s*(.*))?$", line)
+        m = re.match(r"(must|keep)\s+(\S+)\s*(?:#\s*(.*))?$", line)
         if m:
             out.append(m.groups())
     return out
@@ -55,6 +55,8 @@ def check(clone: Path) -> int:
 
     listed = entries()
     for kind, pattern, why in listed:
+        if kind == "keep":
+            continue
         now = [f for f in files if matches(f, pattern)]
         ever = [p for p in history if matches(p, pattern)]
         if now or ever:
@@ -71,7 +73,7 @@ def check(clone: Path) -> int:
                 break
     if binaries:
         problems += 1
-        print(f"  binary files the list does not name: {len(binaries)}: {', '.join(binaries[:10])}")
+        print(f"  binary files the list does not keep: {len(binaries)}: {', '.join(binaries[:10])}")
 
     log = git(clone, "log", "--all", "--format=%h %B%x00").decode()
     trailers = [c.split(" ", 1)[0] for c in log.split("\0") if re.search(r"(?im)^co-authored-by:|generated with", c)]

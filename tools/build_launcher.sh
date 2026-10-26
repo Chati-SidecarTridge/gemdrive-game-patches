@@ -27,7 +27,7 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 src="$(cd "${1:-$repo/src}" && pwd)"
 out="${2:-$repo/tools/dev/builds/launcher}"
 cd "$repo"
-[[ -f "$repo/src/d15r/d15r_h5.s" && -f "$repo/src/d15r/d15r_f5.s" ]] || tools/make_sources.sh  # not committed (D-13)
+[[ -f "$repo/src/lemld2/lemld2.s" && -f "$repo/src/d15r/d15r_h5.s" && -f "$repo/src/d15r/d15r_f5.s" ]] || tools/make_sources.sh  # not committed (D-13, D-25)
 [[ -f "$src/d15r/d15r_h5.s" ]] || cp "$repo"/src/d15r/*.s "$src/d15r/"
 obj="$out/obj"
 tree="$out/LEMMINGS"
