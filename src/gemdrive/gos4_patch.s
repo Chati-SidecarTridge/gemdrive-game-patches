@@ -292,6 +292,11 @@ gd_named:
 	bcs.w	gd_bad_name
 	lea	gd_name(pc),a0
 	move.l	a0,(2,a2)
+	cmpi.b	#$3d,d0				; Fopen for reading and writing: for reading. The
+	bne.s	gd_call				; Multidevice's GEMDRIVE locks a file open for writing,
+	cmpi.w	#2,(6,a2)			; and Noddy's Playtime opens data\driving.dat so, never
+	bne.s	gd_call				; closes it and loads it again; no game writes through
+	clr.w	(6,a2)				; such a handle (Fcreate makes the files they write)
 gd_call:
 	cmpi.b	#$4e,d0				; Fsfirst, Fsnext: the DTA
 	bcs.s	gd_go

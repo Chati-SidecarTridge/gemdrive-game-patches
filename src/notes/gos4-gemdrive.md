@@ -22,6 +22,10 @@ files stay as they are.
     back a snapshot of a game's variables that holds such a number (Operation Stealth's);
   - a program the launcher or the game starts (`Pexec`) is read through the drive into GOS's
     memory, then GOS runs it;
+  - a file opened for reading and writing is opened on the drive for reading: the Multidevice's
+    GEMDRIVE refuses to open again a file that is open for writing, and Noddy's Playtime opens
+    `data\driving.dat` so, never closes it and then loads it (on the Multidevice it asked for disk 1
+    forever). No game writes through such a file: the files they write, they create;
   - `Fsfirst` and `Fsnext` fill the game's DTA;
   - drives A and B stay GOS's floppy; drive C answers the games that ask for its BPB (Starblade,
     Windsurf Willy) and reads no sector.
@@ -67,4 +71,9 @@ To undo, put `START.ORG` back as `START.TOS`.
   searched for, a second open at the same time, one deleted, a name longer than 8.3
   (`src/probes/epic05/gos4_selftest.py`). Guild of Thieves saves a game to the GEMDOS drive and
   restores it.
-- Not yet on a real machine with the Multidevice.
+- An STE with TOS 1.62, 4 MB, from the Multidevice's GEMDRIVE, power-cycled between games
+  (2026-10-26): Operation Stealth, Guild of Thieves (a game saved to the card and restored), Erik,
+  Defender 2, Grandad, Starblade, Gravity, Strider and F16 Falcon run. F16 Falcon's "Read mission
+  disk" needs the Falcon Mission Disk, which this adaptation does not include. Noddy's Playtime
+  asked for disk 1 forever; with the change for files opened for reading and writing above, it
+  runs too.
