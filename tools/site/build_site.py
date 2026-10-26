@@ -35,6 +35,7 @@ import html
 import html.parser
 import re
 import shutil
+import subprocess
 import sys
 import urllib.parse
 from pathlib import Path
@@ -53,6 +54,7 @@ SECTIONS = [
     ("findings", "Findings", [("findings", "Findings")]),
     ("modes", "The modes", [("modes", "The modes")]),
     ("solutions", "Solutions", [("solutions", "Solutions")]),
+    ("patch", "Patch a game", []),
     ("catalogue", "Catalogue", []),
     ("tools", "Tools", []),
 ]
@@ -289,7 +291,8 @@ def window(path: str, body: str, info: str = "", cls: str = "", label: str = "",
             f'<span class="fuller" aria-hidden="true"></span></div>{info}<div class="work">{body}</div></{tag}>')
 
 
-def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", lead: str = "", info: str = "") -> str:
+def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", lead: str = "", info: str = "",
+         scripts: tuple = ()) -> str:
     current = section_of(name)
     nav = "".join(
         f'<li><a href="{(pages[0][0] if pages else key)}.html"{" aria-current=page" if key == current else ""}>{label}</a></li>'
@@ -316,12 +319,14 @@ def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", le
 {window(gemdos_path(name), main, info=info, cls="doc", tag="main", close=name != "index")}
 </div>
 <footer class="credits">
-<p>The adaptations, their list and their documentation come from the 8bitchip.info website. This
-site links to its pages and copies none of its files.
-Every run was made in <a href="https://www.hatari-emu.org/">Hatari</a> 2.6.1. Atari, ST, STE, TT,
-Falcon and TOS are Atari's names.</p>
+<p>The adaptations, their list and their documentation come from a third party website. This site
+links to its pages and copies none of its files. Every run was made in
+<a href="https://www.hatari-emu.org/">Hatari</a> 2.6.1 and
+<a href="https://sidecartridge.com/products/sidecartridge-multidevice-atari-st/">SidecarTridge
+Multi-device</a> with the Multidrive Emulator. Atari, ST, STE, TT, Falcon and TOS are Atari's
+names.</p>
 </footer>
-<script src="site.js"></script>
+{"".join(f'<script src="{s}"></script>{chr(10)}' for s in scripts)}<script src="site.js"></script>
 </body>
 </html>
 """
@@ -429,7 +434,8 @@ def index(games: list[dict]) -> str:
 fix makes it run.</p>
 <p class="ask"><label for="check-q" class="vh">Game name</label><input id="check-q" type="search" name="q"
 autocomplete="off" placeholder="Lemmings" required><button class="default" type="submit">Check the game</button>
-<a class="button" href="solutions.html#solutions-4-the-solutions-proposed">How to fix a game</a></p>
+<a class="button" href="patch.html">Patch a game</a>
+<a class="button" href="solutions.html#solutions-4-the-solutions-proposed">How the fixes work</a></p>
 </div>
 </form>
 <div class="map">
@@ -521,7 +527,8 @@ def catalogue(games: list[dict], records: dict, shots: dict) -> str:
         if exceptions:
             notes.append(f'<span class="exc">On the list: {esc("; ".join(exceptions))}</span>')
         if g["solution"]:
-            notes.append(f'<span class="sol">{esc(g["solution"])}</span>')
+            patch_it = ' <a href="patch.html">Patch it</a>' if g["row"] in ported else ""
+            notes.append(f'<span class="sol">{esc(g["solution"])}.{patch_it}</span>')
         h = hw.get(g["row"], {})
         if h.get("result") == "fails":
             notes.append(f'<span class="hwnote">Fails on the Multidevice ({esc(h["machine"])}): {esc(h["note"])}</span>')
@@ -636,20 +643,83 @@ def snapshot_names(games: list[dict]) -> dict:
     return out
 
 
+def patch_page() -> str:
+    """The patcher (D-22): the user's ZIP checked, patched in the browser, and given back."""
+    main = """
+<h1>Patch a game</h1>
+<p class="lead">Give this page a game's ZIP exactly as you downloaded it from the 8bitchip.info website.
+The page checks that it is one of the downloads it knows, tells you whether the game runs from GEMDOS and
+GEMDRIVE as it is, and when a fix makes it run, patches the ZIP and gives it back to you. Everything
+happens in your browser: your file is not sent anywhere.</p>
+<form class="check patcher" aria-labelledby="patch-title">
+<p class="alert" aria-hidden="true">?</p>
+<div>
+<h2 id="patch-title">Choose the game's ZIP</h2>
+<p>Drop it here, or choose it.</p>
+<p class="ask"><input id="patch-zip" type="file" accept=".zip,.ZIP,application/zip"></p>
+<div class="patch-result" aria-live="polite"></div>
+</div>
+</form>
+<h2 id="after">Then</h2>
+<ol>
+<li>Unpack the ZIP the page gave you, or the original when there is nothing to patch.</li>
+<li>Copy the game's folder to your GEMDOS drive: the folder Hatari serves as drive C:, or the microSD
+card of the SidecarTridge Multidevice, which GEMDRIVE serves.</li>
+<li>Start the game's program from that folder, as the page says. A fix that adds
+<code>GDBPB.PRG</code> needs it run first, once after each reset or power-on.</li>
+</ol>
+<p>The page holds no file of the games. It rebuilds the fixed file from your own copy, and checks the
+result against this project's build before it gives it to you. How each fix works:
+<a href="solutions.html#solutions-4-the-solutions-proposed">the solutions</a>.</p>
+<noscript><p>The patcher needs JavaScript.</p></noscript>
+"""
+    return page("patch", "Patch a game", main, kind="home",
+                lead="Check a game's ZIP, and patch it to run from GEMDOS and GEMDRIVE.",
+                scripts=("patcher.js", "patch-data.js"))
+
+
+def patch_data(games: list[dict]) -> str:
+    """The patcher's data (D-22): src/survey/patches.tsv, each archive's games by name, and our three blocks
+    in base64, assembled from our sources as the build tools assemble them. No byte of the adaptations."""
+    import base64
+    import json
+    sys.path[:0] = [str(REPO / "tools"), str(REPO / "tools" / "survey")]
+    import build_gos4
+    import build_gos5
+    import sdcard
+    names = {g["row"]: g["name"] for g in games}
+    rows = []
+    for r in read_csv(REPO / "src" / "survey" / "patches.tsv", "\t"):
+        r["games"] = [names[x] for x in r["rows"].split(";") if x in names]
+        rows.append({k: v for k, v in r.items() if v not in ("", [])})
+    if not sdcard.GDBPB.exists() or sdcard.GDBPB.stat().st_mtime < sdcard.GDBPB_SRC.stat().st_mtime:
+        sdcard.GDBPB.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run([str(REPO / "tools" / "dev" / "asm.sh"), "--tos", str(sdcard.GDBPB_SRC), str(sdcard.GDBPB)],
+                       check=True, stdout=subprocess.DEVNULL)
+    blocks = {"gos5": build_gos5.patch_block(), "gos4": build_gos5.patch_block(build_gos4.PATCH_SRC, build_gos4.PATCH_BIN),
+              "gdbpb": sdcard.GDBPB.read_bytes()}
+    b64 = {k: base64.b64encode(v).decode() for k, v in blocks.items()}
+    return ("// The patcher's data, written by tools/site/build_site.py from src/survey/patches.tsv and our sources.\n"
+            f"window.PATCHES = {json.dumps(rows, separators=(',', ':'))};\n"
+            "window.PATCH_BLOCKS = {" + ", ".join(f"{k}: Patcher.b64('{v}')" for k, v in b64.items()) + "};\n")
+
+
 def build(out: Path, with_snapshots: bool) -> None:
     games = read_csv(REPO / "src" / "survey" / "migration.csv")
     records = {r["row"]: r for r in read_csv(REPO / "src" / "survey" / "catalogue.csv")}
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    for f in ("site.css", "site.js"):
+    for f in ("site.css", "site.js", "patcher.js"):
         shutil.copy(HERE / f, out / f)
+    (out / "patch-data.js").write_text(patch_data(games))
     shots = snapshot_names(games) if with_snapshots else {}
     if shots:
         (out / "snapshots").mkdir()
         for name in shots.values():
             shutil.copy(SNAPSHOTS / name, out / "snapshots" / name)
-    pages = {"index": index(games), "catalogue": catalogue(games, records, shots), "tools": tools_page()}
+    pages = {"index": index(games), "catalogue": catalogue(games, records, shots), "tools": tools_page(),
+             "patch": patch_page()}
     for key, title, notes in SECTIONS:
         for stem, _ in notes:
             if stem in PARTS:
