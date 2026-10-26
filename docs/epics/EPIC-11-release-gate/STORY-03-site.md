@@ -18,7 +18,7 @@ The site at https://gemdrive.sidecartridge.com/ (`CNAME`), with each game's snap
       1816 snapshots, 0 problems; 1834 files, 23 MB.
 - [x] The Actions deploy dropped (`docs/publication/site.yml`); `docs/publication/README.md`,
       `README.md`, `CLAUDE.md` and the CI workflow's comment say how the site is published.
-- [ ] `gh-pages` pushed.
+- [x] `gh-pages` pushed: `89411f9`, built from `6f0c28a` (`git ls-remote origin gh-pages`).
 - [ ] Pages on, from `gh-pages` `/`, custom domain `gemdrive.sidecartridge.com` (its DNS already
       points at `sidecartridge.github.io`), HTTPS; on Diego's word, since the site is then public.
 - [ ] The published site in Chrome, Safari and Firefox: every page, the snapshots, the patcher.
