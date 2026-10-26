@@ -8,7 +8,7 @@ status: done
 ## Goal
 
 The 87 games of the card's `FIXGOS5` folder, Gamex launchers with GOS5, run from a Hatari GEMDOS
-drive, with Hatari unchanged (C-02). They use solution S1 (`src/notes/hd-strategies.md` §4), in
+drive, with Hatari unchanged (C-02). They use solution S1 (`src/notes/solutions.md` §4), in
 two parts:
 - the launcher's driver checks are changed so that GOS starts without PP's driver;
 - GOS's file requests go to the `TRAP #1` handler the machine had before the launcher. On
@@ -28,14 +28,14 @@ on a user's copy is EPIC-09 (D-17, D-18). Chosen by Diego, 2026-10-15 (D-16).
     (`ITERATIONS.md`, a candidate until now).
   - The change made by signature on each game's packed `START.TOS`, checked against every
     ST/STE build of GOS5's D15R (`D15R_5H` in 56 games, `D15R_H5` in 31, `D15R_H15` in 3;
-    `hd-strategies.md` §3.1).
+    `solutions.md` §3.1).
   - The 87 games, patched and run with `run_all.py`'s rules, with their verdicts updated.
   - The instructions for a user, and the card and the site updated.
 - Out of scope:
   - GOS4 (EPIC-05).
   - The Falcon builds (`D15R_5F`, `D15R_F5`, `D15R_F15`): they would take the same patch,
     untested.
-  - The 33 GOS5 games that already have a HAGA download that runs (`hd-strategies.md` §5): they
+  - The 33 GOS5 games that already have a HAGA download that runs (`solutions.md` §5): they
     get the patch like the rest.
   - Publishing PP's files, or any of it before D-15's clean-up.
 
@@ -72,7 +72,7 @@ on a user's copy is EPIC-09 (D-17, D-18). Chosen by Diego, 2026-10-15 (D-16).
   (`src/gemdrive/lemld2_gemdrive.s`). GOS's code stays as PP's. Lemmings reaches its title and
   loads its first level from Hatari's GEMDOS drive on the three setups.
 
-- The S1 risks for GOS5, from `hd-strategies.md` §4:
+- The S1 risks for GOS5, from `solutions.md` §4:
   - `Fsfirst`/`Fsnext` find the DTA through TOS's current process.
   - Gamex's state saves (`file_io` with `"Wr"`) are untested.
   - On the Multidevice, the GEMDRIVE reads `_longframe` and `_dskbufp`, which GOS's image of TOS's

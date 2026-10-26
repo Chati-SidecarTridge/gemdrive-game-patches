@@ -2,13 +2,13 @@
 id: EPIC-06
 iteration: 2
 title: The small fixes from a GEMDOS drive (FIXPLAIN, FIXHOLE, FIXHAGE)
-status: todo
+status: done
 ---
 
 ## Goal
 
 The eight games of the card's `FIXPLAIN`, `FIXHOLE` and `FIXHAGE` folders run from a Hatari
-GEMDOS drive, with solutions S2, S3 and S4 (`hd-strategies.md` §3.2–3.4, §4). STORY-06's trials
+GEMDOS drive, with solutions S2, S3 and S4 (`solutions.md` §3.2–3.4, §4). STORY-06's trials
 already showed each of these working. This epic turns them into something a user can apply.
 Chosen by Diego, 2026-10-15 (D-16): one epic for the three small groups.
 
@@ -37,7 +37,7 @@ Chosen by Diego, 2026-10-15 (D-16): one epic for the three small groups.
 
 As EPIC-04: Hatari's three setups, in GEMDRIVE mode and from PPDRIVER. At the checkpoint, Diego's
 Multidevice, from a card. Whether S3's cause exists on the Multidevice has not been checked
-(`hd-strategies.md` §4).
+(`solutions.md` §4).
 
 ## Stories
 
@@ -48,3 +48,7 @@ Multidevice, from a card. Whether S3's cause exists on the Multidevice has not b
 - STORY-05: Verification (Diego's checkpoint)
 
 ## Notes
+
+Closed 2026-10-26: S2 (`GDBPB.PRG`), S3 (`tools/set_fastload.py`) and S4 (`tools/rody2_runme.py`)
+built and run in Hatari; seven of the eight games run on Diego's STE with the Multidevice. Aquanaut
+fails there (it reboots while loading) and is carried to EPIC-07.

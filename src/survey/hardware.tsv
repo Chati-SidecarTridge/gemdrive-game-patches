@@ -1,0 +1,107 @@
+row	name	machine	date	result	note
+41	Rody and Mastico 2	STE	2026-10-26	runs	the chapter menu takes the mouse once its music has finished
+88	Teenage Mutant Hero Turtles	STE	2026-10-16	runs	
+89	Teenage Mutant Hero Turtles 2	STE	2026-10-16	runs	
+104	Forgotten Worlds	STE	2026-10-16	runs	
+105	Prince of the YolkFolk	STE	2026-10-16	runs	
+106	Shinobi	STE	2026-10-16	runs	
+107	Spellbound Dizzy	STE	2026-10-16	runs	
+108	Street Fighter II	STE	2026-10-16	runs	
+109	Torvak the Warrior	STE	2026-10-16	runs	
+110	Bubble Dizzy	STE	2026-10-16	runs	
+111	Indigo	STE	2026-10-16	runs	
+112	Jim Power	STE	2026-10-16	runs	
+113	Magicland Dizzy	STE	2026-10-16	runs	
+114	Outrun Europa	STE	2026-10-16	runs	
+115	Risky Woods	STE	2026-10-16	runs	
+168	Captive	STE	2026-10-16	runs	
+171	Gemini Wing	STE	2026-10-16	runs	
+172	Kid Gloves 2	STE	2026-10-16	runs	
+173	Knightmare	STE	2026-10-16	runs	
+174	Mega Twins	STE	2026-10-16	runs	
+175	Video Kid	STE	2026-10-16	runs	
+182	Cadaver	STE	2026-10-16	runs	
+183	Cisco Heat	STE	2026-10-16	runs	
+184	Flimbos Quest	STE	2026-10-16	runs	
+185	Frenetic	STE	2026-10-16	runs	
+197	Alien Storm	STE	2026-10-16	runs	
+198	All Points Bulletin	STE	2026-10-16	runs	
+200	Chase H.Q.	STE	2026-10-16	runs	
+202	Big Run	STE	2026-10-16	runs	
+203	Chaos Engine	STE	2026-10-16	runs	needs a floppy in drive A: it waits for the floppy motor on the STE
+208	Gods	STE	2026-10-16	runs	
+209	Magic Pockets	STE	2026-10-16	runs	
+283	Rick Dangerous 2	STE	2026-10-16	runs	
+291	Saint Dragon	STE	2026-10-16	runs	
+305	Strider	STE	2026-10-26	runs	
+695	Lemmings	STE	2026-10-16	runs	
+1050	3D Construction Kit	STE	2026-10-13	runs	three bombs after other games and a reset; runs after a power cycle
+1195	Operation Stealth	STE	2026-10-26	runs	
+1476	Thunderhawk AH-73M	STE	2026-10-16	runs	
+1477	Awesome	STE	2026-10-16	fails	stops on its title: it refuses a cartridge in the port, as in Hatari
+1479	Last Ninja 3	STE	2026-10-16	runs	
+1482	Ninja Remix	STE	2026-10-16	runs	
+1483	Prison	STE	2026-10-16	fails	halts when play starts: it refuses a cartridge in the port, as in Hatari
+1486	Motörhead	STE	2026-10-16	runs	
+1489	Z-Out	STE	2026-10-16	runs	
+1491	Pegasus	STE	2026-10-16	runs	
+1495	Heavy Metal Heroes	STE	2026-10-16	runs	
+1496	Captain Planet	STE	2026-10-16	runs	
+1509	Deliverance	STE	2026-10-16	runs	
+1514	Venus the Flytrap	STE	2026-10-16	runs	
+1516	Popeye 2	STE	2026-10-16	runs	
+1519	Tusker	STE	2026-10-16	runs	
+1530	Jupiters Masterdrive	STE	2026-10-16	runs	
+1535	Warp	STE	2026-10-16	runs	
+1536	Wrath of the Demon	STE	2026-10-16	runs	
+1540	Gold of the Aztecs, The	STE	2026-10-16	runs	
+1541	Mad Professor Mariarti	STE	2026-10-16	runs	
+1543	Bad Company	STE	2026-10-16	runs	
+1546	Alien World	STE	2026-10-16	runs	
+1547	Pro Tennis Tour	STE	2026-10-16	runs	
+1548	Grand Monster Slam	STE	2026-10-16	runs	
+1553	Microprose F1 GP	STE	2026-10-16	runs	
+1554	Trex Warrior	STE	2026-10-16	runs	
+1555	Shadow of the Beast	STE	2026-10-16	runs	
+1558	Fire and Forget II	STE	2026-10-16	runs	
+1562	Hook	STE	2026-10-16	runs	
+1564	B.A.T. II	STE	2026-10-16	runs	
+1566	Kristal, The	STE	2026-10-16	runs	
+1569	Armour-Geddon	STE	2026-10-16	runs	
+1571	Exile	STE	2026-10-16	runs	
+1572	Dragon Breed	STE	2026-10-16	runs	
+1577	Heimdall	STE	2026-10-16	runs	
+1578	No Second Prize	STE	2026-10-16	runs	
+1580	Robocop 3	STE	2026-10-16	runs	
+1581	Creatures	STE	2026-10-16	runs	
+1587	Guild of Thieves	STE	2026-10-26	runs	a game saved to the card and restored
+1588	Starblade	STE	2026-10-26	runs	
+1595	Magic Boy	STE	2026-10-16	runs	runs on the STE; on an ST with 1 MB it crashes, as with PPDRIVER
+1600	Xybots	STE	2026-10-16	runs	
+1602	Robocop 2	STE	2026-10-16	runs	
+1604	Grandad	STE	2026-10-26	runs	
+1613	Pit Fighter	STE	2026-10-16	runs	
+1634	Noddys Playtime	STE	2026-10-26	runs	asked for disk 1 forever until the build opened files for reading and writing for reading only: GEMDRIVE locks a file open for writing
+1636	Striker	STE	2026-10-16	runs	
+1638	Hunter	STE	2026-10-16	runs	
+1639	G.Nius	STE	2026-10-16	runs	
+1640	Outzone	STE	2026-10-16	runs	
+1643	Night Hunter	STE	2026-10-16	runs	
+1646	Killing Cloud	STE	2026-10-16	runs	
+1650	Clever and Smart	STE	2026-10-16	runs	
+1654	Super Monaco G.P.	STE	2026-10-16	runs	
+1659	Erik	STE	2026-10-26	runs	
+1660	Shadow Warriors	STE	2026-10-16	runs	
+1679	Muzzy	STE	2026-10-16	runs	runs on the STE; on an ST it halts, as with PPDRIVER
+1680	Matrix Marauders	STE	2026-10-16	runs	
+1684	Jetsons	STE	2026-10-16	runs	
+1686	Gravity	STE	2026-10-26	runs	
+1698	Crystals of Arborea	STE	2026-10-26	runs	GDBPB.PRG run first
+1699	Targhan	STE	2026-10-26	runs	GDBPB.PRG run first
+1736	Defender 2	STE	2026-10-26	runs	
+1774	Robinsons Requiem	STE	2026-10-26	runs	GDBPB.PRG run first
+1804	Spy vs Spy 2	STE	2026-10-26	runs	
+1808	Storm Master	STE	2026-10-26	runs	GDBPB.PRG run first; needs a floppy in drive A at its credits, as with PPDRIVER
+1813	Strike Force Harrier	STE	2026-10-26	runs	
+1824	F16 Falcon	STE	2026-10-26	runs	its menu's Read mission disk needs the Falcon Mission Disk, not in this download
+1826	Aquanaut	STE	2026-10-26	fails	reboots while it loads: it runs only where a bare TOS 1.04 loads it, and GEMDRIVE leaves free memory higher

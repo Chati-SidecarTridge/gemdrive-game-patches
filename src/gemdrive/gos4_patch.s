@@ -598,7 +598,7 @@ gd_exec_end:
 
 ; The driver GOS takes: drives A and B go to GOS's own floppy routines, as PP's path has them;
 ; drive C has a BPB, so that a game that asks for it before its files (Getbpb(2): Starblade,
-; Windsurf Willy, as the Silmarils games of hd-strategies.md 3.2) goes on to read them by name;
+; Windsurf Willy, as the Silmarils games of solutions.md 3.2) goes on to read them by name;
 ; it is never changed, and its sectors fail.
 gd_bpb:
 	cmpi.w	#2,(4,sp)

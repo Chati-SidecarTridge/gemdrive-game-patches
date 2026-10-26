@@ -1,19 +1,19 @@
 match	solution
-Gamex + GOS4	S1: GOS reads through the GEMDOS drive (built by tools/build_gos4.py)
-Gamex + GOS5	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py)
-1698	S2: a BPB for the GEMDOS drive
-1699	S2: a BPB for the GEMDOS drive
-1774	S2: a BPB for the GEMDOS drive
-1808	S2: a BPB for the GEMDOS drive
-1804	S3: the fastload bit in the program it starts
-1813	S3: the fastload bit in the program it starts
-1826	S3: the fastload bit in the program it starts
-41	S4: Rody and Mastico 4's RUNME.TOS in its folder
-1613	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and a disk in drive A
-203	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and a disk in drive A
-1558	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and a disk in drive A
-1514	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and a disk in drive A
-1684	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and a disk in drive A
-1477	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and its cartridge check turned off in AWE
-104	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and D15R_5H.FIC and D15R_5F.FIC from another GOS5 game
-1483	S1: GOS reads through the GEMDOS drive (built by tools/build_gos5.py), and its cartridge check turned off in PR1
+Gamex + GOS4	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos4.py)
+Gamex + GOS5	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py)
+1698	S2: a BPB for GEMDOS and GEMDRIVE (GDBPB.PRG, run from the game's folder first; built from src/gemdrive/gdbpb.s)
+1699	S2: a BPB for GEMDOS and GEMDRIVE (GDBPB.PRG, run from the game's folder first; built from src/gemdrive/gdbpb.s)
+1774	S2: a BPB for GEMDOS and GEMDRIVE (GDBPB.PRG, run from the game's folder first; built from src/gemdrive/gdbpb.s)
+1808	S2: a BPB for GEMDOS and GEMDRIVE (GDBPB.PRG, run from the game's folder first; built from src/gemdrive/gdbpb.s)
+1804	S3: the fastload bit in the program it starts (set by tools/set_fastload.py)
+1813	S3: the fastload bit in the program it starts (set by tools/set_fastload.py)
+1826	S3: the fastload bit in the program it starts (set by tools/set_fastload.py)
+41	S4: Rody and Mastico 4's RUNME.TOS in its folder (copied by tools/rody2_runme.py)
+1613	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py), and a disk in drive A
+203	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py), and a disk in drive A
+1558	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py), and a disk in drive A
+1514	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py), and a disk in drive A
+1684	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py), and a disk in drive A
+1477	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py), and its cartridge check turned off in AWE
+104	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py), and D15R_5H.FIC and D15R_5F.FIC from another GOS5 game
+1483	S1: GOS reads through GEMDOS and GEMDRIVE (built by tools/build_gos5.py), and its cartridge check turned off in PR1

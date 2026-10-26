@@ -70,7 +70,7 @@ they are git-ignored, under `tools/dev/builds/survey/snapshots/`.
 their tasks from `docs/epics/`), the five findings of EPIC-01 and EPIC-02, PP's modes, the verdicts
 and solutions with the strategies, the catalogue, and the tools (`tools/dev/README.md` and every
 script's docstring). The notes are rendered by the builder's own Markdown (the subset they use); a
-note named in another (`strategies.md`) links to its page, a page of PP's (`agcat.html`) to his
+note named in another (`recognising-modes.md`) links to its page, a page of PP's (`agcat.html`) to his
 site.
 
 **The catalogue**: one row per game of `migration.csv` (`id` `g-0695` for row 695), with its

@@ -7,7 +7,7 @@ Reads src/survey/catalogue.csv (the records and their downloads), src/survey/fil
 of every download) and the unpacked downloads in tools/dev/builds/survey/games/. For every download
 it scans the program the user starts (PP's self-unpacking stub unpacked first, tools/unpack.py)
 for the signatures of disk access, and gives the download one strategy from its files and those
-signatures (src/notes/strategies.md defines them):
+signatures (src/notes/recognising-modes.md defines them):
 
   HAGA, HAGE, HAG2              the module of that name in the game's folder
   Gamex + GOS4, Gamex + GOS5    START.TOS with a D15R_HH4/F4, or D15R_H5/F5/H15/F15/5H/5F file
@@ -44,7 +44,7 @@ import unpack  # noqa: E402
 
 GAMES = REPO / "tools" / "dev" / "builds" / "survey" / "games"
 
-# Disk-access signatures (src/notes/launcher-signatures.md, src/notes/strategies.md)
+# Disk-access signatures (src/notes/launcher-signatures.md, src/notes/recognising-modes.md)
 SIGNATURES = {
     "PPHD": rb"\x22\x78\x04\x72\x0c\xa9PPHD\xff\xf8",                  # PP-driver check on hdv_bpb
     "DMAread": rb"\x3f\x3c\x00\x2a\x4e\x4e",                            # XBIOS 42

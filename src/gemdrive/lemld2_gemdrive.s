@@ -1,4 +1,4 @@
-; EPIC-04 STORY-01: GOS through the GEMDOS drive (S1, src/notes/hd-strategies.md section 4).
+; EPIC-04 STORY-01: GOS through the GEMDOS drive (S1, src/notes/solutions.md section 4).
 ; tools/build_gemdrive.sh puts this in a copy of src/lemld2/lemld2.s, before no_pp_driver, and
 ; sends check_pp_driver's "no PP driver" branch here.
 ;

@@ -13,7 +13,7 @@ is, fix, not feasible, unsure) and by (whose verdict: "trace", "Diego", "ppdrive
 
   a finding                       its verdict and reason
   Diego's OK                      as it is
-  Diego's Broken, GOS4/GOS5       fix (the launcher's driver checks, src/notes/strategies.md)
+  Diego's Broken, GOS4/GOS5       fix (the launcher's driver checks, src/notes/recognising-modes.md)
   Diego's Broken, otherwise       unsure: broken in its run, the cause still to find (and what the
                                   PPDRIVER run did)
   Diego's Not sure, or a proposal other than "as it is", with a PPDRIVER run:
@@ -31,7 +31,7 @@ listed in tools/dev/builds/survey/stale.txt, which review.py shows again as not 
 A run that reads C: by sectors (BIOS Rwabs, Getbpb over and over) sets the access column to
 "sectors" where STORY-04 found no such access in the programs' code (STORY-05 task 5).
 
-Every "fix" gets its solution (STORY-06, src/notes/hd-strategies.md) from src/survey/solutions.tsv
+Every "fix" gets its solution (STORY-06, src/notes/solutions.md) from src/survey/solutions.tsv
 (a row number, or a strategy, and the solution), and the game's other downloads that run as it is
 from the GEMDOS drive (tools/dev/builds/survey/runs-other.tsv, run_other.py).
 

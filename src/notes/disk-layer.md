@@ -1,132 +1,89 @@
 # The disk layer: D15R and the driver it uses
 
-Read on 2026-10-11. What sits between the game and the disk on the PPDRIVER reference,
-from the sources (`src/d15r/d15r_h5.s`, `src/lemld2/lemld2.s`) and runs on ST TOS 1.04. Names
-are the sources' labels; `launch-chain.md` tells how the launcher sets it all up.
+This page shows what sits between Lemmings and the disk when the game runs from a hard disk with
+`PPDRIVER`, the hard-disk driver the Gamex launcher requires. The game asks for files by name. D15R,
+the launcher's build of GOS, is a copy of TOS 1.04 that runs from RAM. Its GEMDOS reads the files by
+sectors through a copy of `PPDRIVER`. A GEMDOS drive, such as Hatari's or the Multidevice's
+GEMDRIVE, has no sectors, so this chain cannot work on one as it is.
+
+Read from the sources (`src/d15r/d15r_h5.s`, `src/lemld2/lemld2.s`) and runs on ST
+TOS 1.04. LEMLD2 is the launcher's main program, which sets all this up (`launch-chain.md`).
 
 ## 1. D15R is TOS 1.04 in RAM
 
-`src/probes/epic02/d15r_vs_tos.py` aligns D15R_H5 with the TOS 1.04 UK ROM (`TOS_ST_104`) and
-classifies its 91,460 bytes:
+Aligned with the TOS 1.04 UK ROM, the 91,460 bytes of `D15R_H5` sort into three kinds:
 
-| | bytes | |
+| bytes | count | what |
 | --- | --- | --- |
-| the ROM's own | 54,640 (59.7%) | |
-| relocated | 9,804 (10.7%) | a ROM address made a D15R one (the copy moved from `$FC0000` to around `$C0100`), or an address in TOS's RAM plus `$D0528` (D15R keeps TOS's RAM in its own image there) |
-| other | 27,016 (29.5%) | D15R's own code, the RAM image's contents (no ROM has them) and the edits to TOS's code |
+| the ROM's own | 54,640 (59.7%) | copied unchanged |
+| relocated | 9,804 (10.7%) | a ROM address moved from `$FC0000` to around `$C0100`, or a RAM address plus `$D0528` |
+| other | 27,016 (29.5%) | D15R's own code, its image of TOS's RAM, its edits to TOS |
 
-Of the TOS 1.04 ROMs on this Mac, the UK one matches best (the keyboard table has the UK `#`
-key); the other languages are within 0.5%.
+So D15R is GOS as `GAMEXdoc.html` describes it, and more. It holds TOS 1.04's GEMDOS and also its
+BIOS, XBIOS, floppy driver, start-up code and data. Its own 1,852 bytes at `$C0100` hold the entry
+table and `file_io`. From `$D0528` it keeps an image of TOS's RAM: each variable sits at its TOS
+address plus `$D0528`. The Falcon build, `D15R_F5`, is the same, except that its
+GEMDOS entry, `trap1`, reads the function number past the 68030's format word.
 
-What D15R holds, from `$C0100` (the sources name every routine):
+## 2. D15R's entry points
 
-| from | what |
-| --- | --- |
-| `$C0100` | **D15R's own** (1,852 bytes, nowhere in the ROM): the entry table, `swap_low_ram`, `tos_paths`, `file_io`, `init`, `file_io_2`, `mfp_quiet`, the parameters at `$C0730`, `low_ram_save` |
-| `$C0830` | TOS's start-up (`tos_start`, also `swv_vec`'s target as in TOS), the BIOS and XBIOS traps (`bios_trap`, `xbios_trap`) and their tables, the exception handler, VBL and HBL |
-| `$C11CE` | the floppy driver: the XBIOS floppy functions, `flop_getbpb`, `flop_rw`, `flop_mediach` (byte for byte TOS's `hdv_*` at `$FC173C`, `$FC1A24`, `$FC18EC`) |
-| `$C2166` | clock chip, printer, serial port, MIDI, keyboard processor, MFP, sound chip |
-| `$C34F8` | **GEMDOS**: console, the directory tree, buffers and FAT, files and handles, processes and memory, its dispatcher (`gemdos`) and its function table (`$CF946`, every function of TOS 1.04) |
-| `$C83C6` | D15R's BIOS and XBIOS call stubs for GEMDOS (`bios`, `xbios`), TRAP #2 (`vdi_aes`) |
-| `$C84A0` | **D15R's GEMDOS entry** (`trap1`): functions 1-11 (the console) answer 0, `Super` is handled apart, the rest goes to `gemdos` |
-| `$C899E` | TOS's GEMDOS dispatcher and the rest of TOS's code (timer, VT52, line-A, the VDI's entry) |
-| `$CF688` | TOS's data: keyboard tables, the 6x6 font's header, GEMDOS's messages ("OUT OF INTERNAL MEMORY") |
-| `$D0528` | **the image of TOS's RAM**: TOS's address + `$D0528`, its vectors and system variables (`$8`-`$7FF`) and TOS's own variables above them, up to the end of the file |
+D15R starts with a table of word offsets from `$C0100`:
 
-D15R's edits to TOS's code, as far as the comparison shows them: TOS's RAM variables moved into the
-image (1,724 absolute references relocated by `$D0528`; where TOS sets `a5`, its base for
-its variables, to 0 with `suba.l a5,a5`, D15R has `lea $D0528,a5`: in seven places, the BIOS
-dispatcher among them, `$FC07FE` in the ROM, `$C0C1E` in D15R); some accesses rewritten with other
-addressing, which changes instruction lengths (the runs of "other" bytes in the start-up and BIOS
-code); the call to the
-hard-copy routine, which D15R does not include, turned into a branch to an odd address
-(`no_hardcopy`: Alt-Help would end in an address error); and its own `TRAP #1` entry. The image's
-device tables (`xconstat`…, `$51E`-`$59D`) are empty: TOS fills them at start-up and D15R's
-`tos_start` never runs, which is why `trap1` answers the console functions with 0.
+| entry | offset | does |
+| --- | --- | --- |
+| `swap_low_ram` | `$0010` | swaps `$8`-`$7FF` with the image: TOS's vectors in, the game's out, or back |
+| `tos_paths` | `$0034` | sets the drive and path to LEMLD2's |
+| `file_io` | `$0070` | loads or saves a whole file by name, for the launcher's loader |
+| `init` | `$01BC` | called once by LEMLD2 |
+| `file_io_2` | `$01CA` | `file_io` for a second parameter set, never seen called (§4) |
 
-**It is GOS, as the Gamex documentation (`GAMEXdoc.html`) describes it, and more than that page
-says.** Not only TOS 1.04's GEMDOS but its BIOS, XBIOS, floppy driver, start-up code and data,
-relocated to `$C0100`, with an image of its RAM, behind entry points of its own. The Falcon build
-(`D15R_F5`) is the same with `trap1` (and LEMLD2's `trap1_stub`) reading the function number past
-the 68030's format word.
+`file_io` takes the file name, path, offset, length and buffer at `$C0730`. It swaps TOS's low RAM
+in, calls `Fopen`, `Fseek`, `Fread` or `Fwrite`, and `Fclose` through `TRAP #1`, and swaps the
+game's low RAM back.
 
-## 2. D15R's entry points and the data it shares
+D15R's GEMDOS reaches the disk through BIOS calls. `Rwabs` reads sectors. `Getbpb` returns the BPB,
+the block that describes a volume's layout. `Mediach` asks whether the disk changed. They go to the
+vectors `hdv_rw`, `hdv_bpb` and `hdv_mediach`, which LEMLD2 points at its copy of the driver.
 
-| entry | offset in the table at `$C0100` | called by | does |
-| --- | --- | --- | --- |
-| `swap_low_ram` | `$0010` | `file_io`, `file_io_2` | exchange `$8`-`$7FF` with the image: TOS's vectors and system variables in, the game's out, or back |
-| `tos_paths` | `$0034` | `file_io` (when `$C0734` is set) | a VBL tick into `_hz_200`; `Dsetdrv` and `Dsetpath` to LEMLD2's drive and path |
-| `file_io` | `$0070` | the launcher's loader (`$C0100` + the word at `+4`), the game's copy of it | load or save a whole file by name (below) |
-| `init` | `$01BC` | LEMLD2 (`start_d15r`), with `a1 = $FFFAA` | keep the 24 bytes at `$FFFAA` |
-| `file_io_2` | `$01CA` | not seen called (§4) | the same as `file_io` for the second parameter set |
+## 3. What the launcher needs from the resident PPDRIVER
 
-`io_params`, at `$C0730`: `+4` drive (a word; non-zero makes `file_io` set the paths, the loader
-clears it after the first call), `+6` offset, `+$A` length, `+$E` buffer (longs), `+$12` `"Wr"` to
-write, `+$22` the file name (8.3), `+$30` the path (`\LEMMINGS\FILES`, from LEMLD2's
-`Dgetpath`). The result is at `$C02B4`.
+From `reuse_pp_driver` and `set_buffers` in `src/lemld2/lemld2.s`, checked against the memory dumps
+in `gemdrive-failure.md` §3:
 
-**`file_io`**: with interrupts off, keep the registers and SR; `mfp_quiet` (the MFP's enables
-and masks kept and cleared); a destination below `$800` goes through `$80400`; `swap_low_ram`
-(TOS in); `tos_paths` if asked; `Fopen` (mode 1 with `"Wr"`), `Fseek`, `Fread` or `Fwrite`,
-`Fclose`, all through `TRAP #1`, which TOS's image points at `trap1`; `swap_low_ram` (the game
-back); the MFP back. D15R's GEMDOS reads the volume through BIOS `Rwabs`, `Getbpb`, `Mediach`
-(its `bios` stub, `TRAP #13`), which the image sends to `hdv_rw`, `hdv_bpb`, `hdv_mediach`: the
-driver copy's entries, which LEMLD2 wrote there.
+1. The XBRA id `PPHD` 8 bytes before the routine `hdv_bpb` points to.
+2. 7,204 bytes from the XBRA header that still work when copied to `$B7180`.
+3. `hdv_rw` and `hdv_mediach` in that block, found by their distance from `hdv_bpb`.
+4. Three slots holding TOS's own disk routines, which LEMLD2 replaces with D15R's floppy routines.
+5. GEMDOS buffer headers where LEMLD2 expects them. It builds four 8 KB buffers from `$AF100`.
+6. `pun_ptr` and the cookie jar pointer, saved into the image as found.
 
-## 3. What the launcher asks of the resident PPDRIVER
-
-From `reuse_pp_driver` and `set_buffers` (`src/lemld2/lemld2.s`), checked against the
-dumps of the resident and copied driver in `gemdrive-failure.md` §3:
-
-1. **The XBRA id `PPHD`** in the 4 bytes 8 before the routine `hdv_bpb` points to (the XBRA
-   header `"XBRA" "PPHD" <old vector>` starts 12 bytes before it).
-2. **7,204 bytes from that header that still work at `$B7180`**: they are copied there and run
-   there (the code must not depend on where it was loaded).
-3. **`hdv_rw` and `hdv_mediach` in the same block, at the same distance from `hdv_bpb` as in
-   the resident copy**: their copies' addresses are computed from those distances and written
-   into D15R's image (`$B71C2`, `$B75BE` on the reference).
-4. **Three old-vector slots holding TOS's `hdv_bpb`, `hdv_rw`, `hdv_mediach`** (the values the
-   driver chains to for drives it does not serve): LEMLD2 finds them by value in the copy and
-   puts D15R's floppy routines in their place.
-5. **GEMDOS buffer headers at the same distance from `hdv_mediach` as `_bufl`'s**: LEMLD2 makes
-   two buffer lists there, with four 8 KB buffers from `$AF100` (`_bufl` in the image).
-6. **`pun_ptr` and the cookie jar pointer** are saved into the image as found (`pun_ptr` is
-   cleared afterwards on the reference, `gemdrive-failure.md` §3).
-
-And from the game, through D15R (§4): `hdv_rw` for every read (logical 1,024-byte records on
-drive C, per the BPB it gave), `hdv_mediach` before each access (answering 0); `hdv_bpb` not
-after the hand-over (on the reference, D15R's `Getbpb(2)` comes before it: `gemdrive-failure.md` §4). A replacement driver would have to provide exactly that, laid out the
-same way; or D15R's GEMDOS could be bypassed altogether (what the GOS5 builds do: `gos5-gemdrive.md`).
+The game then calls `hdv_rw` for every read, in 1,024-byte records on drive C, and `hdv_mediach`
+before each access. A replacement driver would have to provide all of this, laid out the same way.
 
 ## 4. Every call the game makes, from the hand-over to the level load
 
-`src/probes/epic02/disk_calls_probe.py st-104`, then `disk_calls_report.py` on run
-`20261011-182600-st-104-ppdriver-disk-calls` (PASS, 13/13):
+Run `20261011-182600-st-104-ppdriver-disk-calls` on ST TOS 1.04 (PASS, 13/13):
 
-| call | what | the driver's reads |
+| file | when | records the driver reads |
 | --- | --- | --- |
-| loader, a0 = `"FORM…"`, d1 = 5 | not a file name (it starts with `F`): `loader_skip`, nothing read | |
-| loader `"IntroPart2"` → `file_io` `IntroPar` (cut to 8 characters), to `$10000` | the intro | directory 263, 415 × 80, 495, 496; `Mediach` × 23 |
-| loader `"CODE"` to `$200` → `file_io` `CODE` 1,536 bytes through `$80400`, then `file_io` `CODE` from offset 1,536 to `$800` | the game | 497, 498; then 499 × 76, 575; `Mediach` × 50 |
-| `file_io` `leveldat` (the game's own copy of the loader, at `$E892`, not `$85000`) | level data, at the title | 263, 264, 677 × 2, 679, 680; `Mediach` × 45 |
-| `file_io` `level020`, after the click on "1 PLAYER" | the first level | 263, 407 × 2, 409; `Mediach` × 21 |
+| `"FORM…"` | not a file name: the loader skips it | none |
+| `IntroPar`, to `$10000` | the intro | 263, 415 × 80, 495, 496 |
+| `CODE`, to `$200` | the game | 497, 498, 499 × 76, 575 |
+| `leveldat` | the title screen | 263, 264, 677 × 2, 679, 680 |
+| `level020` | after the click on "1 PLAYER" | 263, 407 × 2, 409 |
 
-In all: 3 calls to the loader at `$85000`, 5 to `file_io`, none to `file_io_2`, 16 to the driver
-copy's `hdv_rw`, 139 to its `hdv_mediach`, none to its `hdv_bpb`. Names arrive in mixed case
-(`leveldat`); D15R's GEMDOS matches them regardless, as TOS does.
+In all: 3 calls to the loader at `$85000`, 5 to `file_io`, none to `file_io_2`. The driver copy
+gets 16 calls to `hdv_rw`, 139 to `hdv_mediach` and none to `hdv_bpb`. Names arrive in mixed case,
+and D15R's GEMDOS matches them regardless, as TOS does.
 
 ## 5. For the solution
 
-The game asks for files **by name** and the request reaches GEMDOS as `Fopen`/`Fread` by name.
-The sectors only come in because that GEMDOS is D15R's own, behind `trap1` in TOS's image, and it
-reads the volume through the driver copy. Hatari's GEMDOS drive answers `Fopen`/`Fread` by name
-too, at the ROM's `TRAP #1` (`$FA002A`, which the game's own vectors still hold,
-`launch-chain.md`). Where the fix goes in (a driver that serves records, a `file_io` that calls
-the system's GEMDOS, or something else) was weighed with the other solutions in
-`hd-strategies.md` §4; the GOS5 builds send GOS's file calls to the system's GEMDOS
-(`gos5-gemdrive.md`). This is what they started from.
+The game's requests reach GEMDOS as `Fopen` and `Fread` by name. Sectors come in only because that
+GEMDOS is D15R's own. A GEMDOS drive answers `Fopen` and `Fread` by name too, at the ROM's
+`TRAP #1` (`$FA002A`). The GOS5 builds use this: they send GOS's file calls to the system's GEMDOS
+(`gos5-gemdrive.md`). The other options are weighed in `solutions.md` §4.
 
 ## Tools
 
-- `src/probes/epic02/d15r_vs_tos.py [H5|F5]`: the comparison of §1.
-- `src/probes/epic02/disk_calls_probe.py [<setup>]` and `disk_calls_report.py <run>`: §4.
+- `src/probes/epic02/d15r_vs_tos.py [H5|F5]`: the comparison in §1.
+- `src/probes/epic02/disk_calls_probe.py [<setup>]` and `disk_calls_report.py <run>`: the calls in §4.

@@ -7,7 +7,7 @@ status: done
 
 ## Goal
 
-`src/notes/hd-strategies.md` answers how many ways there are, how many games use each, what each
+`src/notes/solutions.md` answers how many ways there are, how many games use each, what each
 needs, and how many games fall under each verdict; and it proposes, for every strategy with games
 to fix, the solutions that would fix them, for Diego to choose from at STORY-08.
 
@@ -32,7 +32,7 @@ its verdict, and for a "fix", the solution that would make it run.
 
 ## Notes
 
-Done (2026-10-13). `src/notes/hd-strategies.md` holds the answers: twelve strategies, two ways to
+Done (2026-10-13). `src/notes/solutions.md` holds the answers: twelve strategies, two ways to
 the disk; **1,608 as it is, 212 fix, 1 not feasible, 10 unsure**; four solutions for the 212.
 Diego settled five of the unsure games at the start (his second look at the PPDRIVER snapshots).
 

@@ -45,32 +45,40 @@ OUT = REPO / "tools" / "dev" / "builds" / "site"
 SNAPSHOTS = REPO / "tools" / "dev" / "builds" / "survey" / "snapshots"
 LOGS = REPO / "tools" / "dev" / "logs"
 PP = "https://atari.8bitchip.info/"
-SITE = "Atari ST hard-disk adaptations, from a GEMDOS drive"
+SITE = "Atari ST hard-disk adaptations, from GEMDOS and GEMDRIVE"
 
 # The notes, by section, in reading order: (file stem, short title)
 SECTIONS = [
     ("index", "The project", []),
-    ("findings", "Findings", [("gemdrive-failure", "Why Lemmings fails"), ("launch-chain", "The launch chain"),
-                              ("disk-layer", "The disk layer"), ("launcher-formats", "The file formats"),
-                              ("launcher-signatures", "The launcher's signatures")]),
+    ("findings", "Findings", [("findings", "Findings")]),
     ("modes", "The modes", [("modes", "The modes")]),
-    ("strategies", "Strategies and solutions", [("hd-strategies", "Verdicts and solutions"),
-                                                ("strategies", "The strategies, from the files"),
-                                                ("gos5-gemdrive", "The GOS5 games, built"),
-                                                ("gos4-gemdrive", "The GOS4 games, built")]),
+    ("solutions", "Solutions", [("solutions", "Solutions")]),
     ("catalogue", "Catalogue", []),
     ("tools", "Tools", []),
 ]
-VERDICTS = [("as it is", "ok", "runs from the GEMDOS drive unchanged"),
+VERDICTS = [("as it is", "ok", "runs from GEMDOS and GEMDRIVE unchanged"),
             ("fix", "fix", "runs once one of the four solutions is applied"),
             ("not feasible", "no", "would need the game itself rewritten"),
-            ("unsure", "unsure", "its runs did not settle it")]
+            ("unsure", "unsure", "the runs did not settle it")]
 BY = {"run": "from its run", "Diego": "Diego's review", "ppdriver": "against the PPDRIVER run",
       "trace": "from a trace or a trial"}
 CATEGORIES = {"1-2": "1 or 2: the regular file system", "3": "3: loaded whole, no floppy after the start",
               "4": "4: the file system, in low RAM", "5": "5: XBIOS floppy loads",
               "6": "6: the floppy controller during play", "?": "a code the categories do not cover",
               "": "no code on its page"}
+# Where the map's strategy labels lead: each strategy's detailed section of modes.md (build_site.py --check
+# fails on an anchor that does not exist)
+STRATEGY_PAGES = {
+    "HAGA": "modes.html#modes-3-1-haga-since-january-2012",
+    "HAGE": "modes.html#modes-3-2-hage-and-hag2", "HAG2": "modes.html#modes-3-2-hage-and-hag2",
+    "Gamex + GOS4": "modes.html#modes-3-3-gamex-with-gos4-and-gos5-before-2012",
+    "Gamex + GOS5": "modes.html#modes-3-3-gamex-with-gos4-and-gos5-before-2012",
+    "Gamex": "modes.html#modes-3-4-gamex-without-gos-and-with-gos-1-00",
+    "Gamex + GOS 1.00": "modes.html#modes-3-4-gamex-without-gos-and-with-gos-1-00",
+    "launcher without Gamex": "modes.html#modes-3-5-the-rest", "plain + HOLE": "modes.html#modes-3-5-the-rest",
+    "floppy image": "modes.html#modes-3-5-the-rest",
+    "plain": "modes.html#modes-3-6-plain-installations", "FWRD RAM disk": "modes.html#modes-3-7-fwrd-ram-disk",
+}
 MACHINES = [("tos104", "TOS 1.04"), ("tos206", "TOS 2.06"), ("mste16", "Mega STE"), ("falcon", "Falcon"), ("tt", "TT")]
 
 
@@ -84,7 +92,14 @@ def slug(s: str) -> str:
 
 # --- Markdown, the subset the notes use -----------------------------------------------------------
 
-NOTES = {stem for _, _, pages in SECTIONS for stem, _ in pages}
+# A page made of several notes, one part each, in this order: each note keeps its own file (other notes,
+# the sources and the tools cite it by name and section), and a link to it leads to its part
+PARTS = {"findings": ["how-it-started", "gemdrive-failure", "launch-chain", "disk-layer", "launcher-formats",
+                      "launcher-signatures"],
+         "modes": ["modes", "recognising-modes"],
+         "solutions": ["solutions", "gos5-gemdrive", "gos4-gemdrive", "small-fixes"]}
+PART_OF = {stem: name for name, stems in PARTS.items() for stem in stems}
+NOTES = {stem for _, _, pages in SECTIONS for stem, _ in pages if stem not in PARTS} | set(PART_OF)
 LIST = re.compile(r"^( *)([-*]|\d+\.) +(.*)$")
 BACKLOG = re.compile(r"\b(?:EPIC|STORY)-\d+\b|\b[DCH]-\d\d\b|(?:ITERATIONS|DECISIONS|STATUS)\.md|docs/epics"
                      r"|\b[Ii]terations?\b|\b[Ee]pics?\b")
@@ -100,6 +115,8 @@ def link(url: str, text: str) -> str:
 def code_span(text: str) -> str:
     """Inline code; a note's file name links to its page, a page of the 8bitchip.info website's to it."""
     c = f"<code>{esc(text)}</code>"
+    if text.endswith(".md") and text[:-3] in PART_OF:
+        return f'<a href="{PART_OF[text[:-3]]}.html#{text[:-3]}">{c}</a>'
     if text.endswith(".md") and text[:-3] in NOTES:
         return f'<a href="{text[:-3]}.html">{c}</a>'
     if re.fullmatch(r"[A-Za-z0-9_]+\.(html|php)", text):
@@ -145,14 +162,15 @@ def cells(line: str) -> list[str]:
 
 
 class Doc:
-    """One note rendered: its title, its body and its headings (level, id, text)."""
+    """One note rendered: its title, its body and its headings (level, id, text). As a part of a page (PARTS),
+    its headings go one level down and their ids start with the note's name."""
 
-    def __init__(self, text: str):
-        self.title, self.toc, self.ids = "", [], collections.Counter()
+    def __init__(self, text: str, part: str = ""):
+        self.title, self.toc, self.ids, self.part = "", [], collections.Counter(), part
         self.body = self.blocks(text.splitlines(), top=True)
 
     def anchor(self, text: str) -> str:
-        base = slug(text)
+        base = f"{self.part}-{slug(text)}" if self.part else slug(text)
         self.ids[base] += 1
         return base if self.ids[base] == 1 else f"{base}-{self.ids[base]}"
 
@@ -174,7 +192,8 @@ class Doc:
                     self.title = text
                 else:
                     a = self.anchor(text)
-                    if top and level in (2, 3):
+                    level = min(level + 1, 6) if self.part else level
+                    if top and level in ((3,) if self.part else (2, 3)):
                         self.toc.append((level, a, text))
                     out.append(f'<h{level} id="{a}">{text}</h{level}>')
                 i += 1
@@ -248,13 +267,35 @@ def section_of(page: str) -> str:
     return ""
 
 
-def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", lead: str = "") -> str:
+def gemdos_path(name: str, folder_only: bool = False) -> str:
+    """The page as a GEMDOS drive would name it, each part cut to 8.3: C:\\FINDINGS\\GEMDRIVE.HTM."""
+    key = section_of(name)
+    parts = ["C:"] + ([key[:8].upper()] if key and key != "index" and (folder_only or name != key) else [])
+    if folder_only:
+        return "\\".join(parts) + "\\"
+    return "\\".join(parts + [f"{name[:8].upper()}.HTM"])
+
+
+def window(path: str, body: str, info: str = "", cls: str = "", label: str = "", tag: str = "div",
+           close: bool = False) -> str:
+    """A GEM window: its title bar with the path, its info line, then its work area."""
+    closer = ('<a class="closer" href="index.html" aria-label="Close: back to the project"></a>' if close
+              else '<span class="closer" aria-hidden="true"></span>')
+    info = f'<p class="info">{info}</p>' if info else ""
+    attrs = f' class="{("window " + cls).strip()}"'
+    attrs += f' aria-label="{esc(label)}"' if label else ""
+    attrs += ' id="main"' if tag == "main" else ""
+    return (f'<{tag}{attrs}><div class="titlebar">{closer}<span class="path">{esc(path)}</span>'
+            f'<span class="fuller" aria-hidden="true"></span></div>{info}<div class="work">{body}</div></{tag}>')
+
+
+def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", lead: str = "", info: str = "") -> str:
     current = section_of(name)
     nav = "".join(
         f'<li><a href="{(pages[0][0] if pages else key)}.html"{" aria-current=page" if key == current else ""}>{label}</a></li>'
         for key, label, pages in SECTIONS)
     head_title = SITE if name == "index" else f"{title} | {SITE}"
-    rail = f'<nav class="rail" aria-label="In this section">{rail}</nav>' if rail else ""
+    rail = window(gemdos_path(name, folder_only=True), rail, cls="rail", label="In this section", tag="nav") if rail else ""
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -267,14 +308,12 @@ def page(name: str, title: str, main: str, rail: str = "", kind: str = "doc", le
 <body class="{kind}">
 <a class="skip" href="#main">Skip to the content</a>
 <header class="bar">
-<a class="mark" href="index.html">Atari ST hard-disk adaptations<span>, from a GEMDOS drive</span></a>
+<a class="mark" href="index.html">Atari ST hard-disk adaptations<span>, from GEMDOS and GEMDRIVE</span></a>
 <nav aria-label="Sections"><ul>{nav}</ul></nav>
 </header>
-<div class="frame">
+<div class="desk">
 {rail}
-<main id="main">
-{main}
-</main>
+{window(gemdos_path(name), main, info=info, cls="doc", tag="main", close=name != "index")}
 </div>
 <footer class="credits">
 <p>The adaptations, their list and their documentation come from the 8bitchip.info website. This
@@ -325,6 +364,23 @@ def built() -> set[str]:
     return {r["row"] for r in read_csv(REPO / "src" / "survey" / "ports.tsv", "\t") if r["result"] == "runs"}
 
 
+def hardware() -> dict:
+    """The games tried on the SidecarTridge Multidevice's GEMDRIVE, by row (src/survey/hardware.tsv)."""
+    return {r["row"]: r for r in read_csv(REPO / "src" / "survey" / "hardware.tsv", "\t")}
+
+
+def machine_exceptions(r: dict) -> list[str]:
+    """Where the 8bitchip.info website's page says the game does not run as it is: "-" (not on that machine),
+    "Hole" (needs the RAM hole there) or a note. "+" and no mark are the rule: it runs on any machine."""
+    out = []
+    for key, label in MACHINES:
+        v = r.get(key, "").strip()
+        if v in ("", "+", "?"):
+            continue
+        out.append(f"not on {label}" if v == "-" else f"{label}: needs the RAM hole" if v == "Hole" else f"{label}: {v}")
+    return out
+
+
 def strategy_order(games: list[dict]) -> list[str]:
     return [s for s, _ in collections.Counter(g["strategy"] for g in games).most_common()]
 
@@ -339,78 +395,107 @@ def index(games: list[dict]) -> str:
             f'<a class="{dict((v, c) for v, c, _ in VERDICTS)[g["verdict"]]}{" built" if g["row"] in ported else ""}" '
             f'href="catalogue.html#g-{int(g["row"]):04d}" tabindex="-1" '
             f'title="{esc(g["name"])}: {g["verdict"]}{", built: runs" if g["row"] in ported else ""}"></a>' for g in members)
-        bands.append(f'<div class="band" style="--b:{b}"><a class="label" href="catalogue.html#s={urllib.parse.quote(s, safe="")}">'
+        bands.append(f'<div class="band" style="--b:{b}"><a class="label" href="{STRATEGY_PAGES[s]}">'
                      f'<span>{esc(s)}</span> <span class="count">{n(len(members))}</span></a>'
                      f'<div class="squares">{squares}</div></div>')
     items = [f'<li><i class="{c}"></i><span class="count">{n(count[v])}</span><span><a href="catalogue.html#v='
              f'{urllib.parse.quote(v, safe="")}">{v}</a>: {what}</span></li>' for v, c, what in VERDICTS]
     items.insert(2, f'<li><i class="fix built"></i><span class="count">{n(len(ported))}</span><span>of them '
-                    f'<a href="hd-strategies.html">built</a>, and running from the GEMDOS drive</span></li>')
+                    f'<a href="solutions.html">fixed</a> and running</span></li>')
     legend = "".join(items)
     solutions = collections.Counter(g["solution"].split(":")[0] for g in games if g["verdict"] == "fix")
     names = {}
     for s in read_csv(REPO / "src" / "survey" / "solutions.tsv", "\t"):
         names.setdefault(s["solution"].split(":")[0], s["solution"].split(": ", 1)[1].split(" (")[0])
-    sol_rows = "".join(f'<tr><td>{k}</td><td>{esc(names[k])}</td><td class="num">{n(solutions[k])}</td></tr>'
-                       for k in sorted(names))
+    running = collections.Counter(g["solution"].split(":")[0] for g in games if g["verdict"] == "fix" and g["row"] in ported)
+    sol_rows = "".join(f'<tr><td>{k}</td><td>{esc(names[k])}</td><td class="num">{n(solutions[k])}</td>'
+                       f'<td class="num">{n(running[k])}</td></tr>' for k in sorted(names))
     gos = sum(1 for g in games if g["strategy"] in ("Gamex + GOS4", "Gamex + GOS5"))
     gos5, gos4 = ({g["row"] for g in games if g["strategy"] == s} for s in ("Gamex + GOS5", "Gamex + GOS4"))
     lead = (f"The 8bitchip.info website lists {n(len(games))} Atari ST games adapted to start from a hard disk. "
-            f"This project ran every one of them in the Hatari emulator from its GEMDOS drive: a folder of the "
-            f"computer it runs on, served as drive C: file by file, with no disk sectors behind it.")
+            f"This project started each one from a GEMDOS drive: a folder that the ST sees as drive C:, "
+            f"file by file, with no disk sectors. Two serve it: the Hatari emulator's GEMDOS drive, and the "
+            f"SidecarTridge Multidevice's GEMDRIVE on real machines, where every fix is tried and what fails "
+            f"is reported. Most games run as they are. The others need one of four fixes.")
     main = f"""
 <section class="hero" aria-labelledby="hero-title">
-<h1 id="hero-title">Which of {n(len(games))} Atari ST <span class="nb">hard-disk</span> adaptations run from a GEMDOS drive</h1>
+<h1 id="hero-title">Which of {n(len(games))} Atari ST <span class="nb">hard-disk</span> adaptations run from GEMDOS and GEMDRIVE</h1>
 <p class="lead">{lead}</p>
+<form class="check" action="catalogue.html" method="get" role="search" aria-labelledby="check-title">
+<p class="alert" aria-hidden="true">?</p>
+<div>
+<h2 id="check-title">Does your game run from GEMDOS and GEMDRIVE?</h2>
+<p>Type its name. Its row in the catalogue says whether it runs as it is, and if it does not, which
+fix makes it run.</p>
+<p class="ask"><label for="check-q" class="vh">Game name</label><input id="check-q" type="search" name="q"
+autocomplete="off" placeholder="Lemmings" required><button class="default" type="submit">Check the game</button>
+<a class="button" href="solutions.html#solutions-4-the-solutions-proposed">How to fix a game</a></p>
+</div>
+</form>
 <div class="map">
 <div class="bands" role="img" aria-label="{n(count['as it is'])} games run as they are, {n(count['fix'])} need a fix ({n(len(ported))} of them built and running), {n(count['not feasible'])} not feasible, {n(count['unsure'])} unsure, by strategy">
 {''.join(bands)}
 </div>
 <ul class="legend">{legend}</ul>
 </div>
-<p class="readout" aria-live="polite">Each square is one game, grouped by the way its adaptation reaches its files. Point at a square to see the game; select it to open its row in the catalogue.</p>
+<p class="readout" aria-live="polite">Each square is one game. Each row groups the games by how their adaptation reaches its files. Point at a square to see the game; click it to open its row in the catalogue.</p>
 </section>
 
 <section class="prose">
 <h2 id="why">Why some do not</h2>
-<p>Ten of the twelve ways the adaptations reach their files go through GEMDOS by name, and a
-GEMDOS drive serves those. The other two, Gamex launchers with GOS4 or GOS5, bring their own
-GEMDOS, a copy of TOS 1.04's running from RAM, which reads the disk by sectors through a
-hard-disk driver. A GEMDOS drive has neither the driver nor the sectors: those {gos} games, Lemmings
-among them, are most of the fixes. <a href="gemdrive-failure.html">Why Lemmings fails</a> shows it
-step by step; <a href="hd-strategies.html">Verdicts and solutions</a> has every strategy's count.</p>
+<p>Most adaptations open their files through GEMDOS, by name, and both Hatari's GEMDOS drive and the
+Multidevice's GEMDRIVE serve them. The
+Gamex launchers with GOS4 or GOS5 work differently. They bring their own GEMDOS, a copy of TOS
+1.04's that runs from RAM and reads the disk sector by sector through a hard-disk driver. GEMDOS and
+GEMDRIVE have neither the driver nor the sectors, so these {gos} games, Lemmings among them, stop at
+the start. They are most of the games to fix. <a href="findings.html#gemdrive-failure">Why Lemmings
+fails</a> shows it step by step, and <a href="solutions.html">Verdicts and solutions</a> gives
+the counts for every strategy.</p>
+
+<h2 id="testing">Tested twice</h2>
+<p>Every game ran in Hatari, on an emulated ST and STE. Every fix then runs on real machines, an ST,
+an STE, a Mega ST and a Mega STE, with the SidecarTridge Multidevice's GEMDRIVE serving the games
+from a microSD card. Real machines find failures that Hatari does not show: a file that GEMDRIVE
+locks, memory that GEMDRIVE uses, a floppy drive that a game waits for. Each one is reported in
+the catalogue and in <a href="solutions.html#solutions-7-how-the-solutions-are-tested">how the solutions are tested</a>, with its cause once it is
+known.</p>
 
 <h2 id="solutions">The solutions</h2>
-<p>Four solutions make the {n(count['fix'])} games to fix run, each on the Atari side, with the
-emulator unchanged. S2, S3 and S4 were shown in trial runs. S1 is built for the {n(len(gos5))} GOS5
-games and the {n(len(gos4))} GOS4 games, and {n(len(ported))} of them run from the GEMDOS drive with
-their start program built for it: {n(len(ported & gos5))} GOS5 games in Hatari and on an STE with the
-SidecarTridge Multidevice's GEMDRIVE (<a href="gos5-gemdrive.html">the GOS5 games, built</a>), and
-{n(len(ported & gos4))} GOS4 games in Hatari (<a href="gos4-gemdrive.html">the GOS4 games,
-built</a>). The smaller fixes are next.</p>
+<p>Four solutions fix the {n(count['fix'])} games. Each one changes the Atari side only; the emulator
+stays as it is. {n(len(ported))} of the {n(count['fix'])} games now run from GEMDOS and GEMDRIVE: Hatari's
+GEMDOS drive and the SidecarTridge Multidevice's GEMDRIVE.</p>
+<ul>
+<li>S1 rebuilds the start program of the GOS games, so that GOS asks GEMDOS or GEMDRIVE for its files
+by name. {n(len(ported & gos5))} of the {n(len(gos5))} GOS5 games run (<a href="solutions.html#gos5-gemdrive">the
+GOS5 games, built</a>), and {n(len(ported & gos4))} of the {n(len(gos4))} GOS4 games
+(<a href="solutions.html#gos4-gemdrive">the GOS4 games, built</a>).</li>
+<li>S2, S3 and S4 are small fixes for eight games, and {n(len(ported - gos4 - gos5))} of them run
+(<a href="solutions.html#small-fixes">eight games with a small fix</a>).</li>
+</ul>
 <div class="table"><table>
-<thead><tr><th></th><th>solution</th><th class="num">games</th></tr></thead>
+<thead><tr><th></th><th>solution</th><th class="num">games</th><th class="num">running</th></tr></thead>
 <tbody>{sol_rows}</tbody></table></div>
-<p><a href="hd-strategies.html#4-the-solutions-proposed">What each one changes, costs and risks</a>.</p>
+<p><a href="solutions.html#solutions-4-the-solutions-proposed">What each one changes, costs and risks</a>.</p>
 
 <h2 id="project">The project</h2>
-<p>It started with one game: the 2011 hard-disk adaptation of Lemmings, whose launcher stops at
-once from a GEMDOS drive. The work has two parts. The first understood and classified: why
-Lemmings fails, the launcher rebuilt from sources that reassemble to the original bytes, and every
-adaptation in the 8bitchip.info website's list given a verdict. The second, under way, builds the solutions one group of games at a
-time: the GOS5 and GOS4 games first, {n(len(ported))} of them running now, then the smaller
-fixes and the games still unsure; then a check with acsi2stm's GemDrive, the other
-GEMDRIVE, and a program that installs the builds on a user's own copies. Each build is tested in
-Hatari's GEMDOS drive and on the SidecarTridge Multidevice's GEMDRIVE, which serves an ST's drive
-the same way from an SD card.</p>
-<p>The findings, in the order they were made: <a href="gemdrive-failure.html">why Lemmings fails</a>,
-<a href="launch-chain.html">the launch chain</a>, <a href="disk-layer.html">the disk layer</a>,
-<a href="launcher-formats.html">the file formats</a>, <a href="launcher-signatures.html">the
-launcher's signatures</a>, <a href="modes.html">the modes</a>, <a href="strategies.html">the
-strategies</a> and <a href="hd-strategies.html">the verdicts and solutions</a>.</p>
+<p>It started with one game: the 2011 hard-disk adaptation of Lemmings, which stops at once when it
+is started from GEMDOS or GEMDRIVE. The first part of the work found out why, rebuilt the launcher from
+sources that reassemble to the original bytes, and gave every adaptation on the list a verdict. The
+second part builds the fixes, one group of games at a time, and tests each in Hatari and on the
+SidecarTridge Multidevice. Still to come: the games whose verdict is unsure, a check with
+acsi2stm's GemDrive, and a program that applies the fixes to a user's own copies.</p>
+<p>The findings, in the order they were made: <a href="findings.html#gemdrive-failure">why Lemmings fails</a>,
+<a href="findings.html#launch-chain">the launch chain</a>, <a href="findings.html#disk-layer">the disk layer</a>,
+<a href="findings.html#launcher-formats">the file formats</a>, <a href="findings.html#launcher-signatures">the
+launcher's signatures</a>, <a href="modes.html#modes">the modes</a>, <a href="modes.html#recognising-modes">recognising
+the modes from the files</a> and <a href="solutions.html">the verdicts and solutions</a>.</p>
 </section>
 """
-    return page("index", SITE, main, kind="home", lead=lead)
+    hw = hardware()
+    info = (f"{n(len(games))} games: {n(count['as it is'])} as they are, {n(count['fix'])} to fix "
+            f"({n(len(ported))} built and running), {n(count['not feasible'])} not feasible, {n(count['unsure'])} unsure. "
+            f"{n(sum(1 for r in hw.values() if r['result'] == 'fails'))} fail on the Multidevice")
+    return page("index", SITE, main, kind="home", lead=lead, info=info)
 
 
 # --- The catalogue --------------------------------------------------------------------------------
@@ -421,32 +506,37 @@ def ram_of(g: dict) -> str:
 
 
 def catalogue(games: list[dict], records: dict, shots: dict) -> str:
-    strategies, ported = strategy_order(games), built()
+    strategies, ported, hw = strategy_order(games), built(), hardware()
     count = collections.Counter(g["verdict"] for g in games)
     rows = []
     for g in games:
         r = records.get(g["row"], {})
-        machines = [label for key, label in MACHINES if r.get(key, "") not in ("", "-", "?")]
+        exceptions = machine_exceptions(r)
         cls = dict((v, c) for v, c, _ in VERDICTS)[g["verdict"]]
         rid = f"g-{int(g['row']):04d}"
         shot = shots.get(g["row"])
         img = (f'<button class="shot" type="button" data-src="snapshots/{shot}" aria-label="Enlarge {esc(g["name"])}\'s screenshot">'
                f'<img src="snapshots/{shot}" alt="" loading="lazy" width="208" height="138"></button>') if shot else ""
         notes = [f'{esc(g["download"])}' + (f': {esc(g["reason"])}' if g["reason"] else "")]
+        if exceptions:
+            notes.append(f'<span class="exc">On the list: {esc("; ".join(exceptions))}</span>')
         if g["solution"]:
             notes.append(f'<span class="sol">{esc(g["solution"])}</span>')
+        h = hw.get(g["row"], {})
+        if h.get("result") == "fails":
+            notes.append(f'<span class="hwnote">Fails on the Multidevice ({esc(h["machine"])}): {esc(h["note"])}</span>')
         rows.append(
             f'<tr id="{rid}" data-v="{esc(g["verdict"])}" data-s="{esc(g["strategy"])}" data-c="{esc(g["code_category"])}" '
-            f'data-r="{ram_of(g)}" data-m="{esc("|".join(machines))}" data-n="{esc(g["name"].lower())}">'
+            f'data-r="{ram_of(g)}" data-n="{esc(g["name"].lower())}">'
             f'<td class="pic">{img}</td>'
             f'<td class="game">{link(esc(g["url"]), esc(g["name"]))}<p>{" ".join(notes)}</p></td>'
             f'<td>{esc(g["strategy"])}</td>'
             f'<td><span title="{esc(CATEGORIES.get(g["code_category"], ""))}">{esc(g["cat_code"] or "none")}</span>'
             f'<br><small>{esc(g["code_category"] and "cat. " + g["code_category"])}</small></td>'
             f'<td>{esc(g["min_ram"])}</td>'
-            f'<td><small>{", ".join(machines)}</small></td>'
             f'<td class="verdict"><i class="{cls}{" built" if g["row"] in ported else ""}"></i>{esc(g["verdict"])}<br>'
-            f'<small>{"built: runs" if g["row"] in ported else BY.get(g["by"], "")}</small></td></tr>')
+            f'<small>{"built: runs" if g["row"] in ported else BY.get(g["by"], "")}</small></td>'
+            '</tr>')
 
     def options(values, labels=None):
         return "".join(f'<option value="{esc(v)}">{esc((labels or {}).get(v, v))}</option>' for v in values)
@@ -457,11 +547,12 @@ def catalogue(games: list[dict], records: dict, shots: dict) -> str:
     cats = [c for c in CATEGORIES if any(g["code_category"] == c for g in games)]
     main = f"""
 <h1>The catalogue</h1>
-<p class="lead">Every game of the 8bitchip.info website's list of hard-disk adaptations
-({link(PP + "fromhd3.php", "fromhd3.php")}, read on 2026-10-11), with the way its adaptation
-reaches its files and its verdict from Hatari's GEMDOS drive. The name opens the game's page on
-the 8bitchip.info website, where its download is; how the original used the floppy and the
-machines it runs on are the ones that page gives.{" The picture is the last screen of its run, on an ST with TOS 1.04 (STE games: TOS 1.62); for a game built for the GEMDOS drive, of its build's run." if shots else ""}</p>
+<p class="lead">Every game on the 8bitchip.info website's list of hard-disk adaptations
+({link(PP + "fromhd3.php", "fromhd3.php")}), with how its adaptation reaches its
+files and its verdict from Hatari's GEMDOS drive. A game runs on every machine, and from the
+SidecarTridge Multidevice's GEMDRIVE too, unless its row says otherwise. A game's name opens its page on the 8bitchip.info
+website, where its download is. The floppy use, and the machines a game does not run on, come from
+that page.{" The picture is the last screen of the game's run, on an ST with TOS 1.04 (STE games: TOS 1.62). For a fixed game, it is the last screen of its fixed run." if shots else ""}</p>
 <form class="filters" role="search" aria-label="Filter the games">
 <label class="search">Name <input type="search" name="q" autocomplete="off" placeholder="Lemmings"></label>
 <fieldset class="verdicts"><legend>Verdict</legend>
@@ -470,12 +561,11 @@ machines it runs on are the ones that page gives.{" The picture is the last scre
 <label>Strategy <select name="s"><option value="">all</option>{options(strategies)}</select></label>
 <label>Floppy use <select name="c"><option value="">all</option>{options(cats, CATEGORIES)}</select></label>
 <label>RAM <select name="r"><option value="">all</option>{options(["512K", "1M", "2M"])}</select></label>
-<label>Runs on <select name="m"><option value="">all</option>{options([l for _, l in MACHINES])}</select></label>
 <p class="shown" aria-live="polite"><span id="shown">{n(len(games))}</span> of {n(len(games))} games shown
 <button type="reset">Show all</button></p>
 </form>
 <div class="table catalogue"><table>
-<thead><tr><th><span class="vh">Screenshot</span></th><th>Game</th><th>Strategy</th><th>Floppy use</th><th>RAM</th><th>Runs on</th><th>Verdict</th></tr></thead>
+<thead><tr><th><span class="vh">Screenshot</span></th><th>Game</th><th>Strategy</th><th>Floppy use</th><th>RAM</th><th>Verdict</th></tr></thead>
 <tbody>
 {chr(10).join(rows)}
 </tbody></table></div>
@@ -484,7 +574,8 @@ machines it runs on are the ones that page gives.{" The picture is the last scre
 <button class="close">Close</button></form><img alt=""></dialog>
 """
     return page("catalogue", "The catalogue", main, kind="wide",
-                lead=f"{n(len(games))} hard-disk adaptations, each with its strategy and verdict from a GEMDOS drive.")
+                lead=f"{n(len(games))} hard-disk adaptations, each with its strategy and verdict from GEMDOS and GEMDRIVE.",
+                info=f"{n(len(games))} games")
 
 
 # --- The tools ------------------------------------------------------------------------------------
@@ -559,8 +650,17 @@ def build(out: Path, with_snapshots: bool) -> None:
         for name in shots.values():
             shutil.copy(SNAPSHOTS / name, out / "snapshots" / name)
     pages = {"index": index(games), "catalogue": catalogue(games, records, shots), "tools": tools_page()}
-    for key, _, notes in SECTIONS:
+    for key, title, notes in SECTIONS:
         for stem, _ in notes:
+            if stem in PARTS:
+                whole = Doc("")
+                main = [f"<h1>{title}</h1>"]
+                for part in PARTS[stem]:
+                    doc = Doc((REPO / "src" / "notes" / f"{part}.md").read_text(), part=part)
+                    main.append(f'<h2 id="{part}">{doc.title}</h2>\n{doc.body}')
+                    whole.toc += [(2, part, doc.title)] + doc.toc
+                pages[stem] = page(stem, title, "\n".join(main), rail=rail_for(stem, whole))
+                continue
             doc = Doc((REPO / "src" / "notes" / f"{stem}.md").read_text())
             main = f"<h1>{doc.title}</h1>\n{doc.body}"
             pages[stem] = page(stem, doc.title, main, rail=rail_for(stem, doc))

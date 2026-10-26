@@ -32,7 +32,7 @@ with its reason. The note gives the number of strategies and the number of games
 ## Notes
 
 **Done 2026-10-11.** `python3 tools/survey/classify.py` writes `src/survey/migration.csv`; the note
-is `src/notes/strategies.md`; the disk-access patterns are in `src/notes/launcher-signatures.md`.
+is `src/notes/recognising-modes.md`; the disk-access patterns are in `src/notes/launcher-signatures.md`.
 
 - **12 strategies**, no game unclassified: HAGA 1,022, HAGE 203, HAG2 130, plain 125, Gamex 117,
   Gamex + GOS4 116, Gamex + GOS5 87, PP launcher 21, Gamex + GOS 1.00 5, plain + HOLE 3, FWRD RAM

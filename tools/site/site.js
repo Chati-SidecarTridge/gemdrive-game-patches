@@ -20,7 +20,7 @@ if (form) {
   const rows = [...document.querySelectorAll('.catalogue tbody tr')];
   const shown = document.getElementById('shown');
   const empty = document.querySelector('.empty');
-  const keys = ['q', 'v', 's', 'c', 'r', 'm'];
+  const keys = ['q', 'v', 's', 'c', 'r'];
 
   const apply = (keep) => {
     const f = Object.fromEntries(keys.map((k) => [k, String(new FormData(form).get(k) || '').trim()]));
@@ -29,7 +29,7 @@ if (form) {
     for (const tr of rows) {
       const d = tr.dataset;
       const show = (!q || d.n.includes(q)) && (!f.v || d.v === f.v) && (!f.s || d.s === f.s)
-        && (!f.c || d.c === f.c) && (!f.r || d.r === f.r) && (!f.m || d.m.split('|').includes(f.m));
+        && (!f.c || d.c === f.c) && (!f.r || d.r === f.r);
       tr.hidden = !show;
       if (show) count += 1;
     }
@@ -47,7 +47,8 @@ if (form) {
   };
 
   const fromHash = () => {
-    const h = location.hash.slice(1);
+    // the home page's check sends ?q=name; the filters live in the hash from then on
+    const h = location.hash.slice(1) || location.search.slice(1);
     clear();
     if (h.startsWith('g-')) {
       apply(false);

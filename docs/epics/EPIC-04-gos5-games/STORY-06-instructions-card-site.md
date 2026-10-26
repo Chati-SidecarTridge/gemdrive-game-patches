@@ -46,7 +46,7 @@ drive. The card and the site show the new verdicts.
   (`card-1335`), and the three games moved to `STILLNOT/1MB/MAG-PRI/`. `gos5_run.py` now takes the
   originals from the unpacked downloads (`run_all.plan`), with the table's options and files.
 - **The site**: the verdicts are unchanged (all 87 stay fix); the catalogue shows their new reasons
-  and solutions, the solutions page (`hd-strategies.md` §1 and S1) what was built.
+  and solutions, the solutions page (`solutions.md` §1 and S1) what was built.
 - **The site was out of date** (Diego, 2026-10-16: "remember we are building a website for our
   research. is it updated?"): the home page called S1 a proposal and the first iteration "now
   ending", its solutions table took S1's name from the last row of `solutions.tsv` (Forgotten
