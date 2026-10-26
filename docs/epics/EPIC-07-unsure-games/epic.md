@@ -10,7 +10,7 @@ status: todo
 Each of the ten games in the card's `UNSURE` folder gets a cause and a verdict: **fix**, with the
 fix built and run here, or **not feasible**, with the reason. They fail from Hatari's GEMDOS drive
 and, by Diego's test (2026-10-15), from the Multidevice's too. EPIC-03 did not find out why
-(`hd-strategies.md` §3.6). Little Puff in Dragonland is the first test game: it runs from
+(`solutions.md` §3.6). Little Puff in Dragonland is the first test game: it runs from
 PPDRIVER and fails only from the GEMDOS drive, so a trace of each run should show the difference.
 Chosen by Diego, 2026-10-15 (D-16). The not-feasible game, Great Giana Sisters STE (`NOFIX`),
 stays out.
@@ -44,3 +44,9 @@ asks for it. At the checkpoint, Diego's Multidevice, from a card.
 - STORY-05: Verification (Diego's checkpoint)
 
 ## Notes
+
+From EPIC-06 (2026-10-26): Aquanaut (`AQUAN.ZIP`, plain + HOLE), fastload bit set, reaches its title
+in Hatari but reboots on Diego's STE with the Multidevice while it loads. It runs only where a bare
+TOS loads it (64 KB more below it and it fails in Hatari too), and with the RAM below 512 KB kept
+free, as its `FBHOLE.PRG` boot floppy does, it still fails (`src/gemdrive/gdhole.s`, a test, not
+committed). EPIC-06 STORY-05 has the runs.

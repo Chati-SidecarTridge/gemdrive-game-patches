@@ -82,7 +82,7 @@ drive at this repository's root.
 - `docs/epics/`: the backlog (committed, D-03).
 - `src/`: what this project produces: unpacked stages, reconstructed sources (vasm Motorola
   syntax, D-05) that reassemble byte for byte to the original, notes (`src/notes/`; the GEMDRIVE
-  cause is `gemdrive-failure.md`, every game's verdict and the solutions `hd-strategies.md`) and
+  cause is `gemdrive-failure.md`, every game's verdict and the solutions `solutions.md`) and
   the debugger probes of each epic (`src/probes/`).
 - `tools/`: the project's own unpackers and packers (standard-library Python); `tools/survey/`,
   EPIC-03's scripts, starting with `mirror.py`, which copied PP's site into `MIRROR`; `tools/site/`,

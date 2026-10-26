@@ -203,3 +203,11 @@ row	name	download	options	result	add	from	run	shot
 1736	Defender 2	DEFNDR2.ZIP		runs			20261016-201249-st-104-gemdrive-gos5-defndr2	s45.png
 1809	Internatianal Karate	IK.ZIP		runs			20261016-201805-st-104-gemdrive-gos5-ik	s45.png
 1824	F16 Falcon	F16_FALC.ZIP		runs			20261016-201452-st-104-gemdrive-gos5-f16_falc	s45.png
+1698	Crystals of Arborea	ARBOTARG.ZIP	gdbpb	runs			20261026-115631-st-104-gemdrive-bpb-crystals-of-arborea-gdbpb	k4.png
+1699	Targhan	ARBOTARG.ZIP	gdbpb	runs			20261026-115631-st-104-gemdrive-bpb-targhan-gdbpb	k4.png
+1774	Robinsons Requiem	ROBINSON.ZIP	gdbpb	runs			20261026-115631-st-104-gemdrive-bpb-robinsons-requiem-gdbpb	end.png
+1808	Storm Master	STORMMAS.ZIP	gdbpb	runs			20261026-115631-st-104-gemdrive-bpb-storm-master-gdbpb	end.png
+1804	Spy vs Spy 2	SPY2.ZIP	fastload	runs			20261026-121044-st-104-gemdrive-fix-spy-vs-spy-2-fastload	end.png
+1813	Strike Force Harrier	STRIKEFH.ZIP	fastload	runs			20261026-121044-st-104-gemdrive-fix-strike-force-harrier-fastload	end.png
+1826	Aquanaut	AQUAN.ZIP	fastload	fails			20261026-121044-st-104-gemdrive-fix-aquanaut-fastload	end.png
+41	Rody and Mastico 2	RODYM2.ZIP		runs	RUNME.TOS	RODYM4.ZIP	20261026-122932-st-104-gemdrive-fix-rody-and-mastico-2-rody2	end.png

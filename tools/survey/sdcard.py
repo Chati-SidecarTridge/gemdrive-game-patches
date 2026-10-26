@@ -42,7 +42,12 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(REPO / "tools"))
 import run_all  # noqa: E402
+import set_fastload  # noqa: E402
+
+GDBPB_SRC = REPO / "src" / "gemdrive" / "gdbpb.s"
+GDBPB = REPO / "tools" / "dev" / "builds" / "epic06" / "GDBPB.PRG"
 
 TOPS = {"as it is": "WORKS", "unsure": "UNSURE", "not feasible": "NOFIX"}
 FIXES = {"Gamex + GOS4": "FIXGOS4", "Gamex + GOS5": "FIXGOS5", "HAGE": "FIXHAGE", "plain": "FIXPLAIN",
@@ -74,7 +79,28 @@ def groups(stems: set[str]) -> dict[str, str]:
 
 def built(start: Path, options: list[str], strategy: str) -> None:
     """A ported game's program to start, the download's copy at start, built for a GEMDOS drive in its place
-    (tools/build_gos4.py for a GOS4 game, build_gos5.py for a GOS5 one)."""
+    (tools/build_gos4.py for a GOS4 game, build_gos5.py for a GOS5 one); for the others, the options name
+    the fix: gdbpb puts GDBPB.PRG (src/gemdrive/gdbpb.s) beside start, to run from the desktop first;
+    fastload sets the bit in the program tools/set_fastload.py knows in start's folder."""
+    if strategy not in ("Gamex + GOS4", "Gamex + GOS5"):
+        for option in options:
+            if option == "gdbpb":
+                if not GDBPB.exists() or GDBPB.stat().st_mtime < GDBPB_SRC.stat().st_mtime:
+                    GDBPB.parent.mkdir(parents=True, exist_ok=True)
+                    subprocess.run([str(REPO / "tools" / "dev" / "asm.sh"), "--tos", str(GDBPB_SRC), str(GDBPB)],
+                                   check=True, stdout=subprocess.DEVNULL)
+                shutil.copyfile(GDBPB, start.parent / "GDBPB.PRG")
+            elif option == "fastload":
+                known = [f for f in start.parent.rglob("*") if f.name.upper() in set_fastload.PROGRAMS]
+                if len(known) != 1:
+                    sys.exit(f"error: {start.parent}: {len(known)} programs set_fastload.py knows")
+                done = subprocess.run([sys.executable, "-I", str(REPO / "tools" / "set_fastload.py"), str(known[0]),
+                                       str(known[0])], capture_output=True, text=True)
+                if done.returncode:
+                    sys.exit(f"error: {known[0]}: {done.stdout}{done.stderr}")
+            else:
+                sys.exit(f"error: {start}: unknown fix {option!r}")
+        return
     tool = "build_gos4.py" if strategy == "Gamex + GOS4" else "build_gos5.py"
     done = subprocess.run([sys.executable, "-I", str(REPO / "tools" / tool), str(start), str(start)]
                           + options, capture_output=True, text=True)
@@ -147,6 +173,13 @@ def main() -> int:
                 base = run_all.SURVEY / "games" / Path(g["download"]).with_suffix("")
                 inner = [e for e in base.iterdir() if e.name != ".DS_Store"]
                 total += copy(inner[0] if len(inner) == 1 and inner[0].is_dir() else base, dest)
+                port = ports.get(g["row"])
+                if port:  # what another download adds, its program to start among them (Rody and Mastico 2)
+                    for name in port["add"].split():
+                        total += copy(found(port["from"], name), dest / name)
+                    added = [n for n in port["add"].split() if n.upper().endswith((".TOS", ".PRG"))]
+                    if added:
+                        p = {"start": added[0]}
             else:
                 total += copy(p["folder"], dest)
                 log = run_all.RUNS / g["run"] / "hatari.out"

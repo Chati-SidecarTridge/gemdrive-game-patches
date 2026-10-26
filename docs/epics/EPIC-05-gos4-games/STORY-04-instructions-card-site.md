@@ -37,7 +37,7 @@ card and the site show the new verdicts.
   builds of their last runs (`final-2038`).
 - **The site**: the new page; the home page's legend and solutions count the GOS4 games among the
   built (202 of 212 fix: 85 GOS5 and 117 GOS4), the project's paragraph says where the work stands;
-  `hd-strategies.md` §1, the risk that GOS4's calls were not known (now answered), and "Built for
+  `solutions.md` §1, the risk that GOS4's calls were not known (now answered), and "Built for
   GOS4"; the 117 catalogue rows show "built: runs" and their build's picture (`port-<row>.png`).
   `build_site.py --check`: 13 pages, 7,702 links, 0 problems.
 - **Diego's card** (his "Update", 2026-10-16): its `FIXGOS4` matched `sdcard-1635` byte for byte; the

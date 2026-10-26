@@ -39,7 +39,7 @@ Multidevice's GEMDRIVE, on Diego's STE, it reaches its title and loads its first
 
 ### The approach (2026-10-15): GOS's code unchanged
 
-S1 as proposed (`hd-strategies.md` §4) changed two things: the launcher's driver checks, and GOS's
+S1 as proposed (`solutions.md` §4) changed two things: the launcher's driver checks, and GOS's
 `trap1` in each D15R build. Only the first one is needed.
 
 - During `file_io`, GOS swaps in its image of TOS's low RAM, and its `TRAP #1` vector there

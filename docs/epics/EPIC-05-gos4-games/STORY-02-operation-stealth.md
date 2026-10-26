@@ -105,6 +105,6 @@ calls, its loader and a game's save shown.
   builds list at text `+$38` behind a `bra` (`$600C` at `+$36`; Defender 2's build has none) and PP's
   path also takes; drive C has a BPB (FAT16, 512-byte records), is never changed, and its sectors
   fail; `Dfree` goes to the machine. Starblade and Windsurf Willy, Silmarils games, asked
-  `Getbpb(2)` forever (the S2 case of `hd-strategies.md` §3.2) and now read their files by name;
+  `Getbpb(2)` forever (the S2 case of `solutions.md` §3.2) and now read their files by name;
   Gravity's `Mediach(0)` loop and Chariots of Wrath's fault are gone (`rerun2-1857`).
 

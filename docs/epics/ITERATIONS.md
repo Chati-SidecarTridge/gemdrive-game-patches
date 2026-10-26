@@ -133,7 +133,7 @@ What was known before these epics were written, as their input:
 
 ### The solutions EPIC-03 proposes
 
-From EPIC-03 STORY-06 (`src/notes/hd-strategies.md` §4; each "fix" row of
+From EPIC-03 STORY-06 (`src/notes/solutions.md` §4; each "fix" row of
 `src/survey/migration.csv` names its solution). 212 games to fix of 1,831; each solution would be
 an epic of its own, for Diego to choose and order at EPIC-03's checkpoint (STORY-08).
 
@@ -145,7 +145,7 @@ an epic of its own, for Diego to choose and order at EPIC-03's checkpoint (STORY
 | S4 | Rody and Mastico 4's `RUNME.TOS` | 1 (Rody and Mastico 2) | itself | instructions only | a trial |
 
 43 of S1's games already run from the GEMDOS drive through another download of PP's (Lemmings'
-`LEMMSRD.ZIP`, 2 MB, among them; `hd-strategies.md` §5). One game is not feasible (Great Giana
+`LEMMSRD.ZIP`, 2 MB, among them; `solutions.md` §5). One game is not feasible (Great Giana
 Sisters STE: it streams its music by sectors itself) and 10 are unsure (§3.6 of the note).
 
 ### Candidates, not yet epics
@@ -162,7 +162,7 @@ Found on the way. Each waits for Diego to choose it into an epic.
 - **The 10 unsure games** (now EPIC-07). Found in EPIC-03 STORY-05/06: six fail from PPDRIVER too (Lords of
   Doom, Substation, Roger, Zero-5, Spitting Images, Utopos), three only from the GEMDOS drive by
   Diego's look (Super Breakout mono, 9 Lives, Little Puff in Dragonland), and Ice and Fire has
-  only floppy images (`hd-strategies.md` §3.6). Each needs its traces read, as S2 and S3's were.
+  only floppy images (`solutions.md` §3.6). Each needs its traces read, as S2 and S3's were.
 - **Hatari's `Pexec` and the caller's stack.** Found in EPIC-03 STORY-06: Hatari's GEMDOS drive
   clears a started program's free memory before it rewrites the caller's saved `Pexec` call, so a
   caller whose stack lies there ends instead (S3). Not a change here (C-02); a report to Hatari's
