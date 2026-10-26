@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-06: the other downloads of the games to fix, run from Hatari's GEMDOS drive.
+"""The other downloads of the games to fix, run from Hatari's GEMDOS drive.
 
 Usage: run_other.py [--jobs N] [--disk gemdrive|ppdriver] [--only ZIP ...] [--list]
 

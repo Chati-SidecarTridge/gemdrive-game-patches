@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # tools/dev/disasm.sh: disassemble a raw binary loaded at a given address, in
-# the pinned toolchain (EPIC-00 STORY-02).
+# the pinned toolchain.
 #
 # Usage: tools/dev/disasm.sh <bin> <vma> <out> [arch]
 #

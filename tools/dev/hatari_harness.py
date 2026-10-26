@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """tools/dev/hatari_harness.py: start the launcher in Hatari on one machine, TOS
 and disk setup, headless, record what it does, and end with PASS or FAIL against
-a list of expected steps (EPIC-00 STORY-05).
+a list of expected steps.
 
 Usage: hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver
                          [--expect FILE] [--parse FILE] [--memsize MB] [--no-auto]
@@ -9,7 +9,7 @@ Usage: hatari_harness.py --setup st-104|ste-162|ste-206 --disk gemdrive|ppdriver
                          [--monitor mono|rgb|vga|tv] [--tos-res low|med|high] [--drive FOLDER] [--image FILE]
                          [--log-root FOLDER]
 
-Hatari is used as released (C-02). Each run gets a folder under tools/dev/logs/:
+Hatari is used as released, never modified. Each run gets a folder under tools/dev/logs/:
 
   hatari.out   everything Hatari printed: its traces of GEMDOS, BIOS, XBIOS and
                ACSI calls, and the debugger's output
@@ -48,7 +48,7 @@ with `:file`, are copied into the run folder and run from there, so a relative
 path they save to (savebin dump.bin ...) lands in the run folder. At the end of
 every run the registers are dumped into hatari.out and the PC goes into
 result.txt. After every run the harness checks that
-LEMMINGS/ still matches LEMMINGS.sha256 (C-01) and that no Hatari is left.
+LEMMINGS/ still matches LEMMINGS.sha256 (the original files are never modified) and that no Hatari is left.
 Standard library only.
 """
 
@@ -86,7 +86,7 @@ KEYS.update({f"f{n}": 0x3A + n for n in range(1, 11)})
 KEYS.update({str(n): 0x01 + n for n in range(1, 10)})
 KEYS["0"] = 0x0B
 DEFAULT_STEPS = [("sleep", "20"), ("shot", "desktop")]
-# Lemmings' IKBD sender (EPIC-01 STORY-01): a table-driven routine entered at
+# Lemmings' IKBD sender: a table-driven routine entered at
 # MOUSE_SEND with a0 at a table of <count><bytes...>; its poll entry at
 # MOUSE_TABLE is "01 0D" (one byte, interrogate absolute mouse position), sent
 # once per frame; MOUSE_SEND_END is the rts after the bytes went out. Hatari's
@@ -218,7 +218,7 @@ def shown(path: Path) -> Path:
 
 
 def evidence_ok() -> tuple[bool, str]:
-    """Whether every file listed in LEMMINGS.sha256 still has its hash (C-01)."""
+    """Whether every file listed in LEMMINGS.sha256 still has its hash: the original files are never modified."""
     bad = []
     for line in (REPO / "LEMMINGS.sha256").read_text().splitlines():
         digest, name = line.split("  ", 1)
@@ -234,7 +234,7 @@ def main() -> int:
     ap.add_argument("--disk", required=True, choices=DISKS)
     ap.add_argument("--expect", type=Path, help="expectations file")
     ap.add_argument("--parse", type=Path, help="Hatari debugger script")
-    ap.add_argument("--memsize", type=int, default=1, help="ST RAM in MB, at least 1 (C-04)")
+    ap.add_argument("--memsize", type=int, default=1, help="ST RAM in MB, at least 1 (the game needs 1 MB)")
     ap.add_argument("--no-auto", action="store_true", help="boot to the desktop only")
     ap.add_argument("--start", default=AUTO, help=f"program to start (default {AUTO})")
     ap.add_argument("--step-time", type=float, default=60, help="seconds per step")

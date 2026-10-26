@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-04 STORY-04: what the launcher change needs, in each of the card's 87 FIXGOS5 games.
+"""What the launcher change needs, in each of the card's 87 FIXGOS5 games.
 
 Usage: gos5_survey.py [<card>]    (default tools/dev/builds/sdcard, tools/survey/sdcard.py's)
 
@@ -10,7 +10,7 @@ unpack_start), its layout (text, data, BSS, relocations), and in it the places g
   image   movea.l ($C07E6).l,a6 / adda.l #$C0800,a6 (reuse_pp_driver's), and its constants
 and each D15R*.FIC beside it unpacked: its entry table and file_io's first bytes (gd_quiet
 expects lea (sr_save,pc),a0 / move.w sr,(a0)). Prints one line per game and a summary;
-writes the table to tools/dev/builds/epic04/gos5-survey.tsv. Reads the card only.
+writes the table to tools/dev/builds/gos5/gos5-survey.tsv. Reads the card only.
 """
 
 import hashlib
@@ -92,7 +92,7 @@ def main() -> int:
         rows.append(row)
     keys = ["game", "start", "text", "data", "bss", "relocs", "prog_sha", "check", "no_pp",
             "start_d15r", "image", "d15r", "error"]
-    out = REPO / "tools" / "dev" / "builds" / "epic04" / "gos5-survey.tsv"
+    out = REPO / "tools" / "dev" / "builds" / "gos5" / "gos5-survey.tsv"
     out.write_text("\n".join("\t".join(str(r.get(k, "")) for k in keys) for r in [dict(zip(keys, keys))] + rows) + "\n")
     for r in rows:
         print(" ".join(f"{k}={r.get(k, '')}" for k in keys if r.get(k, "") != ""))

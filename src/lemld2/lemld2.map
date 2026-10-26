@@ -1,12 +1,12 @@
-; LEMLD2.TOS: the program START.TOS unpacks and runs (EPIC-02 STORY-01, STORY-02, STORY-04).
-binary	tools/dev/builds/epic02/unpacked/LEMLD2.TOS
+; LEMLD2.TOS: the program START.TOS unpacks and runs.
+binary	tools/dev/builds/stages/unpacked/LEMLD2.TOS
 format	tos
 include	src/include/atari.i
 title	LEMLD2.TOS, unpacked from START.TOS: a GEMDOS program, text 34,910 bytes, BSS $1B046.
 title	PP's launcher for Lemmings: checks the machine, shows its info screen and cover picture,
 title	sets up Gamex, loads D15R and LS2DD, takes over PP's resident driver (or boots one from
 title	the disk) and hands over to D15R and its block at $80100. Notes: src/notes/launch-chain.md.
-run	$604	$c44	$80100	block	; copied to $80100 and run there (STORY-01)
+run	$604	$c44	$80100	block	; copied to $80100 and run there (seen in Hatari's memory)
 run	$912	$c44	$85000	loader	; block+$30E, copied on to $85000: PP's loader
 executed	src/lemld2/lemld2.executed
 
@@ -22,7 +22,7 @@ name	$200	load_d15r	; D15R_H5.FIC (D15R_F5.FIC on a Falcon), else in C:\GAMEX\; 
 name	$27a	save_low_ram	; TOS's low RAM ($8 up to text+$13E6) to $D7008, for the exit to the Desktop
 name	$2be	load_ls2dd	; LS2DD.FIC to $81000, a fixed 4,929 bytes
 name	$2f4	set_paths	; Dsetpath("FILES"); Dgetdrv to $C0734 and Dgetpath to $C0760 for D15R
-name	$324	check_pp_driver	; hdv_bpb preceded by the XBRA id "PPHD"? (EPIC-01)
+name	$324	check_pp_driver	; hdv_bpb preceded by the XBRA id "PPHD"? (where GEMDRIVE fails)
 name	$334	reuse_pp_driver	; copy the resident driver to $B7180 and rewire it to D15R
 name	$3f4	set_buffers	; two GEMDOS buffer lists (_bufl) with 8 KB buffers from $AF100
 name	$482	no_pp_driver	; fallback: read the disk's boot sector by itself

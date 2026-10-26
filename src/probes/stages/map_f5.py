@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""EPIC-02 STORY-04: D15R_F5's likely code addresses, from D15R_H5's executed ones.
+"""D15R_F5's likely code addresses, from D15R_H5's executed ones.
 
 Usage: map_f5.py
 
-No ST or STE runs D15R_F5 (the Falcon build, STORY-01), so it has no profile of
+No ST or STE runs D15R_F5 (the Falcon build), so it has no profile of
 its own. Each address Hatari ran in D15R_H5 is carried over to D15R_F5 when the
 16 bytes from there occur exactly once in D15R_F5. Writes
-tools/dev/builds/epic02/executed/d15r_f5.txt (addresses at $C0100).
+tools/dev/builds/stages/executed/d15r_f5.txt (addresses at $C0100).
 """
 
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-W = REPO / "tools" / "dev" / "builds" / "epic02"
+W = REPO / "tools" / "dev" / "builds" / "stages"
 K, ORG = 16, 0xC0100
 
 h5 = (W / "unpacked" / "D15R_H5.bin").read_bytes()

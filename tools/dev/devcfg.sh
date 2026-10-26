@@ -1,5 +1,5 @@
 # tools/dev/devcfg.sh: sourced by the tools/dev shell scripts that need
-# tools/dev/dev.cfg (EPIC-00 STORY-04). Python scripts read the same file
+# tools/dev/dev.cfg. Python scripts read the same file
 # through tools/dev/devcfg.py.
 
 DEVCFG="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/dev.cfg"

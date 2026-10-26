@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 #
 # tools/dev/roundtrip.sh: the check every reconstructed source must pass. It
-# assembles the source and compares the result with the original bytes
-# (EPIC-00 STORY-03).
+# assembles the source and compares the result with the original bytes.
 #
 # Usage: tools/dev/roundtrip.sh [--tos] <source.s> <reference.bin>
 #

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-04: every game's strategy, from its files.
+"""Every game's strategy, from its files.
 
 Usage: classify.py [<out.csv>]        (default src/survey/migration.csv)
 
@@ -27,7 +27,7 @@ register signatures in the download's PP-packed files (unpacked; D15R and T14 le
 TOS's own code): what the game's own stages contain, which PP's launcher may patch at run time. A game (one record of the list) gets the
 strategy of its first download that is a hard-disk adaptation (else its first floppy image); the
 others are listed too. The verdict
-columns stay empty for STORY-05. Standard library only.
+columns stay empty for verdicts.py. Standard library only.
 """
 
 from __future__ import annotations

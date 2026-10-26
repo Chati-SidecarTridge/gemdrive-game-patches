@@ -402,7 +402,7 @@ it plays a level there was not tried.
   `HAG2`, `D15R*.FIC`, `T14*.FIC`), unpacked with `tools/unpack.py` and compared with the TOS
   1.04 ROM.
 - One game per mode run as it is from Hatari's GEMDOS drive (ST, TOS 1.04, 1 MB) with
-  `src/probes/epic03/mode_probe.py <ZIP>`: run folders
+  `src/probes/modes/mode_probe.py <ZIP>`: run folders
   `tools/dev/logs/20261011-*-st-104-gemdrive-<game>`, and `-ppdriver-` for the reference.
 
 A statement from the documentation counts here only once a run shows it.

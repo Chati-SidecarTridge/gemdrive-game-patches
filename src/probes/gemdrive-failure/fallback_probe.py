@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-01 STORY-03/04: on a GEMDRIVE setup, answer the launcher's sector-0
+"""On a GEMDRIVE setup, answer the launcher's sector-0
 read by hand and see how far it gets, with the pristine files (nothing on
 the disk is patched; the debugger changes registers and memory at run time).
 
@@ -11,7 +11,7 @@ sector into the launcher's buffer whose 16-bit words sum to $1234, the
 executable-boot-sector mark the launcher checks for. Then it traces every
 instruction (cpu_disasm, io) until the launcher's next OS call or its error
 exit, switching the trace off inside the ACSI polling loop. Files go to
-tools/dev/builds/epic01/fallback-<setup>/; the run folder to tools/dev/logs/.
+tools/dev/builds/gemdrive-failure/fallback-<setup>/; the run folder to tools/dev/logs/.
 """
 
 import subprocess
@@ -29,7 +29,7 @@ def main() -> int:
         sys.exit(f"usage: {sys.argv[0]} <st-104|ste-162|ste-206> [--synthetic]")
     setup = sys.argv[1]
     base = BASES[(setup, "gemdrive")]
-    out = REPO / "tools" / "dev" / "builds" / "epic01" / f"fallback-{setup}"
+    out = REPO / "tools" / "dev" / "builds" / "gemdrive-failure" / f"fallback-{setup}"
     out.mkdir(parents=True, exist_ok=True)
 
     def at(off: int) -> str:
@@ -81,7 +81,7 @@ def main() -> int:
         "7-xbios-return.ini": ["r"],
         "7-getbpb.ini": ["m a7 4"] + (
             # --bpb: answer the launcher's Getbpb(2) with PPDRIVER's BPB, read
-            # from the reference run (EPIC-01 STORY-04): recsiz 1024, clsiz 2,
+            # from the reference run: recsiz 1024, clsiz 2,
             # clsizb 2048, rdlen 16, fsiz 32, fatrec 33, datrec 81, numcl 16343,
             # bflags 1. Only the launcher's calls go through its trampoline at
             # $C83CC; TOS's own Getbpb(0) at boot does not.

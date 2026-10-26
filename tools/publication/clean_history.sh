@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # tools/publication/clean_history.sh: a clone of this repository with remove.txt's must paths taken
-# out of every commit of every branch (D-15, D-25), for tools/site/check_public.py and then for
+# out of every commit of every branch, for tools/site/check_public.py and then for
 # going public. This working copy is not touched.
 #
 # Usage: tools/publication/clean_history.sh <out>    (<out>: a folder that does not exist yet)

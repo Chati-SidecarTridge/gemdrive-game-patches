@@ -85,5 +85,5 @@ GEMDOS is D15R's own. A GEMDOS drive answers `Fopen` and `Fread` by name too, at
 
 ## Tools
 
-- `src/probes/epic02/d15r_vs_tos.py [H5|F5]`: the comparison in §1.
-- `src/probes/epic02/disk_calls_probe.py [<setup>]` and `disk_calls_report.py <run>`: the calls in §4.
+- `src/probes/stages/d15r_vs_tos.py [H5|F5]`: the comparison in §1.
+- `src/probes/stages/disk_calls_probe.py [<setup>]` and `disk_calls_report.py <run>`: the calls in §4.

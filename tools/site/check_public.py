@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-07: is a clone of this repository ready to go public (D-15)?
+"""Is a clone of this repository ready to go public?
 
 Usage: check_public.py [<clone>]
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.0.1 (2026-10-26)
+
+A clean-up of the repository; the patches and every game's verdict are the same as in v1.0.0.
+
+- The project's internal planning notes are no longer part of the repository, and nothing in it
+  refers to them any more: comments, notes, tools and the text the SD card's `README.TXT` carries
+  say what they mean instead.
+- The debugger probes are in folders named for what they study (`src/probes/gemdrive-failure/`,
+  `stages/`, `modes/`, `gos5/`, `gos4/`, `small-fixes/`, `patcher/`).
+- `tools/publication/` holds the list of what must never enter the repository and the history
+  clean-up; `make tag` refuses a release while a committed file refers to the planning notes.
+
 ## v1.0.0 (2026-10-26)
 
 The first release. Every Atari ST hard-disk adaptation on the 8bitchip.info website's list, 1,831

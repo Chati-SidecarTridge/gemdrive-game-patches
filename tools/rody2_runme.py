@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""tools/rody2_runme.py: solution S4 (src/notes/solutions.md §3.4, §4, EPIC-06 STORY-03): Rody and
+"""tools/rody2_runme.py: solution S4 (src/notes/solutions.md §3.4, §4): Rody and
 Mastico 2 started with Rody and Mastico 4's RUNME.TOS.
 
 Usage: rody2_runme.py <RODYM4 folder> <RODYM2 folder>

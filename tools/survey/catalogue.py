@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-02: the 8bitchip.info website's list of hard-disk adaptations as a table.
+"""The 8bitchip.info website's list of hard-disk adaptations as a table.
 
 Usage: catalogue.py [<out.csv>]        (default src/survey/catalogue.csv)
 
-Reads the mirror (MIRROR in tools/dev/dev.cfg, D-12), never the site: the list
+Reads the mirror (MIRROR in tools/dev/dev.cfg, made by mirror.py), never the site: the list
 (site/fromhd3.php), every game's page (site/SCRSH/*.html) and PP's categories
 (site/agcat.html). Writes one row per record of the list, in the list's order.
 
-PP's text stays in the mirror (D-11): a row keeps the list's own cells, the
-download names, and what is read from the page with STORY-01's glossary
-(src/notes/modes.md): the category code and its parts, the TOS dependence,
+PP's text stays in the mirror, never copied: a row keeps the list's own cells, the
+download names, and what is read from the page with the glossary of
+src/notes/modes.md: the category code and its parts, the TOS dependence,
 the source PP started from, the adaptation terms, and the mode the page names.
 Every row carries its page's URL.
 
@@ -32,7 +32,7 @@ SITE_URL = "https://atari.8bitchip.info/"
 LIST_COLUMNS = ["min_ram", "gx", "tos104", "tos206", "mste16", "falcon", "tt", "note", "date", "val"]
 AGCAT_TOTALS = {"1": 40, "2": 130, "3": 104, "4": 61, "5": 6, "6": 107}  # agcat.html, "Total overvieew"
 
-# STORY-01's glossary: term -> pattern on the page's text (lower case)
+# the glossary of src/notes/modes.md: term -> pattern on the page's text (lower case)
 TERMS = {
     "gamex": r"\bgamex\b", "haga": r"\bhaga\b", "hage": r"\bhage\b", "hag2": r"\bhag2\b",
     "gos": r"\bgos\b", "tos 1.04 in ram": r"tos 1\.04 in ram", "singleparted": r"singlepart",
@@ -215,7 +215,7 @@ def read_page(site: Path, page: str) -> dict[str, str]:
 
 
 def page_mode(terms: set[str], note: str) -> str:
-    """The mode the page (or the list's note) names, STORY-01's modes; '' when it names none."""
+    """The mode the page (or the list's note) names, src/notes/modes.md's modes; '' when it names none."""
     note = note.lower()
     for mode, keys in (("HAG2", ("hag2",)), ("HAGE", ("hage",)), ("HAGA", ("haga",)),
                        ("Gamex + GOS", ("gos", "tos 1.04 in ram")), ("Gamex", ("gamex",))):

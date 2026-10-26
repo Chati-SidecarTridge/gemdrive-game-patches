@@ -81,7 +81,7 @@ Neither does Hatari's GEMDOS-drive hook, which sits on the ROM's `TRAP #1`, not 
 
 ## Evidence and tools
 
-- `src/probes/epic02/chain_probe.py <setup>`: a dump of every stage at its entry.
-- `src/probes/epic02/profile_probe.py`, `profile_addrs.py`: the addresses Hatari executed.
+- `src/probes/stages/chain_probe.py <setup>`: a dump of every stage at its entry.
+- `src/probes/stages/profile_probe.py`, `profile_addrs.py`: the addresses Hatari executed.
 - `tools/dev/mksource.py` makes each source from its map (`src/<stage>/<stage>.map`).
   `tools/dev/all_harness.sh` reassembles all five and checks them with a `nop` inserted.

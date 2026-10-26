@@ -1,12 +1,12 @@
-; EPIC-04 STORY-04: the launcher change for a GEMDOS drive (STORY-01, STORY-02), as a block that
-; tools/build_gos5.py puts at the front of any GOS5 launcher's text. src/gemdrive/lemld2_gemdrive.s
-; is the same change written into Lemmings' sources.
+; The launcher change for a GEMDOS drive, as a block that tools/build_gos5.py puts at the front of
+; any GOS5 launcher's text. src/gemdrive/lemld2_gemdrive.s is the same change written into
+; Lemmings' sources.
 ;
 ; Position-independent. The tool fills the five branches and the parameters below, turns the
 ; launcher's call of its info screen into a call of gd_info (our lines under PP's), and turns the
 ; launcher's PPHD check (movea.l $472.w,a1 / cmpi.l #'PPHD',-8(a1) / bne) into a bra.w to
 ; gd_check, which makes the check itself:
-;   - PP's driver: PP's own path (x_pp), as before (D-17);
+;   - PP's driver: PP's own path (x_pp), as before (our fix applies to our builds only);
 ;   - no PP driver, and a cartridge's TRAP #1 on a 68000 (Hatari's GEMDOS drive, the
 ;     Multidevice's GEMDRIVE), with GOS's file_io as gd_quiet knows it (lea (sr_save,pc),a0 /
 ;     move.w sr,(a0), or move.l a0,-(sp) before them in the older D15R_H5 builds G52, G55 and

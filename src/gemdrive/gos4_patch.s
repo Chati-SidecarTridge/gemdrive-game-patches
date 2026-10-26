@@ -1,13 +1,13 @@
-; EPIC-05 STORY-02: the launcher change for a GEMDOS drive, as a block that tools/build_gos4.py puts
+; The launcher change for a GEMDOS drive, as a block that tools/build_gos4.py puts
 ; at the front of any GOS4 launcher's text, as tools/build_gos5.py puts gos5_patch.s in a GOS5 one.
 ;
 ; GOS4 (D15R_HH4) is TOS 1.04 started from RAM: the launcher loads it to p_gos ($C0100, $1C0100 for
 ; a 2 MB game) and jumps there, it sets up the machine as a reset would (its own TRAP #1 among the
 ; vectors, `move.l #trap1,$84.w`), takes the driver from the table the launcher leaves it, and
-; starts the game with its own Pexec (EPIC-05 STORY-01). Position-independent. The tool fills the
+; starts the game with its own Pexec. Position-independent. The tool fills the
 ; five branches and the parameters below, turns the launcher's call of its info screen into a call
 ; of gd_info, and its PPHD check into a bra.w to gd_check, which makes the check itself:
-;   - PP's driver: PP's own path (x_pp), as before (D-17);
+;   - PP's driver: PP's own path (x_pp), as before (our fix applies to our builds only);
 ;   - no PP driver, a cartridge's TRAP #1 on a 68000 (Hatari's GEMDOS drive, the Multidevice's
 ;     GEMDRIVE), and GOS's `move.l #trap1,$84.w` found in RAM: gd_forward's block copied to p_run,
 ;     that long pointed at it, the driver table written as PP's path writes it but with no driver,

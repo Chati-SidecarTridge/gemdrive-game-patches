@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-02 STORY-05: D15R against the TOS 1.04 ROM it was made from (H-08).
+"""D15R against the TOS 1.04 ROM it was made from.
 
 Usage: d15r_vs_tos.py [H5|F5]
 
@@ -33,7 +33,7 @@ RAM_IMAGE = 0xD0528  # D15R's image of TOS's low RAM: TOS's address + this
 
 def main() -> int:
     build = (sys.argv[1] if len(sys.argv) > 1 else "H5").upper()
-    d = (REPO / "tools" / "dev" / "builds" / "epic02" / "unpacked" / f"D15R_{build}.bin").read_bytes()
+    d = (REPO / "tools" / "dev" / "builds" / "stages" / "unpacked" / f"D15R_{build}.bin").read_bytes()
     rom = Path(cfg("TOS_ST_104")).read_bytes()
     idx: dict[bytes, int] = {}
     for i in range(0, len(rom) - K, 2):

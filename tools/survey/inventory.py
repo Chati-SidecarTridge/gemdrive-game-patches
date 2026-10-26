@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-03: what every adaptation contains, file by file.
+"""What every adaptation contains, file by file.
 
 Usage: inventory.py [<out.csv>]        (default src/survey/files.csv)
 
@@ -20,7 +20,7 @@ digits of its SHA-256, and what it is:
   marks     byte patterns from src/notes/launcher-signatures.md found in the file as it is:
             PPGX, PPHD (the driver check), unpacker (PP's unpack routine)
 
-Prints the check of STORY-03's acceptance: every record of src/survey/catalogue.csv has its
+Prints the check that every record of src/survey/catalogue.csv has its
 downloads unpacked, or the reason it has not. Standard library only.
 """
 
@@ -67,7 +67,7 @@ def describe(path: str, data: bytes) -> tuple[str, str]:
         return "ICE", str(struct.unpack(">I", data[8:12])[0]) if len(data) >= 12 else ""
     if data[:4] == b"ATM5":
         return "ATM5", ""
-    if data[:4] == b"FWRD":  # PP's "filewise ramdisk": every file of the game in one (EPIC-03 STORY-03)
+    if data[:4] == b"FWRD":  # PP's "filewise ramdisk": every file of the game in one
         return "FWRD", str(struct.unpack(">H", data[4:6])[0]) + " files"
     if data[:4] == b"PK\x03\x04":
         return "zip", ""
@@ -123,7 +123,7 @@ def main() -> int:
     print("  kinds:", dict(collections.Counter(r["kind"] for r in rows).most_common()))
     print("  families:", dict(collections.Counter(r["family"] for r in rows if r["family"]).most_common()))
 
-    # STORY-03's acceptance: every record's downloads are unpacked, or the reason they are not
+    # the check: every record's downloads are unpacked, or the reason they are not
     status = {u["archive"]: u["status"] for u in unpacked}
     started = collections.Counter(r["archive"] for r in rows if r["start"])
     records = list(csv.DictReader((REPO / "src" / "survey" / "catalogue.csv").open()))

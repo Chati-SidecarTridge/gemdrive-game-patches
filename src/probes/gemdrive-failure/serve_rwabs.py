@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-01 STORY-04: in GEMDRIVE mode, with the pristine files, answer by hand
+"""In GEMDRIVE mode, with the pristine files, answer by hand
 everything the launcher asks of the disk, one BIOS Rwabs at a time, until it
 reaches the title screen or asks for something that cannot be answered.
 
@@ -11,7 +11,7 @@ every Getbpb(2) (PPDRIVER's BPB) and the first N Rwabs reads with the sectors
 they ask for, taken from the PPDRIVER reference image (logical sector n of
 1,024 bytes = DOS sectors 2n+1 and 2n+2 of the partition at LBA 63). The run's
 trace then shows the (N+1)-th request, which the next run answers too. The
-list of answered requests is kept in tools/dev/builds/epic01/serve-<setup>/
+list of answered requests is kept in tools/dev/builds/gemdrive-failure/serve-<setup>/
 requests.txt; --reset starts over. Stops when a run asks for nothing new.
 """
 
@@ -86,7 +86,7 @@ def main() -> int:
     setup = args[0]
     base = BASES[(setup, "gemdrive")]
     limit = int(sys.argv[sys.argv.index("--max") + 1]) if "--max" in sys.argv else 60
-    out = REPO / "tools" / "dev" / "builds" / "epic01" / f"serve-{setup}"
+    out = REPO / "tools" / "dev" / "builds" / "gemdrive-failure" / f"serve-{setup}"
     out.mkdir(parents=True, exist_ok=True)
     reqfile = out / "requests.txt"
     if "--reset" in sys.argv or not reqfile.exists():

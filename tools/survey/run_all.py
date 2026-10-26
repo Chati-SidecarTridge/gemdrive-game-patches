@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-05: every game run from Hatari's GEMDOS drive, as it is.
+"""Every game run from Hatari's GEMDOS drive, as it is.
 
 Usage: run_all.py [--jobs N] [--only NAME ...] [--strategy S] [--limit N] [--disk gemdrive|ppdriver]
                   [--setup st-104|ste-162|ste-206] [--redo] [--retry]
@@ -37,14 +37,14 @@ where it stopped (--redo runs every game again, --retry the ones not "as it is")
   halt        Hatari stopped the CPU; faults: address and bus errors in hatari.log
   alive       the last two screenshots differ (the game still moves)
 
-and a proposed verdict (D-14), its rules set with Diego's review of 331 games (src/survey/review.tsv):
+and a proposed verdict (as it is, fix, not feasible, unsure), its rules set with Diego's review of 331 games (src/survey/review.tsv):
 "fix" when a GOS launcher quit to the desktop or the program read sectors on C:; "broken" when the
 screen ends on an empty desktop (TOS in RAM without its disk); "unsure", with the reason, when the
 program quit to the desktop, the CPU halted after the first screenshots, a file was missing, or the
 run did not start in time; "as it is" otherwise: the game's screen still moves, or stands still at
 a menu or title that is not the desktop, or is TOS in RAM's desktop with its drives (HAGE, HAG2).
-Faults and a negative seek in the floppy image are recorded but do not decide by themselves. STORY-05
-checks the proposals before they go into migration.csv; Diego's answers override them.
+Faults and a negative seek in the floppy image are recorded but do not decide by themselves. verdicts.py
+weighs the proposals before they go into migration.csv; Diego's answers override them.
 """
 
 from __future__ import annotations
@@ -303,7 +303,7 @@ def reanalysed(row: dict, archive: Path | None) -> dict:
 def snapshot(run: Path, row: str, name: str, setup: str, disk: str) -> str:
     """The run's last screenshot with something on it (end.png, taken just before Hatari quits, else the
     latest; a blank one is often a fade or a load) copied to snapshots/<row>-<name>[-<setup>-<disk>].png,
-    for the website (STORY-07) and the contact sheets."""
+    for the website (tools/site/build_site.py) and the contact sheets."""
     shots = [run / "shots" / f"{n}.png" for n in ("end", "s38", "s34", "s28", "s20", "s12")]
     shots = [s for s in shots if s.is_file()]
     if not shots:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Turn an objdump listing (tools/dev/disasm.sh) into a vasm source that
-reassembles to the same bytes (EPIC-00 STORY-03).
+reassembles to the same bytes.
 
 Usage: tools/dev/listing2vasm.py [--verbose] <listing> <bin> <out.s>
 

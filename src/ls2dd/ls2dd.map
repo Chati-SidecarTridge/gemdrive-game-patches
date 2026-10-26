@@ -1,5 +1,5 @@
-; LS2DD: the stage LEMLD2's block unpacks to $70000 (EPIC-02 STORY-01, STORY-02, STORY-04).
-binary	tools/dev/builds/epic02/unpacked/LS2DD.bin
+; LS2DD: the stage LEMLD2's block unpacks to $70000.
+binary	tools/dev/builds/stages/unpacked/LS2DD.bin
 format	bin
 origin	$70000
 include	src/include/atari.i
@@ -8,12 +8,12 @@ title	The game's own loader (not PP's): protection, an ICE depacker, palette fad
 title	floppy loader that drives the FDC itself. PP's block patches two places before it runs:
 title	the jump to the game ($70A8C) and the file loader ($70E38, to PP's loader at $85000).
 title	$70000-$709A5 is decrypted in place at run time (the loop at $709A6) and the code there
-title	runs changed; it is kept here as the stored bytes, not reconstructed (STORY-04 notes).
+title	runs changed; it is kept here as the stored bytes, not reconstructed.
 executed	src/ls2dd/ls2dd.executed
 
 code	$7005a	start	; entry, from the block: VBL, MFP off, then the protection
 name	$700a0	bus_error	; LS2DD's bus-error handler, set at start
-name	$700c8	fault_loop	; flashes the background colour for ever: where a crash ends (EPIC-01)
+name	$700c8	fault_loop	; flashes the background colour for ever: where a crash ends
 name	$70994	decrypt	; clears its own code, then the loop at $709A6 decrypts $6E9A4-$709A5
 name	$709ba	push_loop	; pushes the stack down over its own code: protection
 name	$70a8c	jump_game	; jmp $400; the block makes it jmp $8014C (start_game) first

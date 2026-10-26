@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""EPIC-02 STORY-01: the launch chain on the PPDRIVER reference, one memory
+"""The launch chain on the PPDRIVER reference, one memory
 dump per stage at its entry.
 
 Usage: chain_probe.py <setup>      (setup: st-104|ste-162|ste-206)
 
-The stages and how each is caught (addresses from EPIC-01 and from the stub's
-own code, tools/dev/builds/epic02/start_text.lst):
-  stub     START.TOS's text, entered at the text base (BASES, as in EPIC-01)
+The stages and how each is caught (addresses from gate_probe.py's runs and from the stub's
+own code, tools/dev/builds/stages/start_text.lst):
+  stub     START.TOS's text, entered at the text base (BASES, as in gate_probe.py)
   jmp      the stub's unpacker copies itself to text+$8D40 and jumps into the
            unpacked program from text+$8DF2 (its `jmp (a0)`)
   lemld2   the unpacked program, at the same text base, its header 28 bytes
@@ -39,7 +39,7 @@ def main() -> int:
         sys.exit(f"usage: {sys.argv[0]} <st-104|ste-162|ste-206>")
     setup = sys.argv[1]
     base = BASES[setup]
-    out = REPO / "tools" / "dev" / "builds" / "epic02" / f"chain-{setup}"
+    out = REPO / "tools" / "dev" / "builds" / "stages" / f"chain-{setup}"
     out.mkdir(parents=True, exist_ok=True)
     h = lambda v: f"${v:x}"  # noqa: E731
 

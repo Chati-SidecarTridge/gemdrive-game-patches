@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # tools/build_gemdrive.sh: Lemmings' launcher from src/, changed so that GOS reads through a GEMDOS
-# drive (EPIC-04 STORY-01, solution S1).
+# drive (solution S1).
 #
 # Usage: tools/build_gemdrive.sh [<out folder>]
 #
@@ -14,7 +14,7 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 out="${1:-$repo/tools/dev/builds/gemdrive}"
 rm -rf "$out"
 mkdir -p "$out"
-[[ -f "$repo/src/lemld2/lemld2.s" && -f "$repo/src/d15r/d15r_h5.s" && -f "$repo/src/d15r/d15r_f5.s" ]] || "$repo/tools/make_sources.sh"  # D-13, D-25
+[[ -f "$repo/src/lemld2/lemld2.s" && -f "$repo/src/d15r/d15r_h5.s" && -f "$repo/src/d15r/d15r_f5.s" ]] || "$repo/tools/make_sources.sh"  # not committed: made from their maps
 cp -R "$repo/src" "$out/src"
 python3 -I - "$out/src/lemld2/lemld2.s" "$repo/src/gemdrive/lemld2_gemdrive.s" <<'PY'
 import sys
@@ -25,7 +25,7 @@ branch = "\tbne.w\tno_pp_driver\t; $000330\n"
 fallback = "; fallback: read the disk's boot sector by itself\nno_pp_driver:\n"
 if s.count(branch) != 1 or s.count(fallback) != 1:
     sys.exit(f"error: {src}: not the source this change was written for")
-s = s.replace(branch, "\tbne.w\tgd_start\t; $000330 (EPIC-04: was no_pp_driver)\n")
+s = s.replace(branch, "\tbne.w\tgd_start\t; $000330 (GEMDOS drive: was no_pp_driver)\n")
 s = s.replace(fallback, fragment + fallback)
 src.write_text(s)
 PY

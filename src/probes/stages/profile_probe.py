@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-02 STORY-04: every address the CPU executes from LEMLD2's entry to the
+"""Every address the CPU executes from LEMLD2's entry to the
 level load on the PPDRIVER reference, from Hatari's CPU profiler.
 
 Usage: profile_probe.py <setup>      (setup: st-104|ste-162|ste-206)
@@ -11,7 +11,7 @@ one whenever it leaves the debugger: "lemld2", to its jump to the block at $8010
 "title", to about one second into CODE's title. Hatari prints each one (its disassembly of every executed address,
 with counts) into hatari.out after the `profile save` line. The addresses are what
 matters: code a static trace cannot reach (vectors, pointers, decrypted protection
-code) shows up there. src/probes/epic02/profile_addrs.py sorts them by stage.
+code) shows up there. src/probes/stages/profile_addrs.py sorts them by stage.
 """
 
 import subprocess
@@ -27,7 +27,7 @@ def main() -> int:
         sys.exit(f"usage: {sys.argv[0]} <st-104|ste-162|ste-206>")
     setup = sys.argv[1]
     base = BASES[setup]
-    out = REPO / "tools" / "dev" / "builds" / "epic02" / f"profile-{setup}"
+    out = REPO / "tools" / "dev" / "builds" / "stages" / f"profile-{setup}"
     out.mkdir(parents=True, exist_ok=True)
     files = {
         "profile.dbg": [f"b pc = ${base:x} :once :trace :file 1-stub.ini"],
@@ -36,12 +36,12 @@ def main() -> int:
         # Hatari compiles a profile only when it stops in the debugger, and starts
         # a new one each time it leaves it, the harness's own debugger commands
         # included. So the save is a real (not :trace) breakpoint set here: the
-        # game's IKBD sender ($21A6, EPIC-01) on its 50th run, at the title.
+        # game's IKBD sender ($21A6, found by gate_probe.py) on its 50th run, at the title.
         # LEMLD2's own window ends where it jumps to the block: after that other code
         # (the game's unpacking) runs where LEMLD2 was.
         "3-on.ini": ["profile on", "b pc = $80100 :once :file save-lemld2.ini"],
         "save-lemld2.ini": ["profile save lemld2.txt", "b pc = $400 :once :file save-launch.ini", "c"],
-        # block+$D0 ($801D0) patches CODE once it is loaded (STORY-01): after it,
+        # block+$D0 ($801D0) patches CODE once it is loaded (chain_probe.py): after it,
         # the title is CODE's own and its IKBD sender at $21A6 runs once a frame.
         "save-launch.ini": ["profile save launch.txt", "b pc = $801d0 :once :file save-intro.ini", "c"],
         "save-intro.ini": ["profile save intro.txt", "b pc = $21a6 :50 :once :file save-title.ini", "c"],

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """tools/dev/mksource.py: a labelled vasm source for one launcher stage, from its
-bytes and a map of what is known about it (EPIC-02 STORY-04).
+bytes and a map of what is known about it.
 
 Usage: tools/dev/mksource.py [--report] <stage.map> <out.s>
 
@@ -18,7 +18,7 @@ The map (one directive per line, `;` starts a comment):
     pointers <start> <count> <stride>   a table of code addresses: the long at start +
                                i * stride, for i < count, is traced like a `code` entry and
                                written as dc.l <label>
-    executed <path>            addresses Hatari ran (src/probes/epic02/profile_addrs.py), one per
+    executed <path>            addresses Hatari ran (src/probes/stages/profile_addrs.py), one per
                                line: traced like `code` entries, without becoming labels
     run <start> <end> <addr> <name>   (tos) text start..end is copied to and runs at addr: its
                                absolute references to its own run addresses become

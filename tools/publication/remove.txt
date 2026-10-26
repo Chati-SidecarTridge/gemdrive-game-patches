@@ -1,4 +1,4 @@
-# What leaves this repository and its history before it goes public (D-15, EPIC-03 STORY-07, D-25).
+# What leaves this repository and its history before it goes public.
 # One entry per line:  <kind> <path>  # why
 #   must    goes, from the files and every commit
 #   keep    a binary file that stays: the check allows it in the history
@@ -6,12 +6,12 @@
 # tools/site/check_public.py, which is satisfied only when no must entry matches anything, in the
 # files or in any commit.
 
-must    LEMMINGS/                                       # the Psygnosis game and PP's files: the evidence (C-01, D-03)
-must    _archive/                                       # the first pass (D-01): PP's patched START.TOS, his stages unpacked and disassembled, D15R's disassembly (TOS 1.04)
-must    src/start/*.s                                   # PP's launcher, as sources that reassemble to his bytes (EPIC-02, D-25)
+must    LEMMINGS/                                       # the Psygnosis game and PP's files: the evidence, never modified
+must    _archive/                                       # the first pass: PP's patched START.TOS, his stages unpacked and disassembled, D15R's disassembly (TOS 1.04)
+must    src/start/*.s                                   # PP's launcher, as sources that reassemble to his bytes
 must    src/lemld2/*.s                                  # the same
 must    src/ls2dd/*.s                                   # the same
-must    src/d15r/*.s                                    # D15R's sources: TOS 1.04's code (D-13); git-ignored, never committed
+must    src/d15r/*.s                                    # D15R's sources: TOS 1.04's code; git-ignored, never committed
 
 keep    tools/site/logo.png                             # SidecarTridge's logo, the site's header
 keep    tools/site/logo-text.png                        # the same, with its name

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """tools/set_fastload.py: solution S3 (src/notes/solutions.md §3.3, §4) for Spy vs Spy 2, Strike Force
-Harrier and Aquanaut (EPIC-06 STORY-02): the fastload bit set in the program each one's start program
+Harrier and Aquanaut: the fastload bit set in the program each one's start program
 runs.
 
 Usage: set_fastload.py <program> <out>

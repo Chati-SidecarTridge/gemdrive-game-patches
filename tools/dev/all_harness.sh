@@ -1,29 +1,28 @@
 #!/usr/bin/env bash
 #
-# tools/dev/all_harness.sh: check the whole development environment in one go
-# (EPIC-00 STORY-06).
+# tools/dev/all_harness.sh: check the whole development environment in one go.
 #
 # Usage: tools/dev/all_harness.sh
 #
 #   1. tools/dev/make_disks.sh: both disk setups from LEMMINGS/
 #   2. the round trip: the text of START.TOS disassembled, turned into a vasm
 #      source and reassembled to the same 230 bytes
-#   2b. the launcher's sources (EPIC-02 STORY-04): each reassembles to the
+#   2b. the launcher's sources: each reassembles to the
 #      stage tools/unpack.py takes out of LEMMINGS/ (tools/dev/roundtrip.sh),
 #      and still says the same with a nop inserted (tools/dev/shiftcheck.py)
 #   3. tools/dev/hatari_harness.py with expect/launcher-start.exp on every
 #      setup: ST TOS 1.04, STE TOS 1.62, STE TOS 2.06, each in GEMDRIVE mode
 #      and from the PPDRIVER image
 #   4. expect/must-fail.exp, which the harness must report as FAIL
-#   5. the launcher built from src/ (tools/build_launcher.sh, EPIC-02 STORY-06): every stage
+#   5. the launcher built from src/ (tools/build_launcher.sh): every stage
 #      unpacks to PP's bytes, and it boots the PPDRIVER reference to the level load on ST TOS
 #      1.04 (expect/reference-first-level.exp); the disks are rebuilt from LEMMINGS/ after
-#   5b. the launcher for the GEMDOS drive (tools/build_gemdrive.sh, EPIC-04 STORY-01): GOS's file
+#   5b. the launcher for the GEMDOS drive (tools/build_gemdrive.sh): GOS's file
 #      requests reach Hatari's GEMDOS drive by name, cut to 8.3, from the title to the first level
-#      and its files, past the IKBD race (EPIC-04 STORY-02), on ST TOS 1.04
+#      and its files, past the IKBD race, on ST TOS 1.04
 #      (expect/gemdrive-first-level.exp)
 #   6. LEMMINGS/ against LEMMINGS.sha256, and no Hatari left running
-#   7. the website (EPIC-03 STORY-07): tools/site/build_site.py --check from the working tree,
+#   7. the website: tools/site/build_site.py --check from the working tree,
 #      and from a fresh clone of the last commit without the snapshots
 #
 # Prints one line per check and exits 0 only when every check gave what it
@@ -69,7 +68,7 @@ else
 fi
 
 # 2b. The launcher's sources: round trip and nop check for every stage. None is committed
-# (D-13, D-25): made from their maps first.
+# (they are not committed): made from their maps first.
 "$repo/tools/make_sources.sh" > "$work/make-sources.txt" 2>&1 || row "the launcher's sources made" FAIL "see $work/make-sources.txt" 0
 refs="$work/refs"
 mkdir -p "$refs"

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-04 STORY-01: what the SidecarTridge Multidevice's GEMDRIVE would find in RAM when GOS's
+"""What the SidecarTridge Multidevice's GEMDRIVE would find in RAM when GOS's
 file requests reach it, from Hatari's GEMDOS drive (which needs none of it).
 
 Usage: multidevice_probe.py [<setup>] [--memsize N] [--stack ADDR ...]
@@ -33,7 +33,7 @@ def main() -> int:
     ap.add_argument("--memsize", type=int, default=1)
     ap.add_argument("--stack", action="append", default=[], type=lambda v: int(v, 0))
     a = ap.parse_args()
-    out = REPO / "tools" / "dev" / "builds" / "epic04" / f"multidevice-{a.setup}"
+    out = REPO / "tools" / "dev" / "builds" / "gos5" / f"multidevice-{a.setup}"
     out.mkdir(parents=True, exist_ok=True)
     junk = out / "illegal.bin"
     junk.write_bytes(b"\x4a\xfc" * 512)

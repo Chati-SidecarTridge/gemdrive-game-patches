@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# tools/build_launcher.sh: Lemmings' launcher built from the sources in src/ (EPIC-02 STORY-06).
+# tools/build_launcher.sh: Lemmings' launcher built from the sources in src/.
 #
 # Usage: tools/build_launcher.sh [--allow-longer] [<src folder>] [<out folder>]
 #
@@ -15,7 +15,7 @@
 # <src folder> defaults to src/ (another one lets a changed copy be built); <out folder> to
 # tools/dev/builds/launcher/. Prints every product with its size and SHA-256, and whether each
 # stage unpacks to the same bytes as PP's. With --allow-longer, a packed file longer than PP's
-# (a changed stage, EPIC-04) keeps its own length instead of stopping the build.
+# (a changed stage, as for the GEMDOS drive) keeps its own length instead of stopping the build.
 set -euo pipefail
 longer=
 [[ "${1:-}" == --allow-longer ]] && { longer=1; shift; }
@@ -27,7 +27,7 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 src="$(cd "${1:-$repo/src}" && pwd)"
 out="${2:-$repo/tools/dev/builds/launcher}"
 cd "$repo"
-[[ -f "$repo/src/lemld2/lemld2.s" && -f "$repo/src/d15r/d15r_h5.s" && -f "$repo/src/d15r/d15r_f5.s" ]] || tools/make_sources.sh  # not committed (D-13, D-25)
+[[ -f "$repo/src/lemld2/lemld2.s" && -f "$repo/src/d15r/d15r_h5.s" && -f "$repo/src/d15r/d15r_f5.s" ]] || tools/make_sources.sh  # not committed: made from their maps
 [[ -f "$src/d15r/d15r_h5.s" ]] || cp "$repo"/src/d15r/*.s "$src/d15r/"
 obj="$out/obj"
 tree="$out/LEMMINGS"

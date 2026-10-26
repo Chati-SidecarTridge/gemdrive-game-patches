@@ -36,7 +36,7 @@ The unpacker never reads these 32 bytes: the launcher skips them and knows the s
 
 - **`START.TOS`** is a GEMDOS program: a 230-byte text (the stub), an 8,844-byte data section (the
   header above and the packed LEMLD2), BSS `$11A14`, no relocations. The stub
-  (`tools/dev/builds/epic02/start_text.lst`) copies the packed stream down to text+`$8D40`, copies
+  (`tools/dev/builds/stages/start_text.lst`) copies the packed stream down to text+`$8D40`, copies
   its unpacker after it and jumps there. The unpacker writes LEMLD2 to text−28, so LEMLD2's 28-byte
   GEMDOS header lands in the last 28 bytes of the basepage and its text on the stub's own text. It
   then relocates LEMLD2 at that text base with the standard GEMDOS table, fills in the basepage's

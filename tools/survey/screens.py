@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-05: is this Hatari screenshot the TOS desktop?
+"""Is this Hatari screenshot the TOS desktop?
 
 Usage: screens.py <png> ...                  the verdict and the score for each screenshot
        screens.py --learn <name> <png>       keep that screenshot's menu bar as a desktop's

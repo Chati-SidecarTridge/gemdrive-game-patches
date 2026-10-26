@@ -1,6 +1,6 @@
-; D15R_F5: the loader LEMLD2 unpacks to $C0100 (EPIC-02 STORY-01, STORY-02, STORY-04): TOS 1.04's
-; GEMDOS and floppy BIOS routines, relocated, behind PP's own TRAP #1 entry (H-08, STORY-05).
-binary	tools/dev/builds/epic02/unpacked/D15R_F5.bin
+; D15R_F5: the loader LEMLD2 unpacks to $C0100: TOS 1.04's
+; GEMDOS and floppy BIOS routines, relocated, behind PP's own TRAP #1 entry.
+binary	tools/dev/builds/stages/unpacked/D15R_F5.bin
 format	bin
 origin	$c0100
 include	src/include/atari.i

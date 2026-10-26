@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """tools/dev/shiftcheck.py: does a source still say the same thing when its code moves?
-(EPIC-02 STORY-04).
 
 Usage: tools/dev/shiftcheck.py [--tos] <source.s> <origin>
 

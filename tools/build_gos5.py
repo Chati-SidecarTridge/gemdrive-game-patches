@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """tools/build_gos5.py: a GOS5 game's START.TOS for a GEMDOS drive, built from its original by
-signature (EPIC-04 STORY-04; the change is STORY-01's and STORY-02's).
+signature.
 
 Usage: build_gos5.py <START.TOS> <out START.TOS> [--info] [--floppy]
 
@@ -51,7 +51,7 @@ VSYNC = b"\x3f\x3c\x00\x25\x4e\x4e\x54\x8f"
 END_A = re.compile(rb"\x42\x99\x22\xc3\x42\x99\x42\x99\x22\x8a\x60\x00(..)", re.S)
 AFTER_B = re.compile(rb"\x41\xf9(....)\x70\x00\x30\x28\x00\x0c\xd1\xc0\x4e\x90\x60\x00(..)", re.S)
 # where gd_forward's block and GEMDRIVE's stack go, by GOS's base: PP's driver copy (GOS - $8F80 in
-# every family A launcher) and the top of his GEMDOS buffers below it (EPIC-04 STORY-01, STORY-02)
+# every family A launcher) and the top of his GEMDOS buffers below it
 AREAS = {0xC0100: (0xB7180, 0xB7100), 0x1A0100: (0x197180, 0x197100), 0x1C0100: (0x1B7180, 0x1B7100)}
 
 

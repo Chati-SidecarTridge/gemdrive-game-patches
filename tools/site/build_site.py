@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-07: the project's website, built from what the repository holds.
+"""The project's website, built from what the repository holds.
 
 Usage: build_site.py [--out DIR] [--no-snapshots] [--check]
 
@@ -10,15 +10,15 @@ tools (tools/dev/README.md and the survey scripts' docstrings). The style and th
 filters are tools/site/site.css and site.js, copied beside the pages. Nothing is fetched: the site
 works from its folder and from GitHub Pages alike.
 
-The 8bitchip.info website's pages are linked, never copied (D-11): a note's `agcat.html` links to it
+The 8bitchip.info website's pages are linked, never copied: a note's `agcat.html` links to it
 there, and every game links to its page there. The snapshots, this project's own Hatari screenshots of each
-game's run (tools/dev/builds/survey/snapshots/, STORY-05), are copied when they are there, unless
---no-snapshots; whether they are published is Diego's call (D-15). A built game's snapshot is the
-last screen of its build's run (src/survey/ports.tsv), kept beside the others as port-<row>.png.
+game's run (tools/dev/builds/survey/snapshots/, made by tools/survey/run_all.py), are copied when they
+are there, unless --no-snapshots. A built game's snapshot is the last screen of its build's run
+(src/survey/ports.tsv), kept beside the others as port-<row>.png.
 
-The site speaks to its readers, never to the backlog (D-20): --check fails on a page that refers to
-docs/epics/ or what is in it (an epic, a story, a decision, ITERATIONS.md). Nor does it name the
-adaptations' author (D-21): --check fails on PP, PPera or Putnik in a page's prose (code, as a quoted
+The site speaks to its readers, never to the project's planning notes, which stay on the developer's
+machine: --check fails on a page that names one of their items by its identifier or points into their
+folder (PLANNING). Nor does it name the adaptations' author: --check fails on PP, PPera or Putnik in a page's prose (code, as a quoted
 string or a driver's name, may), and on a link to the 8bitchip.info website's home page rather than a
 game's page or a technical one, or on such a link without rel=nofollow.
 
@@ -104,8 +104,8 @@ PARTS = {"findings": ["how-it-started", "gemdrive-failure", "launch-chain", "dis
 PART_OF = {stem: name for name, stems in PARTS.items() for stem in stems}
 NOTES = {stem for _, _, pages in SECTIONS for stem, _ in pages if stem not in PARTS} | set(PART_OF)
 LIST = re.compile(r"^( *)([-*]|\d+\.) +(.*)$")
-BACKLOG = re.compile(r"\b(?:EPIC|STORY)-\d+\b|\b[DCH]-\d\d\b|(?:ITERATIONS|DECISIONS|STATUS)\.md|docs/epics"
-                     r"|\b[Ii]terations?\b|\b[Ee]pics?\b")
+PLANNING = re.compile(r"\b(?:EP[I]C|ST[O]RY)-\d+\b|\b[DCH]-\d\d\b|\bdocs[/]"
+                     r"|\b(?i:iterations?)\b|\b[Ee]pics?\b")
 AUTHOR = re.compile(r"\bPP\b|PPera|Putnik", re.I)
 
 
@@ -625,8 +625,7 @@ def tools_page() -> str:
         if not m:
             continue
         text = m.group(1).strip().split("\n\n")
-        first = re.sub(r"\s*\([^()]*\b(?:EPIC-\d+|STORY-\d+|[DCH]-\d\d)\b[^()]*\)", "",
-                       re.sub(r"^(?:EPIC-\d+(?: STORY-\d+)?(?:, STORY-\d+)*|tools/\S+): ", "", text[0].replace("\n", " ")))
+        first = re.sub(r"^tools/\S+: ", "", text[0].replace("\n", " "))
         usage = next((t.replace("Usage:", "").strip() for t in text if t.startswith("Usage:")), "")
         rows.append(f'<tr><td><code>{esc(str(f.relative_to(REPO)))}</code></td><td>{inline(first)}'
                     + (f'<br><code>{esc(usage.split(chr(10))[0])}</code>' if usage else "") + "</td></tr>")
@@ -674,7 +673,7 @@ def snapshot_names(games: list[dict]) -> dict:
 
 
 def patch_page() -> str:
-    """The patcher (D-22): the user's ZIP checked, patched in the browser, and given back."""
+    """The patcher: the user's ZIP checked, patched in the browser, and given back."""
     main = """
 <h1>Patch a game</h1>
 <p class="lead">Give this page a game's ZIP exactly as you downloaded it from the 8bitchip.info website.
@@ -709,7 +708,7 @@ result against this project's build before it gives it to you. How each fix work
 
 
 def patch_data(games: list[dict]) -> str:
-    """The patcher's data (D-22): src/survey/patches.tsv, each archive's games by name, and our three blocks
+    """The patcher's data: src/survey/patches.tsv, each archive's games by name, and our three blocks
     in base64, assembled from our sources as the build tools assemble them. No byte of the adaptations."""
     import base64
     import json
@@ -821,9 +820,9 @@ def check(out: Path) -> int:
                 bad.append(f"{name}: {ref}: no file {target}")
             elif frag and "=" not in frag and target.endswith(".html") and frag not in pages[target].ids:
                 bad.append(f"{name}: {ref}: no anchor #{frag} in {target}")
-    for name, p in pages.items():  # the site speaks to its readers, never to the backlog (CLAUDE.md)
-        for m in sorted(set(BACKLOG.findall(" ".join(p.text)))):
-            bad.append(f"{name}: refers to the backlog: {m}")
+    for name, p in pages.items():  # the site speaks to its readers, never to the planning notes
+        for m in sorted(set(PLANNING.findall(" ".join(p.text)))):
+            bad.append(f"{name}: refers to the planning notes: {m}")
         for m in sorted(set(AUTHOR.findall(" ".join(p.prose)))):  # nor names the adaptations' author
             bad.append(f"{name}: names the adaptations' author: {m}")
     games = read_csv(REPO / "src" / "survey" / "migration.csv")

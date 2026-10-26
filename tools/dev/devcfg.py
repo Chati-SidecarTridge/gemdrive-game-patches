@@ -1,5 +1,5 @@
 """tools/dev/devcfg.py: read tools/dev/dev.cfg from Python, as devcfg.sh does
-from the shell (EPIC-00 STORY-04)."""
+from the shell."""
 
 from __future__ import annotations
 

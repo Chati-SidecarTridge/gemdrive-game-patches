@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# tools/make_sources.sh: the launcher's sources, made from their maps (EPIC-02). None is
-# committed: START.TOS's stub, LEMLD2 and LS2DD reassemble to the original files (D-25), D15R's
-# two builds are mostly TOS 1.04's own code (D-13). Unpacks the stages from LEMMINGS/ first
+# tools/make_sources.sh: the launcher's sources, made from their maps. None is
+# committed: START.TOS's stub, LEMLD2 and LS2DD reassemble to the original files, D15R's
+# two builds are mostly TOS 1.04's own code. Unpacks the stages from LEMMINGS/ first
 # (tools/unpack_all.sh), then tools/dev/mksource.py for each map.
 #
 # Usage: tools/make_sources.sh

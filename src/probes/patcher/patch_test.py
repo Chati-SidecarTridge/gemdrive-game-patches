@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-09 STORY-03, STORY-04: the patcher page's code (tools/site/patcher.js) run in headless Chrome on
+"""The patcher page's code (tools/site/patcher.js) run in headless Chrome on
 the mirror's archives, and every ZIP it writes checked here.
 
 Usage: patch_test.py [--only ARCHIVE ...] [--sample N]
@@ -11,7 +11,7 @@ archive with a fix, and N of each other action (default 5), to the patcher, and 
 ZIP and its results. Then each patched ZIP is checked with zipfile against its original: every entry the
 same but the fix's file, which must be the table's result, and the added files, which must be the
 table's. Also: a ZIP the table does not know, and a damaged one, must be refused. Writes the ZIPs and
-results.json into tools/dev/builds/epic09/test-<time>/ and prints a summary.
+results.json into tools/dev/builds/patcher/test-<time>/ and prints a summary.
 """
 
 from __future__ import annotations
@@ -92,7 +92,7 @@ def main() -> int:
         todo = [r["archive"] for r in rows if r["action"] in FIXES]
         for action in sorted({r["action"] for r in rows} - set(FIXES)):
             todo += [r["archive"] for r in rows if r["action"] == action][:a.sample]
-    work = REPO / "tools" / "dev" / "builds" / "epic09" / time.strftime("test-%Y%m%d-%H%M%S")
+    work = REPO / "tools" / "dev" / "builds" / "patcher" / time.strftime("test-%Y%m%d-%H%M%S")
     (work / "zips").mkdir(parents=True)
     page = PAGE % (json.dumps(todo), json.dumps(list(FIXES)))
     done = threading.Event()

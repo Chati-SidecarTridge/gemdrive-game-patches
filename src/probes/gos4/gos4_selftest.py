@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""EPIC-05 STORY-02: gos4_selftest.s, the forwarder's test, run under GOS4 from Hatari's GEMDOS drive.
+"""gos4_selftest.s, the forwarder's test, run under GOS4 from Hatari's GEMDOS drive.
 
 Usage: gos4_selftest.py [--setup st-104|ste-162|ste-206] [--game HERMAN] [--program FILES/HERL]
 
 The game's folder (default Herman's, whose launcher starts FILES\\HERL) is copied from its download
-into a new folder under tools/dev/builds/epic05/, the program its launcher starts replaced by
+into a new folder under tools/dev/builds/gos4/, the program its launcher starts replaced by
 gos4_selftest.s assembled as a GEMDOS program, its START.TOS built by tools/build_gos4.py, and the
 copy run from the GEMDOS drive for 20 s. Prints the test's line (RESULT.OUT, as the run left it on
 the drive), what TEST.OUT holds, and the run. Nothing is deleted.
@@ -20,7 +20,7 @@ import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "src" / "probes" / "epic04"))
+sys.path.insert(0, str(REPO / "src" / "probes" / "gos5"))
 import gos5_run  # noqa: E402
 
 
@@ -30,7 +30,7 @@ def main() -> int:
     ap.add_argument("--game", default="HERMAN")
     ap.add_argument("--program", default="FILES/HERL")
     a = ap.parse_args()
-    work = REPO / "tools" / "dev" / "builds" / "epic05" / time.strftime(f"selftest-{a.game}-%Y%m%d-%H%M%S")
+    work = REPO / "tools" / "dev" / "builds" / "gos4" / time.strftime(f"selftest-{a.game}-%Y%m%d-%H%M%S")
     game = work / a.game
     start, memsize = gos5_run.original(a.game, game)
     target = game / a.program

@@ -1,12 +1,12 @@
 # The reference (PPDRIVER image): the pristine launcher boots Lemmings to its
 # title menu, which reads LEVELDAT before any click, and on a click on
-# "1 PLAYER" loads the first level's data (EPIC-01 STORY-01; LEVELDAT's place
-# corrected in EPIC-02 STORY-01: it is read at the title in every run). Every read after `files-dir` is D15R's own, through BIOS
+# "1 PLAYER" loads the first level's data (LEVELDAT
+# is read earlier, at the title, in every run). Every read after `files-dir` is D15R's own, through BIOS
 # Rwabs on drive C with 1,024-byte logical sectors; the record numbers are
 # those of tools/dev/make_disks.sh's image. The menu is mouse-driven: the
 # `mouse` step puts the game's cursor on "1 PLAYER" and `event doubleclick`
 # clicks it. In Hatari the game then crashes in its level-preview code with an
-# address error (EPIC-01 STORY-01 notes), so this ends at the level load.
+# address error, so this ends at the level load.
 expect start-tos Pexec\(0, "C:\\LEMMINGS\\START\.TOS"
 expect pch Fopen\("LEMMINGS\.PCH"
 expect ls2dd Fopen\("LS2DD\.FIC"

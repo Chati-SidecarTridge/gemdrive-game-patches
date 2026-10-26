@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-01: read a gate_probe.py run folder. Prints the breakpoint hits with
+"""Read a gate_probe.py run folder. Prints the breakpoint hits with
 their dumps, in order, and writes the traced instruction windows (cpu_disasm
 and I/O lines) to <run>/windows.txt.
 

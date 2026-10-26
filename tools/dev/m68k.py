@@ -1,5 +1,5 @@
 """tools/dev/m68k.py: 68000 instruction lengths and control flow, for tracing code
-(EPIC-02 STORY-04). Not a disassembler: objdump gives the text, this gives where
+Not a disassembler: objdump gives the text, this gives where
 each instruction ends, where it can go next, and which addresses it refers to.
 
 Besides the 68000 set, the few 68010/68030 forms PP's launcher uses on the Falcon

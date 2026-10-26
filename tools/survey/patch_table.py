@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-09 STORY-02: every archive of the mirror, and what the patcher page does with it (D-22).
+"""Every archive of the mirror, and what the patcher page does with it.
 
 Usage: patch_table.py
 
@@ -16,13 +16,13 @@ Writes src/survey/patches.tsv, one line per ZIP under the mirror's site/ (MIRROR
   target         for a fix, the file the page writes, its path in the ZIP
   target_sha256  that file in the original ZIP (empty: the page adds it)
   result_sha256  that file as the page must write it: the card builder's result
-  needs, needs_sha256, add   a second download the user gives (D-23), its SHA-256, and the files taken
+  needs, needs_sha256, add   a second download the user gives, its SHA-256, and the files taken
                  from it (name=sha256, ...)
   reason         in plain words, for the page
 
 A fix's result is computed by tools/survey/sdcard.py's own build (built(), and the files ports.tsv adds)
 on a copy of the unpacked download (tools/dev/builds/survey/games/, unpack_games.py), so the page's file
-equals the card's. The table holds names, sizes and hashes only: no byte of the adaptations (D-11).
+equals the card's. The table holds names, sizes and hashes only: no byte of the adaptations.
 """
 
 from __future__ import annotations

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""tools/pack.py: the Gamex launcher's packer, rebuilt (EPIC-02 STORY-03).
+"""tools/pack.py: the Gamex launcher's packer, rebuilt.
 
     pack.py fic <in.bin> <out.FIC> <like.FIC> [--pad]
         a .FIC with <like.FIC>'s name and +10 field
@@ -8,7 +8,7 @@
         its size constants set for the new payload, <like.TOS>'s header otherwise
 
 --pad fills the file with zeros up to <like>'s length, so that a rebuilt launcher takes the
-same clusters on a disk as PP's and the reference's record numbers stay put (EPIC-02 STORY-06);
+same clusters on a disk as PP's and the reference's record numbers stay put;
 the unpacking code stops at the stream's end byte and never sees them.
 
 The stream format is tools/unpack.py's (src/notes/launcher-formats.md). PP's packer is unknown,
@@ -143,7 +143,7 @@ def build_start(prog: bytes, like: bytes, stub_text: bytes | None = None,
         sys.exit("error: the stub must be 230 bytes")
     top = struct.unpack(">I", stub[STUB_TOP:STUB_TOP + 4])[0]
     margin = in_place_margin(data[32:], top)
-    if margin < 0 and raise_top:  # a longer program: copy the stream higher (EPIC-04 STORY-04)
+    if margin < 0 and raise_top:  # a longer program: copy the stream higher
         top += (-margin + 3) & ~3
         struct.pack_into(">I", stub, STUB_TOP, top)
         margin = in_place_margin(data[32:], top)

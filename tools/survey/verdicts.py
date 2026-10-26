@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-05: every game's verdict, into src/survey/migration.csv.
+"""Every game's verdict, into src/survey/migration.csv.
 
 Usage: verdicts.py
 
 For every game of migration.csv: its run from Hatari's GEMDOS drive on ST TOS 1.04, or on STE TOS
 1.62 for a game made for the STE (its name says STE) (tools/dev/builds/survey/runs.tsv, run_all.py),
-its run from a PPDRIVER image, the working reference (D-09), when it has one, Diego's answer, if he
+its run from a PPDRIVER image, the working reference, when it has one, Diego's answer, if he
 gave one (src/survey/review.tsv, review.py; Diego, 2026-10-11: "if i dont check any button, it means
 i trust your guess"), and what a game's own trace showed when it was looked into
-(src/survey/findings.tsv, with the evidence). Writes the columns verdict, run, reason (D-14: as it
+(src/survey/findings.tsv, with the evidence). Writes the columns verdict, run, reason (as it
 is, fix, not feasible, unsure) and by (whose verdict: "trace", "Diego", "ppdriver" or "run"):
 
   a finding                       its verdict and reason
@@ -29,9 +29,9 @@ program, more RAM, a run that started in time) gives way to the new run's propos
 listed in tools/dev/builds/survey/stale.txt, which review.py shows again as not reviewed.
 
 A run that reads C: by sectors (BIOS Rwabs, Getbpb over and over) sets the access column to
-"sectors" where STORY-04 found no such access in the programs' code (STORY-05 task 5).
+"sectors" where classify.py found no such access in the programs' code.
 
-Every "fix" gets its solution (STORY-06, src/notes/solutions.md) from src/survey/solutions.tsv
+Every "fix" gets its solution (src/notes/solutions.md) from src/survey/solutions.tsv
 (a row number, or a strategy, and the solution), and the game's other downloads that run as it is
 from the GEMDOS drive (tools/dev/builds/survey/runs-other.tsv, run_other.py).
 
@@ -103,7 +103,7 @@ def main() -> int:
         if re.search(r"\bSTE\b", g["name"]) and g["row"] in ste:
             run = ste[g["row"]]
         g["run"] = run.get("run", "")
-        # task 5: a run that reads C: by sectors corrects STORY-04's access, found in the programs' code
+        # a run that reads C: by sectors corrects classify.py's access, found in the programs' code
         # (Crystals of Arborea's START.PRG: no sector-access signature, Getbpb(2) in a loop when run)
         if re.search(r"sector reads on C:|boot block", run.get("reason", "")) and g["access"] not in ("sectors", "registers"):
             g["access"], g["evidence"] = "sectors", g["evidence"] + "; run: " + run["reason"]

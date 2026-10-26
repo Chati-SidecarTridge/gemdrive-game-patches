@@ -1,4 +1,4 @@
-; EPIC-05 STORY-02: a test of src/gemdrive/gos4_patch.s's forwarder, run under GOS4 as a game's
+; A test of src/gemdrive/gos4_patch.s's forwarder, run under GOS4 as a game's
 ; program (gos4_selftest.py puts it in place of one, in a copy of the game's folder). Through GOS's
 ; TRAP #1 it writes a file, reads it back, searches for it, makes and deletes a second one, and
 ; opens a name longer than 8.3; it prints PASS or the step that failed, leaves the same line in

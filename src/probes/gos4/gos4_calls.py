@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-05 STORY-01: the GEMDOS calls a GOS4 game makes, logged at GOS's own GEMDOS.
+"""The GEMDOS calls a GOS4 game makes, logged at GOS's own GEMDOS.
 
 Usage: gos4_calls.py <ZIP folder name> [--setup st-104|ste-162|ste-206] [--seconds N]
        gos4_calls.py --report <run folder>
@@ -7,7 +7,7 @@ Usage: gos4_calls.py <ZIP folder name> [--setup st-104|ste-162|ste-206] [--secon
 Hatari's GEMDOS trace sees only the calls that reach its own hook, and under GOS4 the game's
 calls go to GOS (D15R_HH4, TOS 1.04's GEMDOS at $C0100, $1C0100 for a 2 MB game). So the game's folder, as the card lays it
 out (unpacked download, tools/survey/sdcard.py's plan), is copied into a new folder under
-tools/dev/builds/epic05/, its D15R_HH4.FIC unpacked, and GOS's GEMDOS dispatcher found by
+tools/dev/builds/gos4/, its D15R_HH4.FIC unpacked, and GOS's GEMDOS dispatcher found by
 signature (`movea.l (8,a6),a0 / move.w (a0),(-26,a6) / cmpi.w #87,(-26,a6)`): a :trace breakpoint
 just after the movea dumps the call's parameters (a0) and the memory at the two longs that may
 point to a name, at every call. The game runs from the PPDRIVER image (its original START.TOS: the
@@ -28,7 +28,7 @@ import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "src" / "probes" / "epic04"))
+sys.path.insert(0, str(REPO / "src" / "probes" / "gos5"))
 import gos5_run  # noqa: E402
 
 DISPATCH = bytes.fromhex("206E00083D50FFE60C6E0057FFE6")
@@ -133,7 +133,7 @@ def main() -> int:
         return report(a.report)
     if not a.game:
         ap.error("a game or --report")
-    work = REPO / "tools" / "dev" / "builds" / "epic05" / time.strftime(f"{a.game}-%Y%m%d-%H%M%S")
+    work = REPO / "tools" / "dev" / "builds" / "gos4" / time.strftime(f"{a.game}-%Y%m%d-%H%M%S")
     game = work / a.game
     start, memsize = gos5_run.original(a.game, game)
     gos = [f for f in game.rglob("*") if f.name.upper() == "D15R_HH4.FIC"]

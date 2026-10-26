@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-03: every archive in the mirror, unpacked.
+"""Every archive in the mirror, unpacked.
 
 Usage: unpack_games.py
 

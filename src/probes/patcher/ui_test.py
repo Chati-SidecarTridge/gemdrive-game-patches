@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-09 STORY-05: the patcher page (tools/dev/builds/site/patch.html) used as a user would, in headless
+"""The patcher page (tools/dev/builds/site/patch.html) used as a user would, in headless
 Chrome: a ZIP from the mirror given to its file input, the page's answer read, a patched ZIP downloaded
 from its link and checked.
 
@@ -99,7 +99,7 @@ def main() -> int:
              {"label": "as it is", "archive": "10THFRAM.ZIP"}, {"label": "no fix", "archive": "AQUAN.ZIP"},
              {"label": "other download", "archive": first["other"]}, {"label": "not a game", "archive": first["notgame"]},
              {"label": "unknown", "archive": "LEMMINGS.ZIP", "flip": True}]
-    work = Path(tempfile.mkdtemp(prefix="ui-", dir=REPO / "tools" / "dev" / "builds" / "epic09"))
+    work = Path(tempfile.mkdtemp(prefix="ui-", dir=REPO / "tools" / "dev" / "builds" / "patcher"))
     (work / "page.html").write_text(PAGE % json.dumps(cases))
     done, results = threading.Event(), []
 

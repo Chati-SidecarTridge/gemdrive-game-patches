@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""tools/unpack.py: the Gamex launcher's formats, unpacked on the host (EPIC-02 STORY-02).
+"""tools/unpack.py: the Gamex launcher's formats, unpacked on the host.
 
     unpack.py start <START.TOS> <out.prg>          the program packed in START.TOS (LEMLD2.TOS)
     unpack.py fic <file.FIC> <out.bin>             a .FIC payload (LS2DD, D15R_H5, D15R_F5)

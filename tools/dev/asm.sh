@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # tools/dev/asm.sh: assemble a vasm (Motorola syntax) source into a raw binary,
-# in the pinned toolchain (EPIC-00 STORY-02, D-05).
+# in the pinned toolchain.
 #
 # Usage: tools/dev/asm.sh [--tos] <source.s> <out.bin> [<listing>]
 #
@@ -10,8 +10,7 @@
 # reported, not only the first five. With a third argument, vasm also writes
 # its listing there (-L). The source is assembled from a fresh copy
 # (tc_stage), with its own folder on the include path. With --tos the output is
-# a GEMDOS program instead (-Ftos -nosym: header, text, data, relocation table;
-# EPIC-02 STORY-04).
+# a GEMDOS program instead (-Ftos -nosym: header, text, data, relocation table).
 set -euo pipefail
 
 format=(-Fbin)

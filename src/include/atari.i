@@ -1,5 +1,5 @@
 ; src/include/atari.i: names for the Atari ST's fixed addresses that the launcher's
-; sources use (EPIC-02 STORY-04). TOS system variables from the Atari ST Profibuch
+; sources use. TOS system variables from the Atari ST Profibuch
 ; and the TOS 1.04 ROM; hardware registers of the ST and STE.
 
 ; Exception vectors

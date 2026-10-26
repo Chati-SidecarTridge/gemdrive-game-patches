@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""tools/survey/mirror.py: a local copy of the 8bitchip.info website's hard-disk adaptation pages
-(EPIC-03 STORY-02, D-11, D-12).
+"""tools/survey/mirror.py: a local copy of the 8bitchip.info website's hard-disk adaptation pages,
+linked from the project's pages and never copied into the repository.
 
     python3 tools/survey/mirror.py
 

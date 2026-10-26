@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-04 STORY-01: Hatari made to act, at each call gd_forward hands on, like the SidecarTridge
+"""Hatari made to act, at each call gd_forward hands on, like the SidecarTridge
 Multidevice's GEMDRIVE (../md-drives-emulator/target/atarist/src/gemdrive.s), which Hatari's
 GEMDOS drive is not: a test build only.
 
@@ -13,9 +13,9 @@ call to Hatari's TRAP #1, does what GEMDRIVE does for a call it serves:
              as detect_emulated_drive for Dsetpath and Fopen; with the stack, on it
   --dskbuf   ILLEGAL over the $114 bytes from _dskbufp: send_sync's wait code and Fread's
              registers at +$100
-  --delay N  a busy loop of N iterations (about 18 cycles each), an SD card's latency
+  --delay N  a busy loop run N times (about 18 cycles each), an SD card's latency
 and gemdrive-first-level.exp runs it on the GEMDOS drive. Builds in a new folder
-tools/dev/builds/epic04/mdemu-<date>-<time>/ each run (nothing is deleted).
+tools/dev/builds/gos5/mdemu-<date>-<time>/ each run (nothing is deleted).
 """
 
 import argparse
@@ -87,7 +87,7 @@ def main() -> int:
     ap.add_argument("--expect", type=Path,
                     default=REPO / "tools" / "dev" / "expect" / "gemdrive-first-level.exp")
     a = ap.parse_args()
-    out = REPO / "tools" / "dev" / "builds" / "epic04" / time.strftime("mdemu-%Y%m%d-%H%M%S")
+    out = REPO / "tools" / "dev" / "builds" / "gos5" / time.strftime("mdemu-%Y%m%d-%H%M%S")
     gemdrive = REPO / "tools" / "dev" / "builds" / "gemdrive"
     subprocess.run([str(REPO / "tools" / "build_gemdrive.sh"), str(gemdrive)], check=True,
                    stdout=subprocess.DEVNULL)

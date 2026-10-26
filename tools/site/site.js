@@ -1,4 +1,4 @@
-// EPIC-03 STORY-07: the map's readout, the catalogue's filters and screenshot viewer, and the
+// The map's readout, the catalogue's filters and screenshot viewer, and the
 // page contents folded on narrow screens. Every page works without it.
 
 const readout = document.querySelector('.readout');

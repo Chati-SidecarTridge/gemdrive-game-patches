@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-05: the human review of the runs, one click per game.
+"""The human review of the runs, one click per game.
 
 Usage: review.py [--port 8642] [--host 127.0.0.1]   then open http://localhost:8642 on this Mac
        (--host 0.0.0.0: also from the local network, http://<this Mac's address>:8642)

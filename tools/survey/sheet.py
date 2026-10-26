@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-05: a contact sheet of run_all.py's snapshots, to look the runs over.
+"""A contact sheet of run_all.py's snapshots, to look the runs over.
 
 Usage: sheet.py [--all]
 

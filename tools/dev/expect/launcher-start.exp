@@ -1,6 +1,6 @@
-# The pristine launcher starts and reads its own files: every EPIC-00 setup,
-# GEMDRIVE and PPDRIVER, gets this far (EPIC-00 STORY-05). What happens after
-# FILES/ is EPIC-01's question; the last screenshot shows it.
+# The pristine launcher starts and reads its own files: every setup,
+# GEMDRIVE and PPDRIVER, gets this far. What happens after FILES/ differs
+# between the two disks; the last screenshot shows it.
 expect start-tos Pexec\(0, "C:\\LEMMINGS\\START\.TOS"
 expect info-text Cconws\(
 expect pch Fopen\("LEMMINGS\.PCH"

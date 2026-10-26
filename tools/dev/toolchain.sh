@@ -1,6 +1,6 @@
 # tools/dev/toolchain.sh: sourced by every tools/dev script that runs the 68000
 # toolchain. The pinned image and the helpers around it, kept in one place
-# (EPIC-00 STORY-02, D-05). The same arrangement as the sibling repositories'
+# The same arrangement as the sibling repositories'
 # tools/dev/toolchain.sh.
 
 # Diego's atarist-toolkit-docker, pinned by tag and digest (the tag the
@@ -51,7 +51,7 @@ tc_path() {
 # file sharing can serve a container a file the host has just rewritten in
 # place at its old length, cut short (seen 2026-10-11: vasm assembled a source
 # truncated mid-line); a file no container has seen sidesteps it. Never next
-# to the original, which may be evidence (C-01). tc_unstage removes the copy.
+# to the original, which may be one of the original files, never modified. tc_unstage removes the copy.
 TC_STAGED=""
 tc_stage() {
   mkdir -p "$REPO/tools/dev/builds/.stage"

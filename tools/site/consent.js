@@ -1,4 +1,4 @@
-// EPIC-10 STORY-01: the cookie banner of the SidecarTridge sites, as on jackintosh.sidecartridge.com
+// The cookie banner of the SidecarTridge sites, as on jackintosh.sidecartridge.com
 // (md-jackintosh-roms, site/src/consent.html, from sidecartridge.com's cookie-consent.html).
 // cookieconsent v2.9.2 (https://github.com/orestbida/cookieconsent, MIT) is in vendor/. The consent
 // cookie is shared with sidecartridge.com when the site is served there; the analytics script in each

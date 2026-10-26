@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # tools/dev/make_disks.sh: build the two disk setups the harness boots, from a
-# copy of the game folder and never from LEMMINGS/ itself (EPIC-00 STORY-04,
-# C-01).
+# copy of the game folder and never from LEMMINGS/ itself, which is
+# never modified.
 #
 # Usage: tools/dev/make_disks.sh [<game folder> [<out folder>]]
 #
@@ -13,7 +13,7 @@
 # Writes tools/dev/builds/disks/ (emptied first):
 #   gemdrive/LEMMINGS/  the folder Hatari mounts as drive C: in GEMDRIVE mode
 #                       (--harddrive gemdrive)
-#   ppdriver.img        the working reference (D-09): a 32 MB ACSI image with
+#   ppdriver.img        the working reference: a 32 MB ACSI image with
 #                       one partition, booted by PPDRIVER, made by ../atari-hd
 #                       --ppdriver-bootable, with the same folder copied in
 #   SOURCE.txt          where the game came from, and the SHA-256 of every file

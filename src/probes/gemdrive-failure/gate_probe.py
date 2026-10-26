@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-01 STORY-02: probe the launcher's driver check and what follows it, on
+"""Probe the launcher's driver check and what follows it, on
 one Hatari setup and disk, with chained single-shot breakpoints.
 
 Usage: gate_probe.py <setup> <disk>      (setup: st-104|ste-162|ste-206)
@@ -7,7 +7,7 @@ Usage: gate_probe.py <setup> <disk>      (setup: st-104|ste-162|ste-206)
 The launcher's inner program (LEMLD2, text+0x000..) is relocated by START.TOS
 to an address that depends on the setup and the disk (the driver's resident
 size moves the TPA). It is deterministic per setup and disk: BASES below were
-read from EPIC-00's runs as the PC Hatari reports for the launcher's Dgetpath
+read from the harness's first runs as the PC Hatari reports for the launcher's Dgetpath
 trap (the return address) minus 2 minus the trap's text offset $31A. Every
 breakpoint below disassembles the live machine (`d pc`), so a wrong base shows
 as wrong instructions rather than as a wrong conclusion.
@@ -23,7 +23,7 @@ way:
   $CC0  IDE probe, with a bus-error handler at $D2E
   $83C  error exit
 
-Writes the debugger files into tools/dev/builds/epic01/<setup>-<disk>/ and
+Writes the debugger files into tools/dev/builds/gemdrive-failure/<setup>-<disk>/ and
 runs tools/dev/hatari_harness.py with them (run folder in tools/dev/logs/).
 CPU and I/O tracing are switched on only inside bounded windows, never across
 a polling loop.
@@ -48,7 +48,7 @@ def main() -> int:
         sys.exit(f"usage: {sys.argv[0]} <st-104|ste-162|ste-206> <gemdrive|ppdriver>")
     setup, disk = sys.argv[1], sys.argv[2]
     base = BASES[(setup, disk)]
-    out = REPO / "tools" / "dev" / "builds" / "epic01" / f"{setup}-{disk}"
+    out = REPO / "tools" / "dev" / "builds" / "gemdrive-failure" / f"{setup}-{disk}"
     out.mkdir(parents=True, exist_ok=True)
 
     def at(off: int) -> str:

@@ -2,7 +2,7 @@ name: Site
 
 # The website (tools/site/build_site.py): built from the notes, the survey's tables and our sources,
 # and checked (every link and anchor, every game's row, no page loading another site, no reference
-# to the backlog or to the adaptations' author). The patcher's blocks are assembled from our sources
+# to the planning notes or to the adaptations' author). The patcher's blocks are assembled from our sources
 # with the pinned toolchain (tools/dev/toolchain.sh). Runs on every pull request and every push to
 # main. It publishes nothing: tools/site/deploy_site.sh publishes the site, with its snapshots, on gh-pages.
 on:

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-01: run one of PP's adaptations from the mirror, as it is, on one disk,
+"""Run one of PP's adaptations from the mirror, as it is, on one disk,
 and report how it reached its files.
 
 Usage: mode_probe.py <ZIP> [--disk gemdrive|ppdriver] [--setup st-104|ste-162|ste-206]
                      [--start <program>] [--monitor mono] [--memsize MB]
        mode_probe.py --report <run folder>...
 
-<ZIP> is a file name in the mirror's site/ (dev.cfg MIRROR, D-11). The archive is unpacked
-into tools/dev/builds/epic03/games/<name>/ (its single top folder, if any, dropped), the
+<ZIP> is a file name in the mirror's site/ (dev.cfg MIRROR). The archive is unpacked
+into tools/dev/builds/modes/games/<name>/ (its single top folder, if any, dropped), the
 disks are built from it (make_disks.sh: it becomes C:\\LEMMINGS) and the harness starts
 <program> (default: RUNME.TOS, else START.TOS, else START.PRG, in the game's root) with a
 generic expectation: the program starts, then screenshots at 10 s and 30 s, the space
@@ -31,7 +31,7 @@ import zipfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-GAMES = REPO / "tools" / "dev" / "builds" / "epic03" / "games"
+GAMES = REPO / "tools" / "dev" / "builds" / "modes" / "games"
 STARTS = ("RUNME.TOS", "START.TOS", "START.PRG")
 
 

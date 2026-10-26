@@ -156,7 +156,7 @@ A first look at the launcher, in April 2024, left guesses about the cause.
   `tools/dev/expect/reference-first-level.exp`, BPB in run `…-ppdriver-bpb`.
 - The check and the fallbacks: runs `20261011-141008-st-104-gemdrive-gate`,
   `20261011-141116-ste-206-gemdrive-gate` and the other `…-gate` runs, from
-  `src/probes/epic01/gate_probe.py <setup> <disk>`. `read_probe.py <run>` prints a run's chain.
+  `src/probes/gemdrive-failure/gate_probe.py <setup> <disk>`. `read_probe.py <run>` prints a run's chain.
 - The driver copy: runs `…-st-104-ppdriver-gate` and `…-drv`.
-- The answers by hand: `src/probes/epic01/fallback_probe.py` and `serve_rwabs.py`, runs
+- The answers by hand: `src/probes/gemdrive-failure/fallback_probe.py` and `serve_rwabs.py`, runs
   `…-gemdrive-fallback` and `…-gemdrive-serve-02`.

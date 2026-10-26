@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-02 STORY-04: the executed addresses of a profile_probe.py run, sorted by
+"""The executed addresses of a profile_probe.py run, sorted by
 stage, as lists tools/dev/mksource.py reads (`executed <file>` in a map).
 
 Usage: profile_addrs.py <profile run> <chain run>
@@ -13,7 +13,7 @@ LEMLD2's addresses are taken from the "lemld2" profile only (other code runs
 where LEMLD2 was once it has jumped to the block) and are written as text offsets, like the block's and the
 loader's, whose run addresses are mapped back to LEMLD2's text.
 
-Writes tools/dev/builds/epic02/executed/<stage>.txt and prints a summary.
+Writes tools/dev/builds/stages/executed/<stage>.txt and prints a summary.
 """
 
 import re
@@ -60,7 +60,7 @@ def main() -> int:
         "block": (0x80100, 1600, dump("block.bin"), 0x604),
         "loader": (0x85000, 818, dump("loader.bin"), 0x912),
     }
-    outdir = REPO / "tools" / "dev" / "builds" / "epic02" / "executed"
+    outdir = REPO / "tools" / "dev" / "builds" / "stages" / "executed"
     outdir.mkdir(parents=True, exist_ok=True)
     found: dict[str, set[int]] = {"lemld2": set()}
     changed: dict[str, set[int]] = {}

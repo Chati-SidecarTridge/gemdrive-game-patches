@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
 # tools/unpack_all.sh: every launcher stage unpacked from LEMLD2's files in LEMMINGS/ into
-# tools/dev/builds/epic02/unpacked/, where the maps of src/ read them (EPIC-02 STORY-04).
+# tools/dev/builds/stages/unpacked/, where the maps of src/ read them.
 #
 # Usage: tools/unpack_all.sh
 set -euo pipefail
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-out="$repo/tools/dev/builds/epic02/unpacked"
+out="$repo/tools/dev/builds/stages/unpacked"
 mkdir -p "$out"
 cd "$repo"
 python3 -I tools/unpack.py text LEMMINGS/START.TOS "$out/START.text"

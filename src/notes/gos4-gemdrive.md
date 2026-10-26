@@ -83,7 +83,7 @@ To undo, put `START.ORG` back as `START.TOS`.
   launcher's own path.
 - **A test program** in place of a game's program, on the three machines. It writes a file, reads
   it back, searches for it, makes a second open at the same time, deletes a file, and uses a name
-  longer than 8.3 (`src/probes/epic05/gos4_selftest.py`). Guild of Thieves also saves a game to
+  longer than 8.3 (`src/probes/gos4/gos4_selftest.py`). Guild of Thieves also saves a game to
   the GEMDOS drive and restores it.
 - **The Multidevice's GEMDRIVE**, on a real machine, power-cycled between games. Operation Stealth, Guild of Thieves (a game saved to the card and restored), Erik,
   Defender 2, Grandad, Starblade, Gravity, Strider and F16 Falcon run. F16 Falcon's "Read mission

@@ -1,9 +1,9 @@
-// EPIC-09 STORY-03: the patcher, in the browser (D-22). It reads the user's ZIP, knows it by its SHA-256
+// The patcher, in the browser. It reads the user's ZIP, knows it by its SHA-256
 // (window.PATCHES, from src/survey/patches.tsv), applies the fix the table names, checks the result's
 // SHA-256, and writes the patched ZIP. The fixes are tools/build_gos5.py's and build_gos4.py's builds,
-// GDBPB.PRG, the fastload bit and a file from a second download (D-23), done here byte for byte as the
+// GDBPB.PRG, the fastload bit and a file from a second download the user gives, done here byte for byte as the
 // Python tools do them: tools/unpack.py's unpacker, tools/pack.py's packer. Standard APIs only. The page
-// carries our blocks (window.PATCH_BLOCKS) and no byte of the adaptations (D-11).
+// carries our blocks (window.PATCH_BLOCKS) and no byte of the adaptations.
 
 const Patcher = (() => {
   'use strict';

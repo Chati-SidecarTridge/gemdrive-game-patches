@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-03 STORY-08: every game laid out for a microSD card, to test from the SidecarTridge Multidevice's
+"""Every game laid out for a microSD card, to test from the SidecarTridge Multidevice's
 GEMDRIVE.
 
 Usage: sdcard.py [--out DIR]
@@ -23,10 +23,10 @@ started), and beside it what the download keeps next to that folder, unless the 
 name (Zero-5's README.TXT); a file the run opened at the drive's root (Maddog Williams' C:\\PABISYS.FIL)
 goes to the card's root. A game with no program to start gets its whole download. A ported game
 (src/survey/ports.tsv) gets its program to start built for a GEMDOS drive (tools/build_gos5.py or, for a
-GOS4 game, build_gos4.py, with the table's options) and the files the table adds from another download (Forgotten Worlds' GOS, D-19: what
+GOS4 game, build_gos4.py, with the table's options) and the files the table adds from another download (Forgotten Worlds' GOS: what
 the instructions have a user do). INDEX.TXT, at the root,
 gives each game's program to start. DIR is emptied first if it holds an INDEX.TXT from this script, and
-must otherwise be empty. PP's files: never committed (D-11).
+must otherwise be empty. PP's files: never committed.
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ import run_all  # noqa: E402
 import set_fastload  # noqa: E402
 
 GDBPB_SRC = REPO / "src" / "gemdrive" / "gdbpb.s"
-GDBPB = REPO / "tools" / "dev" / "builds" / "epic06" / "GDBPB.PRG"
+GDBPB = REPO / "tools" / "dev" / "builds" / "small-fixes" / "GDBPB.PRG"
 
 TOPS = {"as it is": "WORKS", "unsure": "UNSURE", "not feasible": "NOFIX"}
 FIXES = {"Gamex + GOS4": "FIXGOS4", "Gamex + GOS5": "FIXGOS5", "HAGE": "FIXHAGE", "plain": "FIXPLAIN",
@@ -203,9 +203,9 @@ def main() -> int:
                                           g["reason"] if g["verdict"] != "as it is" else "")
         index.append(f"{where}\\{start}  {g['name']}" + (f" ({note})" if note else ""))
     text = ("PP's hard-disk adaptations from the SidecarTridge Multidevice's GEMDRIVE: "
-            f"{len(games)} games, {len(folders)} folders (EPIC-03 STORY-08).\r\n"
+            f"{len(games)} games, {len(folders)} folders.\r\n"
             "VERDICT\\RAM\\GROUP\\ZIP\\: WORKS as it is from Hatari's GEMDOS drive; FIX*: a fix, by "
-            "strategy (FIXGOS4, FIXGOS5: built for the GEMDOS drive, EPIC-04, EPIC-05); STILLNOT: built, still not working; "
+            "strategy (FIXGOS4, FIXGOS5: built for the GEMDOS drive); STILLNOT: built, still not working; "
             "UNSURE; NOFIX: not feasible. RAM: what its run needed. GROUP: at most 80 games, "
             "from the first to the last.\r\n\r\n"
             + "".join(line.replace("/", "\\") + "\r\n" for line in sorted(index)))

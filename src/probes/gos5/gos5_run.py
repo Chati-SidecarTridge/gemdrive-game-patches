@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""EPIC-04 STORY-04: one of the card's FIXGOS5 games, its START.TOS built by tools/build_gos5.py
-(a FIXGOS4 game's by tools/build_gos4.py, EPIC-05),
+"""One of the card's FIXGOS5 games, its START.TOS built by tools/build_gos5.py
+(a FIXGOS4 game's by tools/build_gos4.py),
 run from Hatari's GEMDOS drive.
 
 Usage: gos5_run.py <ZIP folder name> [--setup st-104|ste-162|ste-206] [--disk gemdrive|ppdriver] [--memsize N]
@@ -8,8 +8,8 @@ Usage: gos5_run.py <ZIP folder name> [--setup st-104|ste-162|ste-206] [--disk ge
 The game's folder as the card lays it out (tools/survey/sdcard.py), from its unpacked download, is
 copied into a new folder under tools/dev/builds/gos5/, its START.TOS built there with
 src/survey/ports.tsv's options and its added files, the disks made from the copy (make_disks.sh: it
-becomes C:\\LEMMINGS) and the harness runs it with EPIC-03's generic expectation
-(src/probes/epic03/mode_probe.py: the start, screenshots at 10 s and 30 s, the space bar, a
+becomes C:\\LEMMINGS) and the harness runs it with the survey's generic expectation
+(src/probes/modes/mode_probe.py: the start, screenshots at 10 s and 30 s, the space bar, a
 screenshot 15 s later), at the RAM of the game's run. Prints mode_probe's report and the crashes
 (TOS's Pterm(-1)). Nothing is deleted.
 """
@@ -25,7 +25,7 @@ import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "src" / "probes" / "epic03"))
+sys.path.insert(0, str(REPO / "src" / "probes" / "modes"))
 import mode_probe  # noqa: E402
 sys.path.insert(0, str(REPO / "tools" / "survey"))
 import run_all  # noqa: E402
@@ -68,7 +68,7 @@ def main() -> int:
                  if Path(r["download"]).stem.upper() == a.game), None)
     gos4 = any(g["strategy"] == "Gamex + GOS4" and Path(g["download"]).stem.upper() == a.game
                for g in csv.DictReader((REPO / "src" / "survey" / "migration.csv").open()))
-    tool = "build_gos4.py" if gos4 else "build_gos5.py"   # EPIC-05: a GOS4 game's own tool
+    tool = "build_gos4.py" if gos4 else "build_gos5.py"   # a GOS4 game's own tool
     subprocess.run([sys.executable, "-I", str(REPO / "tools" / tool), str(game / start),
                     str(game / start)] + (port["options"].split() if port else []), check=True)
     for name in port["add"].split() if port else []:

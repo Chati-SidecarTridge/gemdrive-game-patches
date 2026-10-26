@@ -47,7 +47,7 @@ Hatari is left. One line per check; exit 0 only if all pass. About two minutes.
 | `../build_launcher.sh [<src>] [<out>]` | Lemmings' launcher built from `src/` into `builds/launcher/LEMMINGS/`; then `make_disks.sh builds/launcher/LEMMINGS` |
 | `../build_gemdrive.sh [<out>]` | Lemmings' launcher changed for a GEMDOS drive, from its sources (`src/gemdrive/lemld2_gemdrive.s`) into `builds/gemdrive/build/LEMMINGS` |
 | `../build_gos5.py <START.TOS> <out> [--info] [--floppy]` | any GOS5 game's start program built for a GEMDOS drive from its original, found by signature: `src/gemdrive/gos5_patch.s` in front of the launcher's text (`gos5-gemdrive.md`); `--floppy` adds the info screen's "Insert any floppy disk in drive A" |
-| `../../src/probes/epic04/gos5_run.py <ZIP> [--setup <s>] [--disk <d>]` | one GOS5 game from its unpacked download, built with `src/survey/ports.tsv`'s options and files, run from the GEMDOS drive with `src/probes/epic03/mode_probe.py`'s generic expectation (the start, screenshots at 10 s and 30 s, the space bar, one 15 s later) |
+| `../../src/probes/gos5/gos5_run.py <ZIP> [--setup <s>] [--disk <d>]` | one GOS5 game from its unpacked download, built with `src/survey/ports.tsv`'s options and files, run from the GEMDOS drive with `src/probes/modes/mode_probe.py`'s generic expectation (the start, screenshots at 10 s and 30 s, the space bar, one 15 s later) |
 | `all_harness.sh` | all of the above, once |
 
 Examples:
@@ -122,7 +122,7 @@ Debugger script: Hatari's own syntax. Copied into the run folder with every `:fi
 recursively, so `savebin` with a relative path writes into the run folder (`loadbin` is not
 staged: give it an absolute path). To stop at a program's first instruction:
 `b pc = TEXT && pc < $e00000 :once :trace :file dump.ini`. Chains of single-shot breakpoints,
-each file setting the next, are how `src/probes/epic01/*.py` follow a path and answer the disk
+each file setting the next, are how `src/probes/gemdrive-failure/*.py` follow a path and answer the disk
 by hand (`r d0=0`, `loadbin <file> <address>`); `trace <flags>` in a file switches tracing on or
 off from there, which keeps instruction traces bounded.
 
@@ -157,7 +157,7 @@ off from there, which keeps instruction traces bounded.
   debugger, and starts a new profile each time it leaves it: every `:file` breakpoint and every
   `hatari-debug` command does both. Save with a real (not `:trace`) breakpoint whose file ends in
   `profile save <file>` and `c`; the disassembly goes to `hatari.out`, not to the file
-  (`src/probes/epic02/profile_probe.py`).
+  (`src/probes/stages/profile_probe.py`).
 - Docker Desktop can wedge: containers stay "Created" and `docker rm` hangs. `docker desktop
   restart` brings it back (an `osascript` quit did not).
 - objdump with `-m m68k:68000` reads `movec` and `pmove` as one-word `.short`s and loses step

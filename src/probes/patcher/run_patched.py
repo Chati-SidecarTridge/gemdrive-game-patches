@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""EPIC-09 STORY-04: a ZIP the patcher page wrote, unpacked onto Hatari's GEMDOS drive and run as a user
+"""A ZIP the patcher page wrote, unpacked onto Hatari's GEMDOS drive and run as a user
 would run it.
 
 Usage: run_patched.py <patched ZIP> <archive> [--setup st-104|ste-162|ste-206] [--keys K,K,...]
 
 <archive> is its line in src/survey/patches.tsv (LEMMINGS.ZIP), which gives the program to start and the
-fix. The ZIP is unpacked into a new folder under tools/dev/builds/epic09/ (zipfile, every entry checked to
+fix. The ZIP is unpacked into a new folder under tools/dev/builds/patcher/ (zipfile, every entry checked to
 stay inside it), which becomes drive C:. A gdbpb fix's GDBPB.PRG is copied into C:\\AUTO\\, the way a user
 runs it before the game (Hatari's harness starts one program). The run, at the RAM of the game's survey
 or build run, with tools/survey/run_all.py's expectation (--keys: 12 s, then each key), goes to
@@ -50,7 +50,7 @@ def main() -> int:
             if m:
                 memsize = max(memsize, int(m.group(1)))
         memsize = max(memsize, int(runs.get(r, {}).get("memsize") or 1))
-    work = REPO / "tools" / "dev" / "builds" / "epic09" / time.strftime(f"run-{Path(a.archive).stem}-%Y%m%d-%H%M%S")
+    work = REPO / "tools" / "dev" / "builds" / "patcher" / time.strftime(f"run-{Path(a.archive).stem}-%Y%m%d-%H%M%S")
     drive = work / "drive"
     drive.mkdir(parents=True)
     with zipfile.ZipFile(a.zip) as z:

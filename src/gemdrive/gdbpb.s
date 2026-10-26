@@ -1,4 +1,4 @@
-; EPIC-06 STORY-01: GDBPB.PRG, solution S2 (src/notes/solutions.md §3.2, §4). Run from C:\AUTO\,
+; GDBPB.PRG, solution S2 (src/notes/solutions.md §3.2, §4). Run from C:\AUTO\,
 ; it stays resident and gives a GEMDOS drive a BPB. Silmarils' START.PRG (Crystals of Arborea,
 ; Targhan, Robinsons Requiem, Storm Master) asks BIOS Getbpb on its drive before every file and opens
 ; the file by name only once it gets one; a GEMDOS drive (Hatari's, the Multidevice's GEMDRIVE) has

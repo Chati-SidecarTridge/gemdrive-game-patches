@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EPIC-02 STORY-05: the calls disk_calls_probe.py logged, in order, as a table.
+"""The calls disk_calls_probe.py logged, in order, as a table.
 
 Usage: disk_calls_report.py <run folder>
 

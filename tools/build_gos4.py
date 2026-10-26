@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """tools/build_gos4.py: a GOS4 game's START.TOS for a GEMDOS drive, built from its original by
-signature (EPIC-05 STORY-02), as tools/build_gos5.py builds a GOS5 game's.
+signature, as tools/build_gos5.py builds a GOS5 game's.
 
 Usage: build_gos4.py <START.TOS> <out START.TOS> [--info] [--floppy]
 

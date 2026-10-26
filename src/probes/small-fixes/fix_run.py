@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""EPIC-06: one game of the survey run with this epic's fixes, from Hatari's GEMDOS drive or PPDRIVER.
+"""One game of the survey run with the small fixes, from Hatari's GEMDOS drive or PPDRIVER.
 
 Usage: fix_run.py <row> [--setup st-104|ste-162|ste-206] [--disk gemdrive|ppdriver] [--bpb]
                   [--fastload] [--rody2] [--auto PRG] [--keys K,K,... | --steps FILE] [--memsize N]
 
 <row> is the game's row in src/survey/migration.csv (1698, Crystals of Arborea), or its name when
 only one row has it. Its folder, as tools/survey/run_all.py finds it, is copied into a folder under
-tools/dev/builds/epic06/ (what its download keeps beside it, into the drive's root), and changed:
-  --bpb       GDBPB.PRG (src/gemdrive/gdbpb.s, S2) in C:\\AUTO\\, the GEMDOS drive only (STORY-01)
-  --fastload  tools/set_fastload.py on the program it knows in the folder (S3, STORY-02)
+tools/dev/builds/small-fixes/ (what its download keeps beside it, into the drive's root), and changed:
+  --bpb       GDBPB.PRG (src/gemdrive/gdbpb.s, S2) in C:\\AUTO\\, the GEMDOS drive only
+  --fastload  tools/set_fastload.py on the program it knows in the folder (S3)
   --auto PRG  another program in C:\\AUTO\\, the GEMDOS drive only (a test's: one that keeps low RAM)
   --rody2     tools/rody2_runme.py: Rody and Mastico 4's RUNME.TOS into Rody and Mastico 2's folder,
-              which has no program to start without it (S4, STORY-03)
+              which has no program to start without it (S4)
 The run is at the RAM of the game's survey run (runs.tsv: run_all gives a game more RAM while its run
 ends in trouble; Stormlord 4 MB), with run_all's expectation (--keys: 12 s, then each key, the
 harness's names or scancodes, 0x03 for 2, or event:EVENT for a Hatari event such as event:doubleclick,
@@ -39,7 +39,7 @@ sys.path.insert(0, str(REPO / "tools"))
 import run_all  # noqa: E402
 import set_fastload  # noqa: E402
 
-WORK = REPO / "tools" / "dev" / "builds" / "epic06"
+WORK = REPO / "tools" / "dev" / "builds" / "small-fixes"
 PRG = WORK / "GDBPB.PRG"
 SRC = REPO / "src" / "gemdrive" / "gdbpb.s"
 
