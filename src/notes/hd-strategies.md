@@ -18,9 +18,10 @@ driver as the working reference.
 - **What the 212 need**: four solutions (§4). S1, GOS reading through the GEMDOS drive, covers
   the 204 GOS4/GOS5 games; S2, a BPB for the GEMDOS drive, four Silmarils games; S3, the fastload
   bit, three games whose start program Hatari ends when it starts the next one; S4 one game
-  missing a file. S2, S3 and S4 were shown in trials (§3). S1 is built for the 87 GOS5 games
-  (2026-10-16): 85 run from the GEMDOS drive, in Hatari and on an STE with the Multidevice, and
-  Awesome and Prison do not yet (`gos5-gemdrive.md`); GOS4 is next.
+  missing a file. S2, S3 and S4 were shown in trials (§3). S1 is built for the 87 GOS5 games and
+  the 117 GOS4 games (2026-10-16): 85 GOS5 games run from the GEMDOS drive, in Hatari and on an STE
+  with the Multidevice, Awesome and Prison not yet (`gos5-gemdrive.md`); the 117 GOS4 games run in
+  Hatari (`gos4-gemdrive.md`).
 - **Already there**: 43 of the 204 GOS games have another download on the 8bitchip.info website
   that runs as it is from the GEMDOS drive (§5), Lemmings' own 2 MB RAM-disk version among them.
 
@@ -202,9 +203,10 @@ Two changes, both on the Atari side:
   trips and tests. The Falcon builds take the same patch, untested (Falcon is out of scope).
 - **Memory**: none beyond GOS's own. The driver copy at `$B7180` and its buffers go unused.
 - **Risk**:
-  - GOS4 games call GOS's GEMDOS themselves during play, and which functions they use is not known
-    yet: Hatari traces only the calls that reach its hook, and GOS's do not. They are the first
-    thing to find.
+  - GOS4 games call GOS's GEMDOS themselves during play, which Hatari's trace does not show (it
+    sees only the calls that reach its hook). Logged at GOS's own dispatcher, they make the file
+    calls, start programs with `Pexec` and search with `Fsfirst`; the GOS4 build hands on all three
+    (`gos4-gemdrive.md`).
   - `Fsfirst`/`Fsnext` find the DTA through TOS's current process (`gemdos.c:3043-3049`), which a
     game that owns low RAM may have overwritten.
   - Gamex's state saves (`file_io` with `"Wr"`) are untested.
@@ -226,6 +228,15 @@ load it lets a keyboard message under way finish. 85 games run; five need a disk
 own wait for the floppy motor), Forgotten Worlds two GOS files from another download, Magic Boy 2 MB
 and Muzzy an STE. Awesome and Prison still fail: each refuses the cartridge in the port, and two bytes
 of one of its files turn its check off.
+
+**Built for GOS4** (2026-10-16; `gos4-gemdrive.md`). The same kind of change, by
+`tools/build_gos4.py` with its own block (`src/gemdrive/gos4_patch.s`), found by signature in all 117
+launchers. GOS4 is TOS 1.04 started from RAM and sets up its own `TRAP #1`; the block points it, in
+GOS's copy in memory, at a forwarder that hands the file calls to the machine's handler with names
+cut to 8.3 and handles numbered as GOS's, reads the programs that are started (`Pexec`) through the
+drive, gives `Fsfirst` the game's DTA, leaves drives A and B to GOS's floppy and gives drive C a BPB.
+All 117 run in Hatari; F16 Falcon needs 2 MB; Asterix and Winter Games also read drive A, as with
+PPDRIVER.
 
 **Not proposed, for the same 204 games:**
 - **A driver that serves records**: a resident driver shaped like PPDRIVER (the `PPHD` mark, laid

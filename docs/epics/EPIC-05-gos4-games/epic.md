@@ -2,7 +2,7 @@
 id: EPIC-05
 iteration: 2
 title: The GOS4 games from a GEMDOS drive (FIXGOS4, Operation Stealth first)
-status: todo
+status: done
 ---
 
 ## Goal
@@ -43,3 +43,7 @@ PPDRIVER. At the checkpoint, Diego's Multidevice, from a card.
 
 Hatari traces only the GEMDOS calls that reach its hook, and GOS's calls do not. STORY-01 needs a
 breakpoint on GOS's own `trap1` instead (EPIC-02's map of D15R gives its address in each build).
+
+Closed 2026-10-26: the 117 GOS4 games run from Hatari's GEMDOS drive with `tools/build_gos4.py`'s
+builds; ten checked by Diego on his STE with the Multidevice. The checkpoint found one difference
+from Hatari, GEMDRIVE's file lock (Noddy's Playtime), fixed in the forwarder (STORY-05).

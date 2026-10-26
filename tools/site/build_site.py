@@ -56,7 +56,8 @@ SECTIONS = [
     ("modes", "The modes", [("modes", "The modes")]),
     ("strategies", "Strategies and solutions", [("hd-strategies", "Verdicts and solutions"),
                                                 ("strategies", "The strategies, from the files"),
-                                                ("gos5-gemdrive", "The GOS5 games, built")]),
+                                                ("gos5-gemdrive", "The GOS5 games, built"),
+                                                ("gos4-gemdrive", "The GOS4 games, built")]),
     ("catalogue", "Catalogue", []),
     ("tools", "Tools", []),
 ]
@@ -344,7 +345,7 @@ def index(games: list[dict]) -> str:
     items = [f'<li><i class="{c}"></i><span class="count">{n(count[v])}</span><span><a href="catalogue.html#v='
              f'{urllib.parse.quote(v, safe="")}">{v}</a>: {what}</span></li>' for v, c, what in VERDICTS]
     items.insert(2, f'<li><i class="fix built"></i><span class="count">{n(len(ported))}</span><span>of them '
-                    f'<a href="gos5-gemdrive.html">built</a>, and running from the GEMDOS drive</span></li>')
+                    f'<a href="hd-strategies.html">built</a>, and running from the GEMDOS drive</span></li>')
     legend = "".join(items)
     solutions = collections.Counter(g["solution"].split(":")[0] for g in games if g["verdict"] == "fix")
     names = {}
@@ -353,6 +354,7 @@ def index(games: list[dict]) -> str:
     sol_rows = "".join(f'<tr><td>{k}</td><td>{esc(names[k])}</td><td class="num">{n(solutions[k])}</td></tr>'
                        for k in sorted(names))
     gos = sum(1 for g in games if g["strategy"] in ("Gamex + GOS4", "Gamex + GOS5"))
+    gos5, gos4 = ({g["row"] for g in games if g["strategy"] == s} for s in ("Gamex + GOS5", "Gamex + GOS4"))
     lead = (f"The 8bitchip.info website lists {n(len(games))} Atari ST games adapted to start from a hard disk. "
             f"This project ran every one of them in the Hatari emulator from its GEMDOS drive: a folder of the "
             f"computer it runs on, served as drive C: file by file, with no disk sectors behind it.")
@@ -380,10 +382,12 @@ step by step; <a href="hd-strategies.html">Verdicts and solutions</a> has every 
 
 <h2 id="solutions">The solutions</h2>
 <p>Four solutions make the {n(count['fix'])} games to fix run, each on the Atari side, with the
-emulator unchanged. S2, S3 and S4 were shown in trial runs. S1 is built for the 87 GOS5 games:
-{n(len(ported))} run from the GEMDOS drive with their start program built for it, in Hatari and
-on an STE with the SidecarTridge Multidevice's GEMDRIVE (<a href="gos5-gemdrive.html">the GOS5
-games, built</a>). The GOS4 games are next.</p>
+emulator unchanged. S2, S3 and S4 were shown in trial runs. S1 is built for the {n(len(gos5))} GOS5
+games and the {n(len(gos4))} GOS4 games, and {n(len(ported))} of them run from the GEMDOS drive with
+their start program built for it: {n(len(ported & gos5))} GOS5 games in Hatari and on an STE with the
+SidecarTridge Multidevice's GEMDRIVE (<a href="gos5-gemdrive.html">the GOS5 games, built</a>), and
+{n(len(ported & gos4))} GOS4 games in Hatari (<a href="gos4-gemdrive.html">the GOS4 games,
+built</a>). The smaller fixes are next.</p>
 <div class="table"><table>
 <thead><tr><th></th><th>solution</th><th class="num">games</th></tr></thead>
 <tbody>{sol_rows}</tbody></table></div>
@@ -394,8 +398,8 @@ games, built</a>). The GOS4 games are next.</p>
 once from a GEMDOS drive. The work has two parts. The first understood and classified: why
 Lemmings fails, the launcher rebuilt from sources that reassemble to the original bytes, and every
 adaptation in the 8bitchip.info website's list given a verdict. The second, under way, builds the solutions one group of games at a
-time: the GOS5 games first, {n(len(ported))} of them running now, then the GOS4 games, the
-smaller fixes and the games still unsure; then a check with acsi2stm's GemDrive, the other
+time: the GOS5 and GOS4 games first, {n(len(ported))} of them running now, then the smaller
+fixes and the games still unsure; then a check with acsi2stm's GemDrive, the other
 GEMDRIVE, and a program that installs the builds on a user's own copies. Each build is tested in
 Hatari's GEMDOS drive and on the SidecarTridge Multidevice's GEMDRIVE, which serves an ST's drive
 the same way from an SD card.</p>

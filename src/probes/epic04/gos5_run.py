@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""EPIC-04 STORY-04: one of the card's FIXGOS5 games, its START.TOS built by tools/build_gos5.py,
+"""EPIC-04 STORY-04: one of the card's FIXGOS5 games, its START.TOS built by tools/build_gos5.py
+(a FIXGOS4 game's by tools/build_gos4.py, EPIC-05),
 run from Hatari's GEMDOS drive.
 
-Usage: gos5_run.py <ZIP folder name> [--setup st-104|ste-162|ste-206] [--disk gemdrive|ppdriver]
+Usage: gos5_run.py <ZIP folder name> [--setup st-104|ste-162|ste-206] [--disk gemdrive|ppdriver] [--memsize N]
 
 The game's folder as the card lays it out (tools/survey/sdcard.py), from its unpacked download, is
 copied into a new folder under tools/dev/builds/gos5/, its START.TOS built there with
@@ -57,13 +58,18 @@ def main() -> int:
     ap.add_argument("game")
     ap.add_argument("--setup", default="st-104")
     ap.add_argument("--disk", default="gemdrive", choices=("gemdrive", "ppdriver"))
+    ap.add_argument("--memsize", type=int, help="RAM in MB, instead of the game's run's")
     a = ap.parse_args()
-    work = REPO / "tools" / "dev" / "builds" / "gos5" / time.strftime(f"{a.game}-%Y%m%d-%H%M%S")
+    work = REPO / "tools" / "dev" / "builds" / "gos5" / time.strftime(f"{a.game}-{a.setup}-{a.disk}-%Y%m%d-%H%M%S")
     game = work / a.game
     start, memsize = original(a.game, game)
+    memsize = a.memsize or memsize
     port = next((r for r in csv.DictReader((REPO / "src" / "survey" / "ports.tsv").open(), delimiter="\t")
                  if Path(r["download"]).stem.upper() == a.game), None)
-    subprocess.run([sys.executable, "-I", str(REPO / "tools" / "build_gos5.py"), str(game / start),
+    gos4 = any(g["strategy"] == "Gamex + GOS4" and Path(g["download"]).stem.upper() == a.game
+               for g in csv.DictReader((REPO / "src" / "survey" / "migration.csv").open()))
+    tool = "build_gos4.py" if gos4 else "build_gos5.py"   # EPIC-05: a GOS4 game's own tool
+    subprocess.run([sys.executable, "-I", str(REPO / "tools" / tool), str(game / start),
                     str(game / start)] + (port["options"].split() if port else []), check=True)
     for name in port["add"].split() if port else []:
         sdcard.copy(sdcard.found(port["from"], name), game / name)

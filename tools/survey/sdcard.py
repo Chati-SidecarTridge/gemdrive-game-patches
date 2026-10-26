@@ -22,8 +22,8 @@ The game's folder holds what Hatari's runs had in C:\\GAME\\ (run_all.plan: the 
 started), and beside it what the download keeps next to that folder, unless the folder has its own of that
 name (Zero-5's README.TXT); a file the run opened at the drive's root (Maddog Williams' C:\\PABISYS.FIL)
 goes to the card's root. A game with no program to start gets its whole download. A ported game
-(src/survey/ports.tsv) gets its program to start built for a GEMDOS drive (tools/build_gos5.py, with the
-table's options) and the files the table adds from another download (Forgotten Worlds' GOS, D-19: what
+(src/survey/ports.tsv) gets its program to start built for a GEMDOS drive (tools/build_gos5.py or, for a
+GOS4 game, build_gos4.py, with the table's options) and the files the table adds from another download (Forgotten Worlds' GOS, D-19: what
 the instructions have a user do). INDEX.TXT, at the root,
 gives each game's program to start. DIR is emptied first if it holds an INDEX.TXT from this script, and
 must otherwise be empty. PP's files: never committed (D-11).
@@ -72,9 +72,11 @@ def groups(stems: set[str]) -> dict[str, str]:
     return {stem: name for chunk, name in zip(chunks, names) for stem in chunk}
 
 
-def built(start: Path, options: list[str]) -> None:
-    """A ported game's program to start, the download's copy at start, built for a GEMDOS drive in its place."""
-    done = subprocess.run([sys.executable, "-I", str(REPO / "tools" / "build_gos5.py"), str(start), str(start)]
+def built(start: Path, options: list[str], strategy: str) -> None:
+    """A ported game's program to start, the download's copy at start, built for a GEMDOS drive in its place
+    (tools/build_gos4.py for a GOS4 game, build_gos5.py for a GOS5 one)."""
+    tool = "build_gos4.py" if strategy == "Gamex + GOS4" else "build_gos5.py"
+    done = subprocess.run([sys.executable, "-I", str(REPO / "tools" / tool), str(start), str(start)]
                           + options, capture_output=True, text=True)
     if done.returncode:
         sys.exit(f"error: {start}: {done.stdout}{done.stderr}")
@@ -156,7 +158,7 @@ def main() -> int:
                         total += copy(e, dest / e.name)
                 port = ports.get(g["row"])
                 if port:
-                    built(dest / p["start"], port["options"].split())
+                    built(dest / p["start"], port["options"].split(), g["strategy"])
                     for name in port["add"].split():
                         total += copy(found(port["from"], name), dest / name)
         elif folders[g["download"]] != dest:
@@ -170,7 +172,7 @@ def main() -> int:
     text = ("PP's hard-disk adaptations from the SidecarTridge Multidevice's GEMDRIVE: "
             f"{len(games)} games, {len(folders)} folders (EPIC-03 STORY-08).\r\n"
             "VERDICT\\RAM\\GROUP\\ZIP\\: WORKS as it is from Hatari's GEMDOS drive; FIX*: a fix, by "
-            "strategy (FIXGOS5: built for the GEMDOS drive, EPIC-04); STILLNOT: built, still not working; "
+            "strategy (FIXGOS4, FIXGOS5: built for the GEMDOS drive, EPIC-04, EPIC-05); STILLNOT: built, still not working; "
             "UNSURE; NOFIX: not feasible. RAM: what its run needed. GROUP: at most 80 games, "
             "from the first to the last.\r\n\r\n"
             + "".join(line.replace("/", "\\") + "\r\n" for line in sorted(index)))
