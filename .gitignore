@@ -11,3 +11,8 @@ src/lemld2/*.s
 src/ls2dd/*.s
 LEMMINGS/
 _archive/
+
+# Local planning notes, kept on the developer's machine only. Nothing that is
+# committed may reference a path under docs/ or name an item from it: inline
+# the information instead.
+docs/

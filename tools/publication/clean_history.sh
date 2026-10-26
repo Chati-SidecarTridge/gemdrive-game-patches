@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# docs/publication/clean_history.sh: a clone of this repository with remove.txt's must paths taken
+# tools/publication/clean_history.sh: a clone of this repository with remove.txt's must paths taken
 # out of every commit of every branch (D-15, D-25), for tools/site/check_public.py and then for
 # going public. This working copy is not touched.
 #
-# Usage: docs/publication/clean_history.sh <out>    (<out>: a folder that does not exist yet)
+# Usage: tools/publication/clean_history.sh <out>    (<out>: a folder that does not exist yet)
 set -euo pipefail
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 out="${1:?usage: clean_history.sh <out>}"
@@ -13,7 +13,7 @@ out="${1:?usage: clean_history.sh <out>}"
 paths=()
 while read -r kind path _; do
   [[ "$kind" == must ]] && paths+=("$path")
-done < "$repo/docs/publication/remove.txt"
+done < "$repo/tools/publication/remove.txt"
 
 git clone -q --no-local "$repo" "$out"
 cd "$out"

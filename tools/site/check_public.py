@@ -4,7 +4,7 @@
 Usage: check_public.py [<clone>]
 
 Checks a clone (by default a fresh clone of this repository, made in a temporary folder, with every
-branch) against docs/publication/remove.txt: no must entry may match a file of the clone or a path in
+branch) against tools/publication/remove.txt: no must entry may match a file of the clone or a path in
 any commit of its history; no binary file the list does not keep may be left in its history; no commit
 message may carry an AI co-author trailer or a "Generated with" line (CLAUDE.md); and the site must
 build from the clone (tools/site/build_site.py --no-snapshots --check). Prints what it finds and
@@ -22,7 +22,7 @@ import tempfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-LIST = REPO / "docs" / "publication" / "remove.txt"
+LIST = REPO / "tools" / "publication" / "remove.txt"
 
 
 def git(clone: Path, *args: str) -> bytes:
