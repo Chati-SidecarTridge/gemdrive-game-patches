@@ -35,8 +35,14 @@ recommendations, "go with your recommendations" (D-25).
       files; `check_public.py`: "ready to go public"; none of the 133 removed files' blobs left in
       the clone; `.git` 1.6 MB.
 - [x] `tools/dev/all_harness.sh` with the sources made from the maps: 0 failures (363 s).
-- [ ] Committed on `epic-11-release-gate` (Diego's word), then the cleaned clone made from it and
-      checked again.
+- [x] Committed on `epic-11-release-gate` (Diego's word, `dfff783`), then the cleaned clone made
+      from it (`tools/dev/builds/public/clean`): 39 commits, 11 branches, 211 files;
+      `check_public.py`: "ready to go public"; 0 of the 133 removed files' blobs left.
+- [x] Every check in the clean clone, set up as a new user would: `dev.cfg`, and the mirror's
+      `LEMMINGS.ZIP` unpacked as `LEMMINGS/` (76 hashes OK, `git status` clean);
+      `tools/make_sources.sh` made the five sources; `tools/dev/all_harness.sh`: 0 failures
+      (760 s).
+- [x] The repository's name, Diego: `gemdrive-game-patches` (D-26).
 
 ## Notes
 
