@@ -201,8 +201,10 @@ the patcher that installs them (D-17).
 - The first pass's tools find the repository through their own location
   (`Path(__file__).parents[2]`), so they break once archived; copy one into `tools/` only when a
   story has verified it.
-- **Nothing leaves this Mac yet** (D-15): no remote, no push. Before the repository goes public,
-  `LEMMINGS/` and `_archive/`'s binaries are removed from it and its history.
+- **The remote is private until the release** (D-27): `origin` is
+  `github.com/sidecartridge/gemdrive-game-patches`, every branch pushed. Push only this working
+  copy, never `../reverse-eng-ppera-hd` (the uncleaned history), and only on Diego's word; nothing
+  under `LEMMINGS/` or `_archive/` is ever committed (D-25).
 - `.DS_Store` files are macOS noise; ignore them.
 - **The website speaks to its readers, never to the backlog** (Diego, 2026-10-16, D-20). Nothing the
   site publishes refers to `docs/epics/` or what is in it: no iterations, epics, stories or tasks
