@@ -2,7 +2,7 @@
 id: EPIC-11
 iteration: 2
 title: The release gate
-status: todo
+status: in-progress
 ---
 
 ## Goal
@@ -33,6 +33,8 @@ A clean clone of the repository; the published site in Chrome, Safari and Firefo
 
 ## Stories
 
-Written when the epic starts, ending with Diego's checkpoint: the release.
+- STORY-01, the clean-up: what leaves the history, decided (D-25), and a cleaned clone that
+  `check_public.py` passes.
+- The others written as the epic goes, ending with Diego's checkpoint: the release.
 
 ## Notes

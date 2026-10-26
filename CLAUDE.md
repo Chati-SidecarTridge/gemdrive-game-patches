@@ -74,8 +74,8 @@ of the games by floppy access), `GamexLSrc.html`, `GamexLSrc2.html` and `GamexLS
 his launcher sources, 2009), `fromhd.php` (his view of GEMdrive). All of it is in the mirror
 (D-12). Cite it by URL and never copy it into the repository (D-11). A claim from them counts only once a run shows it (D-01).
 
-`DESKTOP.INF` in the root is the first pass's emulated `C:` desktop: it pointed a Hatari GEMDOS
-drive at this repository's root.
+`LEMMINGS/` and `_archive/` stay on this Mac and out of git (D-25): both are git-ignored and were
+removed from the history before the repository went public.
 
 ## Layout
 
@@ -191,8 +191,10 @@ the patcher that installs them (D-17).
   that is the whole GEMDRIVE problem.
 - **The sources in `src/` are generated from their maps** (`src/<stage>/<stage>.map`) by
   `tools/dev/mksource.py`: change the map (names, comments, entries) and regenerate, then
-  `tools/dev/all_harness.sh`. Hand edits to a `.s` are lost on the next generation. D15R's two
-  sources are TOS 1.04's code and are not committed (D-13): `tools/make_sources.sh` makes them.
+  `tools/dev/all_harness.sh`. Hand edits to a `.s` are lost on the next generation. The
+  launcher's sources are not committed, only their maps: START.TOS's stub, LEMLD2 and LS2DD
+  reassemble to PP's files (D-25), D15R's two are TOS 1.04's code (D-13). `tools/make_sources.sh`
+  makes all five from `LEMMINGS/`. Our own code (`src/gemdrive/`) is committed.
 - **Never read a trace whole.** `hatari.out` is tens of thousands of lines, and a CPU trace gets
   huge (the first pass's reached 800 MB); use `grep`, `head`, `tail` or `sed -n`, and bound CPU
   traces in time.

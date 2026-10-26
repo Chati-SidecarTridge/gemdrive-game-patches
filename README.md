@@ -47,8 +47,9 @@ hash only.
   (`tools/survey/patch_table.py`).
 - **The website** (`tools/site/`): the findings, the modes, the solutions, the patcher and the
   catalogue of every game.
-- **The reverse engineering** (`src/`): the Lemmings launcher's stages as sources that reassemble to
-  the original bytes, their maps, and the notes (`src/notes/`).
+- **The reverse engineering** (`src/`): the maps of the Lemmings launcher's stages, from which
+  `tools/make_sources.sh` makes sources that reassemble to the original bytes, using your own copy
+  of the game in `LEMMINGS/`; and the notes (`src/notes/`).
 
 ## Building and testing
 

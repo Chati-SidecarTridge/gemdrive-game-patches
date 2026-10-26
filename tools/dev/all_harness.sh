@@ -68,9 +68,9 @@ else
   row "round trip START.TOS text" FAIL "see $work/" $((SECONDS - t))
 fi
 
-# 2b. The launcher's sources: round trip and nop check for every stage. D15R's are not
-# committed (D-13): made from their maps first.
-"$repo/tools/make_sources.sh" > "$work/make-sources.txt" 2>&1 || row "D15R's sources made" FAIL "see $work/make-sources.txt" 0
+# 2b. The launcher's sources: round trip and nop check for every stage. None is committed
+# (D-13, D-25): made from their maps first.
+"$repo/tools/make_sources.sh" > "$work/make-sources.txt" 2>&1 || row "the launcher's sources made" FAIL "see $work/make-sources.txt" 0
 refs="$work/refs"
 mkdir -p "$refs"
 python3 -I tools/unpack.py text LEMMINGS/START.TOS "$refs/START.text" > /dev/null
