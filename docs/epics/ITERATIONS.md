@@ -113,6 +113,9 @@ Order set by Diego, 2026-10-15 and 2026-10-16 (D-16, D-17, D-18).
 | EPIC-08 | The ports on acsi2stm's GemDrive (<https://github.com/retro16/acsi2stm>) | Asked by Diego (D-18): a check, after the ports, that their builds also work with the other GEMDRIVE, an STM32 on the ACSI port whose driver lives in the ST's RAM. Before the patcher, so that it installs builds that know both. |
 | EPIC-09 | The patcher: a user's original start files checked by signature and replaced with our builds | Last (D-17): it installs what EPIC-04 to EPIC-08 built, so it comes when they are done. |
 
+Order since 2026-10-26 (D-22): EPIC-09, the patcher, comes now, with the fixes built by EPIC-04 to
+EPIC-06; EPIC-07 and EPIC-08 follow it, and the patcher grows with their fixes.
+
 What was known before these epics were written, as their input:
 
 - **The GOS strategy** (Lemmings' own: a Gamex launcher, PP's resident driver required, D15R, TOS
